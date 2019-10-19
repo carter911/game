@@ -1,47 +1,6 @@
-<html>
-<header>
-    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-</header>
-<style>
-    .form-group{
-        margin-bottom: 10px;
-    }
-</style>
-<body>
+{include file='./header' /}
 <div class="row">
-    <nav class="navbar navbar-default">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a style="font-size: 20px;" class="navbar-brand" href="#">GameCharge <span style="font-size: 10px;color: red">merchant</span></a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="index">OPERATE</a></li>
-<!--                    <li><a href="#">Order</a></li>-->
-<!--                    <li><a href="#">API</a></li>-->
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">{$info.name|default='User'}</a></li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav>
+    {include file='./nav' /}
     <div class="container">
         <div class="panel panel-default">
             <div class="panel-heading" style="text-align: center">Order List</div>
@@ -84,13 +43,9 @@
                     </tr>
                     {/empty}
                 </table>
+                <div style="text-align: center">{$list->render()}</div>
             </div>
         </div>
     </div>
-
-
 </div>
-<div style="text-align: center">{$list->render()}</div>
-
-</body>
-</html>
+{include file='./footer' /}

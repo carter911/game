@@ -44,34 +44,53 @@
     </nav>
     <div class="container">
         <div class="panel panel-default">
-            <div class="panel-heading" style="text-align: center">Supplier Login</div>
+            <div class="panel-heading" style="text-align: center">Order List</div>
             <div class="panel-body">
-                <div class="row">
-                    <div  style="text-align: center">
-                        <form class="form-inline" action="checkLog" method="post">
-                            <div class="form-group">
-                                <label for="exampleInputName2">Name</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon"><span class="glyphicon glyphicon glyphicon-user" aria-hidden="true"></span></div>
-                                    <input name="user_name" value="" type="text" class="form-control"  placeholder="user name">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputName2">Password</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></div>
-                                    <input name="password" value="" type="password" class="form-control"  placeholder="password">
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-default">Login</button>
-                        </form>
-                    </div>
-                </div>
+                <table class="table table-striped">
+                    <tr>
+                        <td>id</td>
+                        <td>merchant_order_id</td>
+                        <td>platform</td>
+                        <td>amount</td>
+                        <td>price</td>
+                        <td>pgw_price</td>
+                        <td>status</td>
+                        <td>create_time</td>
+                        <td>update_time</td>
+                    </tr>
+                    {volist name='list' id='order'}
+                    <tr style="text-align: left">
+                        <td class="active">{$order.id}</td>
+                        <td class="active">{$order.merchant_order_id}</td>
+                        <td class="active">{$order.platform}</td>
+                        <td class="active">{$order.amount}</td>
+                        <td class="active">{$order.price} eur</td>
+                        <td class="active">{$order.pgw_price} eur</td>
+                        <td class="active">
+                            {if condition="$order.status eq 'Undelivered'"} <i style="color: #ccc;font-size: 15px;" class="glyphicon glyphicon-remove"></i>
+                            {elseif condition="$order.status eq 'end'"/}<i style="color: blue;font-size: 15px;" class="glyphicon glyphicon-ok"></i>
+                            {else /} <i style="color: red;font-size: 15px;" class="glyphicon glyphicon-remove"></i>
+                            {/if}
+                            {$order.status|default="NONE"}
+                        </td>
+                        <td class="active">{$order.create_at|date="Y-m-d H:i:s",###}</td>
+                        <td class="active">{$order.update_at|date="Y-m-d H:i:s",###}</td>
+                    </tr>
+                    {/volist}
+
+                    {empty name="list"}
+                    <tr style="text-align: left">
+                        <td style="text-align: center" colspan="7" class="active">list id empty</td>
+                    </tr>
+                    {/empty}
+                </table>
             </div>
         </div>
-
     </div>
+
+
 </div>
+<div style="text-align: center">{$list->render()}</div>
 
 </body>
 </html>
