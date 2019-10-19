@@ -122,7 +122,7 @@ class Index extends Base
         if (!$validate->check($param)) {
             $this->error($validate->getError());
         }
-        $param['price'] = round(session('merchant_id')['price']*$param['amount'],2);
+        $param['price'] = round(session('merchant')['price']*$param['amount'],2);
         //找到最优质的的上游供货商
         $info = Db::name('supplier')->where(['status'=>'online'])->order('price desc')->field('id,price')->find();
         //Undelivered
