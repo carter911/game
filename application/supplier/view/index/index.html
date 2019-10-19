@@ -73,11 +73,11 @@
             <div class="panel-body">
                 <div class="row">
                     <div  style="text-align: center">
-                        <form class="form-inline" action="status" method="post">
+                        <form class="form-inline" action="status" method="post" enctype="multipart/form-data">
                             <div class="form-group">
                                 <label for="exampleInputName2">order_id</label>
                                 <div class="input-group">
-                                    <input name="id" value="" type="text" class="form-control" placeholder="order_id as 1,2,3">
+                                    <input name="id" value="" type="text" class="form-control" placeholder="order_id">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -97,9 +97,15 @@
                                         <option value="wrong login">[wrong login]login or password is wrong</option>
                                         <option value="market locked">[market locked]web app market is locked</option>
                                         <option value="csm online">[csm online]customer online</option>
-                                        <option value="no login verification">[no login verification]its when customer need to login to web app and use code from mail</option>
+                                        <option value="no login verification">[no login verification]</option>
                                         <option value="new">[new]new order not checked yet</option>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputName2">image</label>
+                                <div class="input-group">
+                                    <input type="file" name="image" /> <br>
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-default">Save</button>
@@ -113,7 +119,7 @@
             <div class="panel-body">
                 <table class="table table-striped">
                     <tr>
-                        <td>id</td>
+                        <td>order id</td>
                         <td>platform</td>
                         <td>amount</td>
                         <td>price</td>

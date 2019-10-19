@@ -1,0 +1,58 @@
+{include file='./header' /}
+<div class="row">
+    {include file='./nav' /}
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="text-align: left">Supplier Info <a href="merchant" class="btn btn-primary btn-xs" style="float: right">back</a></div>
+            <div class="panel-body">
+                <form class="" action="store_supplier" method="post">
+                    <div class="form-group">
+                        <label for="exampleInputName2">Name</label>
+                        <div class="input-group">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon glyphicon-user" aria-hidden="true"></span></div>
+                            <input name="name" value="{$info.name|default=''}" type="text" class="form-control"  placeholder="user name">
+                            <input name="id" value="{$info.id|default='0'}" type="hidden" class="form-control"  placeholder="user name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName2">Password</label>
+                        <div class="input-group">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></div>
+                            <input name="password" value="" type="password" class="form-control"  placeholder="password">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName2">Price</label>
+                        <div class="input-group">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-euro" aria-hidden="true"></span></div>
+                            <input  name="price" value="{$info.price|default=''}" type="text" class="form-control"  placeholder="price">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName2">Status</label>
+                        <div class="input-group">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></div>
+                            {empty name='info'}
+                                <select name="status" class="form-control">
+                                    <option selected  value="online">online</option>
+                                    <option value="offline">offline</option>
+                                </select>
+                            {/empty}
+                            {notempty name='info'}
+                                <select name="status" class="form-control">
+                                    <option eq name="info.status" value="online"}selected{/eq}  value="online">online</option>
+                                    <option {eq name="info.status" value="offline"}selected{/eq} value="offline">offline</option>
+                                </select>
+                            {/notempty}
+                        </div>
+                    </div>
+                    <div style="text-align: center">
+                        <button  type="submit" class="btn btn-default">save</button>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{include file='./footer' /}

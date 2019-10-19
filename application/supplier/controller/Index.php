@@ -79,13 +79,24 @@ class Index extends Base
 
     public function status()
     {
-
+        $file = request()->file('image');
+        $image = "";
+        // 移动到框架应用根目录/public/uploads/ 目录下
+        if($file){
+            $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads');
+            if($info){
+                $image = $info->getExtension();
+            }else{
+                // 上传失败获取错误信息
+                //echo $file->getError();
+            }
+        }
         $supplier_id = session('supplier_id');
         $param = Request::instance()->only(['id','status']);
         if(empty($param['id'])){
             $this->error('error');
         }
-        Db::name('Order')->where(['pgw_id'=>$supplier_id,'id'=>['in',$param['id']]])->update(['status'=>$param['status'],'update_at'=>time()]);
+        Db::name('Order')->where(['pgw_id'=>$supplier_id,'id'=>['in',$param['id']]])->update(['status'=>$param['status'],'image'=>$image,'update_at'=>time()]);
         $this->success('success');
     }
 

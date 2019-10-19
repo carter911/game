@@ -12,11 +12,8 @@ class Index extends Base
     public function __construct()
     {
         parent::__construct();
-        $supplier = session('admin_id');
-        $action = Request::instance()->action();
-        if(empty($supplier) && !in_array($action,['login','checklog'])){
-            $this->redirect('login');
-        }
+
+
     }
 
     /**
@@ -57,14 +54,159 @@ class Index extends Base
      */
     public function index( )
     {
+        $search = Request::instance()->param();
+        $where = [];
+        if(!empty($search['supplier_id']) ){
+            $where['pgw_id'] = trim($search['supplier_id']);
+        }
 
-        $merchant_id = session('admin_id');
-        $info = Db::name('admin')->find($merchant_id);
+        if(!empty($search['merchant_id']) ){
+            $where['merchant_id'] = trim($search['merchant_id']);
+        }
 
-        $list = Db::name('order')->where(['merchant_id'=>$merchant_id])->order('id desc')->paginate(20);
+        if(!empty($search['merchant_order_id']) ){
+            $where['merchant_order_id'] = trim($search['merchant_order_id']);
+        }
+
+        if(!empty($search['status']) ){
+            $where['status'] = trim($search['status']);
+        }else{
+            $search['status'] = "";
+        }
+
+        $list = Db::name('order')->where($where)->order('id desc')->paginate(20);
         $this->assign('list', $list);
-        $this->assign('info', $info);
+        $this->assign('search', $search);
         return $this->fetch('index');
+    }
+
+
+    /**
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     *
+     */
+    public function supplier( )
+    {
+        $list = Db::name('Supplier')->where([])->order('id desc')->paginate(10);
+        $this->assign('list', $list);
+        return $this->fetch('supplier');
+    }
+
+    public function add_supplier()
+    {
+        $this->assign('info',[]);
+        return $this->fetch('supplier_info');
+    }
+
+    public function update_supplier()
+    {
+        $id = Request::instance()->param('id',0);
+        $info = Db::name('supplier')->find(['id'=>$id]);
+        $this->assign('info',$info);
+        return $this->fetch('supplier_info');
+    }
+
+
+    public function store_supplier()
+    {
+        $param = Request::instance()->only(['id','name','password','price','status']);
+        $rule = [
+            'name' => 'require',
+            //'password' => 'require',
+            'price' => 'require',
+            'status' => 'require',
+        ];
+        $validate =  new Validate($rule);
+        if (!$validate->check($param)) {
+            $this->error($validate->getError());
+        }
+        $param['update_at'] = time();
+        if(!empty($param['password'])){
+            $param['password'] =  hash('sha256',$param['password']);
+        }else if(empty($param['password']) && $param['id'] <=0){
+            $param['password'] =  hash('sha256','game2019');
+        }
+
+        if(isset($param['id']) && $param['id']>0){
+            Db::name('supplier')->update($param);
+        }else{
+            $param['create_at'] = time();
+            Db::name('supplier')->insert($param);
+        }
+        $this->success('success','supplier');
+    }
+
+
+    public function del_supplier()
+    {
+        $id = Request::instance()->param('id',0);
+        Db::name('supplier')->delete(['id'=>$id]);
+        $this->success('delete supplier success');
+    }
+
+
+
+
+    public function merchant()
+    {
+        $list = Db::name('merchant')->where([])->order('id desc')->paginate(20);
+        $this->assign('list', $list);
+        return $this->fetch('merchant');
+    }
+
+    public function add_merchant()
+    {
+        $this->assign('info',[]);
+        return $this->fetch('merchant_info');
+    }
+
+    public function update_merchant()
+    {
+        $id = Request::instance()->param('id',0);
+        $info = Db::name('merchant')->find(['id'=>$id]);
+        $this->assign('info',$info);
+        return $this->fetch('merchant_info');
+    }
+
+
+    public function store_merchant()
+    {
+        $param = Request::instance()->only(['id','name','password','price','status']);
+        $rule = [
+            'name' => 'require',
+            //'password' => 'require',
+            'price' => 'require',
+            'status' => 'require',
+        ];
+        $validate =  new Validate($rule);
+        if (!$validate->check($param)) {
+            $this->error($validate->getError());
+        }
+        $param['update_at'] = time();
+        if(!empty($param['password'])){
+            $param['password'] =  hash('sha256',$param['password']);
+        }else if(empty($param['password']) && $param['id'] <=0){
+            $param['password'] =  hash('sha256','game2019');
+        }
+
+        if(isset($param['id']) && $param['id']>0){
+            Db::name('merchant')->update($param);
+        }else{
+            $param['create_at'] = time();
+            Db::name('merchant')->insert($param);
+        }
+        $this->success('success','merchant');
+    }
+
+
+    public function del_merchant()
+    {
+        $id = Request::instance()->param('id',0);
+        Db::name('merchant')->delete(['id'=>$id]);
+        $this->success('delete merchant success');
     }
 
     public function checkStatus($info)
