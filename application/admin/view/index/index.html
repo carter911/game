@@ -58,6 +58,7 @@
                         <td>price</td>
                         <td>pgw_price</td>
                         <td>status</td>
+                        <td>image</td>
                         <td>create_time</td>
                         <td>update_time</td>
                     </tr>
@@ -76,6 +77,7 @@
                             {/if}
                             {$order.status|default="NONE"}
                         </td>
+                        <td class="active"><a target="_blank" href="{$order.image|default=''}"><img style="width: 50px" src="{$order.image|default=''}"/></a></td>
                         <td class="active">{$order.create_at|date="Y-m-d H:i:s",###}</td>
                         <td class="active">{$order.update_at|date="Y-m-d H:i:s",###}</td>
                     </tr>

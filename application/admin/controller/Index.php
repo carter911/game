@@ -75,7 +75,15 @@ class Index extends Base
             $search['status'] = "";
         }
 
-        $list = Db::name('order')->where($where)->order('id desc')->paginate(20);
+        $list = Db::name('order')->where($where)->order('id desc')->paginate(20)->each(function($item, $key){
+            if(!empty($item['image'])){
+                $item['image'] = Request::instance()->domain().'/uploads/'.$item['image'];
+            }else{
+
+            }
+
+            return $item;
+        });
         $this->assign('list', $list);
         $this->assign('search', $search);
         return $this->fetch('index');
