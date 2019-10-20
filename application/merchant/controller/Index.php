@@ -74,7 +74,7 @@ class Index extends Base
     public function checkStatus($info)
     {
         //上游最低价格不能高于下游价格
-        $price = Db::name('supplier')->where(['status'=>'online'])->order('price desc')->field('price')->find();
+        $price = Db::name('supplier')->where(['status'=>'online'])->order('price asc')->field('price')->find();
         $price = isset($price['price'])?$price['price']:0;
         if($info['price']<=$price){
             return false;
@@ -122,7 +122,7 @@ class Index extends Base
         }
         $param['price'] = round(session('merchant')['price']*$param['amount'],2);
         //找到最优质的的上游供货商
-        $info = Db::name('supplier')->where(['status'=>'online'])->order('price desc')->field('id,price')->find();
+        $info = Db::name('supplier')->where(['status'=>'online'])->order('price asc')->field('id,price')->find();
         //Undelivered
         $param['pgw_id'] = $info['id'];
         $param['pgw_price'] = round($info['price']*$param['amount'],2);
