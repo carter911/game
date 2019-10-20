@@ -186,8 +186,9 @@ class Index extends Base
             $this->error($validate->getError());
         }
         $param['update_at'] = time();
-        if(!empty($param['password'])){
-            $param['password'] =  hash('sha256',$param['password']);
+        $password = trim($param['password']);
+        if(!empty($password)){
+            $param['password'] =  hash('sha256',$password);
         }
 
         if(isset($param['id']) && $param['id']>0){
