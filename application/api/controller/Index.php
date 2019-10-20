@@ -53,7 +53,7 @@ class Index extends Base
     public function newOrder()
     {
         if(!$this->checkStatus($this->merchant)){
-            return retData(null,500,'gateway offline');
+            return retData(null,500,'stock empty');
         }
 
         $param = Request::instance()->only(['merchant_order_id','login','password','amount','platform','backup1','backup2','backup3']);
@@ -109,13 +109,9 @@ class Index extends Base
     {
         $param = Request::instance()->only(['order_id']);
         $model = new Order();
-        $info = $model->field('id,status')->find($param['order_id']);
+        $info = $model->field('id,status')->where(['id'=>$param['order_id'],'merchant_id'=>$this->merchant['id']])->find();
         return retData($info,200,'success');
     }
 
-    public function orderList()
-    {
-
-    }
 
 }

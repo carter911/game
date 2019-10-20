@@ -137,6 +137,11 @@ class Index extends Base
         $this->success('create success');
     }
 
+    public function api()
+    {
+        return $this->fetch();
+    }
+
 
 
 }
