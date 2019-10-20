@@ -12,7 +12,7 @@
                                 <label for="exampleInputName2">Price</label>
                                 <div class="input-group">
                                     <div class="input-group-addon">€</div>
-                                    <input disabled name="price" value="{$info.price}" type="text" class="form-control" id="exampleInputAmount" placeholder="Amount">
+                                    <input disabled name="price" value="{$info.price|default='999'}" type="text" class="form-control" id="exampleInputAmount" placeholder="Amount">
                                 </div>
                             </div>
                             <div class="checkbox">

@@ -66,7 +66,6 @@ class Index extends Base
         }else{
             $info['status'] = 'online';
         }
-
         $list = Db::name('order')->where(['merchant_id'=>$merchant_id])->order('id desc')->paginate(20);
         $this->assign('list', $list);
         $this->assign('info', $info);
