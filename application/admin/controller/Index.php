@@ -194,6 +194,7 @@ class Index extends Base
         }
 
         if(isset($param['id']) && $param['id']>0){
+            unset($param['password']);
             Db::name('merchant')->update($param);
         }else{
             if(empty($param['password'])){
