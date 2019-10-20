@@ -57,7 +57,6 @@ class Index extends Base
      */
     public function index( )
     {
-
         $merchant_id = session('merchant_id');
         $info = Db::name('merchant')->find($merchant_id);
 

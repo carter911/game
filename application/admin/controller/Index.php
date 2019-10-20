@@ -188,13 +188,14 @@ class Index extends Base
         $param['update_at'] = time();
         if(!empty($param['password'])){
             $param['password'] =  hash('sha256',$param['password']);
-        }else if(empty($param['password']) && $param['id'] <=0){
-            $param['password'] =  hash('sha256','game2019');
         }
 
         if(isset($param['id']) && $param['id']>0){
             Db::name('merchant')->update($param);
         }else{
+            if(empty($param['password'])){
+                $param['password'] =  hash('sha256','game2019');
+            }
             $param['create_at'] = time();
             $param['key'] = hash('sha256',$param['name']);
             Db::name('merchant')->insert($param);
