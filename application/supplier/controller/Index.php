@@ -59,7 +59,12 @@ class Index extends Base
         $supplier_id = session('supplier_id');
         $info = Db::name('supplier')->find($supplier_id);
         $list = Db::name('order')->where(['pgw_id'=>$supplier_id])->order('id desc')->paginate(20)->each(function($item, $key){
-            $item['image'] = Request::instance()->domain().'/uploads/'.$item['image'];
+            if(!empty($item['image'])){
+                $item['image'] = Request::instance()->domain().'/uploads/'.$item['image'];
+            }else{
+
+            }
+
             return $item;
         });
 
