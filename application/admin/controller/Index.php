@@ -132,6 +132,9 @@ class Index extends Base
         }
 
         if(isset($param['id']) && $param['id']>0){
+            if(empty($param['password'])){
+                unset($param['password']);
+            }
             Db::name('supplier')->update($param);
         }else{
             $param['create_at'] = time();
@@ -194,7 +197,9 @@ class Index extends Base
         }
 
         if(isset($param['id']) && $param['id']>0){
-            unset($param['password']);
+            if(empty($param['password'])){
+                unset($param['password']);
+            }
             Db::name('merchant')->update($param);
         }else{
             if(empty($param['password'])){
