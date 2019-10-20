@@ -3,6 +3,7 @@ namespace app\admin\controller;
 
 use app\common\model\Order;
 use think\Db;
+use think\Log;
 use think\Request;
 use think\Validate;
 
@@ -188,6 +189,7 @@ class Index extends Base
         $param['update_at'] = time();
         $password = trim($param['password']);
         if(!empty($password)){
+            Log::notice($password);
             $param['password'] =  hash('sha256',$password);
         }
 
