@@ -58,7 +58,11 @@ class Index extends Base
 
         $supplier_id = session('supplier_id');
         $info = Db::name('supplier')->find($supplier_id);
-        $list = Db::name('order')->where(['pgw_id'=>$supplier_id])->order('id desc')->paginate(20);
+        $list = Db::name('order')->where(['pgw_id'=>$supplier_id])->order('id desc')->paginate(20)->each(function($item, $key){
+            $item['image'] = Request::instance()->domain().'/public/uploads/'.$item['image'];
+            return $item;
+        });
+
         $this->assign('list', $list);
         $this->assign('info', $info);
         return $this->fetch('index');
