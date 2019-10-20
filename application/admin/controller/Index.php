@@ -196,6 +196,7 @@ class Index extends Base
             Db::name('merchant')->update($param);
         }else{
             $param['create_at'] = time();
+            $param['key'] = hash('sha256',$param['name']);
             Db::name('merchant')->insert($param);
         }
         $this->success('success','merchant');

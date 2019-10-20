@@ -85,7 +85,7 @@ class Index extends Base
         if($file){
             $info = $file->move(ROOT_PATH . 'public' . DS . 'uploads');
             if($info){
-                $image = $info->getExtension();
+                $image = $info->getSaveName();
             }else{
                 // 上传失败获取错误信息
                 //echo $file->getError();

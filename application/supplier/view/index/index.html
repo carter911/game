@@ -124,6 +124,7 @@
                         <td>amount</td>
                         <td>price</td>
                         <td>status</td>
+                        <td>image</td>
                         <td>create_time</td>
                         <td>update_time</td>
                     </tr>
@@ -140,6 +141,7 @@
                             {/if}
                             {$order.status|default="NONE"}
                         </td>
+                        <td class="active">{$order.image|default=''}</td>
                         <td class="active">{$order.create_at|date="Y-m-d H:i:s",###}</td>
                         <td class="active">{$order.update_at|date="Y-m-d H:i:s",###}</td>
                     </tr>
