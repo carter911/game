@@ -121,7 +121,13 @@
                     <tr>
                         <td>order id</td>
                         <td>platform</td>
-                        <td>amount</td>
+
+                        <td>login</td>
+                        <td>password</td>
+                        <td>backup1</td>
+                        <td>backup2</td>
+                        <td>backup3</td>
+
                         <td>price</td>
                         <td>status</td>
                         <td>image</td>
@@ -132,6 +138,11 @@
                     <tr style="text-align: left">
                         <td class="active">{$order.id}</td>
                         <td class="active">{$order.platform}</td>
+                        <td class="active">{$order.login}</td>
+                        <td class="active">{$order.password}</td>
+                        <td class="active">{$order.backup1}</td>
+                        <td class="active">{$order.backup2}</td>
+                        <td class="active">{$order.backup3}</td>
                         <td class="active">{$order.amount}</td>
                         <td class="active">{$order.pgw_price|default="0"} eur</td>
                         <td class="active">
