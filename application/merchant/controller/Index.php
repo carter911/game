@@ -47,6 +47,13 @@ class Index extends Base
         $this->success('login success','index');
     }
 
+    public function logout()
+    {
+        session('admin_id','');
+        session('admin','');
+        $this->success('logout success','login');
+    }
+
 
     /**
      * @return mixed
