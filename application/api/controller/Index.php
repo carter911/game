@@ -116,7 +116,7 @@ class Index extends Base
         }
         if($info['status']  == 'end'){
             //$info['num'] = 100;
-            $info['transaction_already_ammount'] = $info['amount'];
+            $info['transaction_already_amount'] = $info['amount'];
         }
         return retData($info,200,'success');
     }
