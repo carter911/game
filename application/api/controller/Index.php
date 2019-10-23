@@ -110,6 +110,10 @@ class Index extends Base
         $param = Request::instance()->only(['order_id']);
         $model = new Order();
         $info = $model->field('id,status')->where(['id'=>$param['order_id'],'merchant_id'=>$this->merchant['id']])->find();
+        $info['num'] = 0;
+        if($info['status']  == 'end'){
+            $info['num'] = $info['amount'];
+        }
         return retData($info,200,'success');
     }
 
