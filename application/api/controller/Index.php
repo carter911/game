@@ -112,7 +112,7 @@ class Index extends Base
         $info = $model->field('id,status')->where(['id'=>$param['order_id'],'merchant_id'=>$this->merchant['id']])->find();
         $info['num'] = 0;
         if($info['status']  == 'end'){
-            $info['num'] = $info['amount'];
+            $info['num'] = 100;
         }
         return retData($info,200,'success');
     }
