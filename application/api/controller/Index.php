@@ -89,12 +89,16 @@ class Index extends Base
 
         //找到最优质的的上游供货商
         $info = Db::name('supplier')->where(['status'=>'online'])->order('price asc')->field('id,price')->find();
-        //Undelivered
-        $param['pgw_id'] = $info['id'];
-        $param['pgw_price'] = round($info['price']*$param['amount'],2);
-        $id = $model->store($param);
-        if(empty($id)){
-            return retData(null,500,'create order failed');
+        if($info){
+            //Undelivered
+            $param['pgw_id'] = $info['id'];
+            $param['pgw_price'] = round($info['price']*$param['amount'],2);
+            $id = $model->store($param);
+            if(empty($id)){
+                return retData(null,500,'create order failed');
+            }
+        }else{
+            return retData(null,500,'stock empty');
         }
         return retData(['id'=>$id,'time'=>time(),'status'=>'ORDER CREATE'],200,'create order success');
     }

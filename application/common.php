@@ -11,6 +11,7 @@
 
 // 应用公共文件
 function retData($data= null,$code='200',$message='success'){
+    \think\Log::info($data);
     die(json_encode(
         [
             'data'=>$data,
