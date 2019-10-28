@@ -60,6 +60,9 @@ class Index extends Base
         $param = Request::instance()->only(['merchant_order_id','login','password','amount','platform','backup1','backup2','backup3']);
         Log::info($param);
         $param['merchant_id'] = $this->merchant['id'];
+        if($param['platform'] == 'FFA20PS4'){
+            $param['platform'] = 'ps4';
+        }
         $rule = [
             'merchant_id'  => 'require',
             'merchant_order_id' => 'require',
