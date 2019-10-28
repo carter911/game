@@ -3,6 +3,7 @@ namespace app\api\controller;
 
 use app\common\model\Order;
 use think\Db;
+use think\Log;
 use think\Request;
 use think\Validate;
 
@@ -57,6 +58,7 @@ class Index extends Base
         }
 
         $param = Request::instance()->only(['merchant_order_id','login','password','amount','platform','backup1','backup2','backup3']);
+        Log::info($param);
         $param['merchant_id'] = $this->merchant['id'];
         $rule = [
             'merchant_id'  => 'require',
