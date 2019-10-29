@@ -31,8 +31,11 @@ namespace app\common\model;
          return $this->getLastInsID();
      }
 
-     public function getInfo($id)
+     public function getInfo($id,$merchant_id=0)
      {
+         if($merchant_id>0){
+             return Db::name('order')->where(['id'=>$id,'merchant_id'=>$merchant_id])->find();
+         }
          return Db::name('order')->where(['id'=>$id])->find();
      }
 
