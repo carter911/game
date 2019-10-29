@@ -119,15 +119,17 @@ class Index extends Base
         $param = Request::instance()->only(['order_id']);
         $model = new Order();
         $info = $model->field('id,status')->where(['id'=>$param['order_id'],'merchant_id'=>$this->merchant['id']])->find();
-        $info['num'] = 0;
+        $data['num'] = 0;
         if(!isset($info['transaction_already_ammount'])){
-            $info['transaction_already_ammount'] = 0;
+            $data['transaction_already_ammount'] = 0;
         }
         if($info['status']  == 'end'){
             //$info['num'] = 100;
-            $info['transaction_already_amount'] = $info['amount'];
+            $data['transaction_already_amount'] = $info['amount'];
         }
-        return retData($info,200,'success');
+        $data['status'] = $info['status'];
+        $data['id'] = $info['id'];
+        return retData($data,200,'success');
     }
 
 
