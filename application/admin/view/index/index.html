@@ -60,6 +60,7 @@
                         <td>amount</td>
                         <td>price</td>
                         <td>pgw_price</td>
+                        <td>pgw</td>
                         <td>status</td>
                         <td>image</td>
                         <td>create_time</td>
@@ -76,6 +77,7 @@
 
                         <td class="active">{$order.amount}</td>
                         <td class="active">{$order.price} eur</td>
+                        <td class="active">{$order.pgw_id} eur</td>
                         <td class="active">{$order.pgw_price} eur</td>
                         <td class="active">
                             {if condition="$order.status eq 'Undelivered'"} <i style="color: #ccc;font-size: 15px;" class="glyphicon glyphicon-remove"></i>
