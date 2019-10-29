@@ -119,6 +119,9 @@ class Index extends Base
         $param = Request::instance()->only(['order_id']);
         $model = new Order();
         $info = $model->field('id,status')->where(['id'=>$param['order_id'],'merchant_id'=>$this->merchant['id']])->find();
+        if(empty($info)){
+            return retData(null,200,'error order_id');
+        }
         $data['num'] = 0;
         if(!isset($info['transaction_already_ammount'])){
             $data['transaction_already_ammount'] = 0;
