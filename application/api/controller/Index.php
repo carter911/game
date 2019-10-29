@@ -90,14 +90,14 @@ class Index extends Base
             return retData(null,3001,$validate->getError());
         }
         $model = new Order();
-        $param['price'] = round($this->merchant['price']*$param['amount'],2);
+        $param['price'] = round($this->merchant['price']*($param['amount']/1000),2);
 
         //找到最优质的的上游供货商
         $info = Db::name('supplier')->where(['status'=>'online'])->order('price asc')->field('id,price')->find();
         if($info){
             //Undelivered
             $param['pgw_id'] = $info['id'];
-            $param['pgw_price'] = round($info['price']*$param['amount'],2);
+            $param['pgw_price'] = round($info['price']*($param['amount']/1000),2);
             $id = $model->store($param);
             if(empty($id)){
                 return retData(null,500,'create order failed');
