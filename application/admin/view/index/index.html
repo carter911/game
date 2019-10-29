@@ -77,8 +77,8 @@
 
                         <td class="active">{$order.amount}</td>
                         <td class="active">{$order.price} eur</td>
-                        <td class="active">{$order.pgw_id} eur</td>
                         <td class="active">{$order.pgw_price} eur</td>
+                        <td class="active">{$order.pgw_id}</td>
                         <td class="active">
                             {if condition="$order.status eq 'Undelivered'"} <i style="color: #ccc;font-size: 15px;" class="glyphicon glyphicon-remove"></i>
                             {elseif condition="$order.status eq 'end'"/}<i style="color: blue;font-size: 15px;" class="glyphicon glyphicon-ok"></i>
