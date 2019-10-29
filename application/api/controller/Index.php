@@ -132,6 +132,7 @@ class Index extends Base
             //$info['num'] = 100;
             $data['transaction_already_amount'] = $info['amount'];
         }
+        $data['amount'] = $info['amount'];
         $data['status'] = $info['status'];
         $data['id'] = $info['id'];
         return retData($data,200,'success');
