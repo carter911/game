@@ -126,7 +126,7 @@ class Index extends Base
         Log::info($info);
         $data['num'] = $info['amount'];
         if(!isset($info['transaction_already_ammount'])){
-            $data['transaction_already_ammount'] = 0;
+            $data['transaction_already_amount'] = 0;
         }
         if($info['status']  == 'end'){
             //$info['num'] = 100;
