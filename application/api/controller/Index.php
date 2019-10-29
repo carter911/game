@@ -3,6 +3,7 @@ namespace app\api\controller;
 
 use app\common\model\Order;
 use think\Db;
+use think\Log;
 use think\Request;
 use think\Validate;
 
@@ -57,7 +58,11 @@ class Index extends Base
         }
 
         $param = Request::instance()->only(['merchant_order_id','login','password','amount','platform','backup1','backup2','backup3']);
+        Log::info($param);
         $param['merchant_id'] = $this->merchant['id'];
+        if($param['platform'] == 'FFA20PS4'){
+            $param['platform'] = 'ps4';
+        }
         $rule = [
             'merchant_id'  => 'require',
             'merchant_order_id' => 'require',
@@ -89,12 +94,16 @@ class Index extends Base
 
         //找到最优质的的上游供货商
         $info = Db::name('supplier')->where(['status'=>'online'])->order('price asc')->field('id,price')->find();
-        //Undelivered
-        $param['pgw_id'] = $info['id'];
-        $param['pgw_price'] = round($info['price']*$param['amount'],2);
-        $id = $model->store($param);
-        if(empty($id)){
-            return retData(null,500,'create order failed');
+        if($info){
+            //Undelivered
+            $param['pgw_id'] = $info['id'];
+            $param['pgw_price'] = round($info['price']*$param['amount'],2);
+            $id = $model->store($param);
+            if(empty($id)){
+                return retData(null,500,'create order failed');
+            }
+        }else{
+            return retData(null,500,'stock empty');
         }
         return retData(['id'=>$id,'time'=>time(),'status'=>'ORDER CREATE'],200,'create order success');
     }
