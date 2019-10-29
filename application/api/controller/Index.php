@@ -120,7 +120,7 @@ class Index extends Base
         $model = new Order();
         $info = $model->field('id,status')->where(['id'=>$param['order_id'],'merchant_id'=>$this->merchant['id']])->find();
         $info['num'] = 0;
-        if(empty($info['transaction_already_ammount'])){
+        if(!isset($info['transaction_already_ammount'])){
             $info['transaction_already_ammount'] = 0;
         }
         if($info['status']  == 'end'){
