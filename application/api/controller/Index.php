@@ -124,7 +124,7 @@ class Index extends Base
             return retData(null,200,'error order_id');
         }
         Log::info($info);
-        $data['num'] = 0;
+        $data['num'] = $info['amount'];
         if(!isset($info['transaction_already_ammount'])){
             $data['transaction_already_ammount'] = 0;
         }
