@@ -9,8 +9,7 @@
                     <tr>
                         <td>id</td>
                         <td>name</td>
-                        <td>status</td>
-                        <td>price</td>
+                        <td>status/price</td>
                         <td>create_time</td>
                         <td>update_time</td>
                         <td>option</td>
@@ -19,8 +18,7 @@
                     <tr style="text-align: left">
                         <td class="active">{$order.id}</td>
                         <td class="active">{$order.name}</td>
-                        <td class="active">{$order.status}</td>
-                        <td class="active">{$order.price}</td>
+                        <td class="active"><pre>{$order.status}<br/>{$order.price}</pre></td>
                         <td class="active">{$order.create_at|date="Y-m-d H:i:s",###}</td>
                         <td class="active">{$order.update_at|date="Y-m-d H:i:s",###}</td>
                         <td class="active">

@@ -8,6 +8,7 @@ use think\Request;
 class Base extends Controller
 {
 
+    protected $merchant_id = 0;
     public function __construct()
     {
         parent::__construct();
@@ -19,6 +20,7 @@ class Base extends Controller
             $this->redirect('login');
         }
         $info = session('merchant');
+        $this->merchant_id = $info['id'];
         $this->assign('admin_info', $info);
         $this->assign('action',$action);
     }

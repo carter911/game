@@ -21,30 +21,18 @@
                             <input name="password" value="" type="password" class="form-control"  placeholder="password">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="exampleInputName2">Price</label>
-                        <div class="input-group">
-                            <div class="input-group-addon"><span class="glyphicon glyphicon-euro" aria-hidden="true"></span></div>
-                            <input  name="price" value="{$info.price|default=''}" type="text" class="form-control"  placeholder="price">
+                    <div class="form-inline">
+                        {foreach name='info.price' item='item' key="k" }
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon">{$k}(€)</div>
+                                <input style="width: 100px" name="price[{$k}]" value="{$item|default='999'}" type="text" class="form-control" id="exampleInputAmount" placeholder="Amount">
+                                <div class="input-group-addon">
+                                    <input   name="status[{$k}]"  {eq name="info.status[$k]" value="online"}checked{/eq}  type="checkbox">    Online
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputName2">Status</label>
-                        <div class="input-group">
-                            <div class="input-group-addon"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></div>
-                            {empty name='info'}
-                                <select name="status" class="form-control">
-                                    <option selected  value="online">online</option>
-                                    <option value="offline">offline</option>
-                                </select>
-                            {/empty}
-                            {notempty name='info'}
-                                <select name="status" class="form-control">
-                                    <option eq name="info.status" value="online"}selected{/eq}  value="online">online</option>
-                                    <option {eq name="info.status" value="offline"}selected{/eq} value="offline">offline</option>
-                                </select>
-                            {/notempty}
-                        </div>
+                        {/foreach}
                     </div>
                     <div style="text-align: center">
                         <button  type="submit" class="btn btn-default">save</button>

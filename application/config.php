@@ -240,4 +240,15 @@ return [
         'var_page'  => 'page',
         'list_rows' => 15,
     ],
+    'redis'                  => [
+        'host' => '47.94.204.119', // redis主机
+        'port' => '3306',       // redis端口
+        'password' => '', // 密码
+        'select' => 10, // 操作库
+        'expire' => 0, // 有效期(秒)
+        'timeout' => 0, // 超时时间(秒)
+        'persistent' => true, // 是否长连接
+        'prefix' => '', //前缀
+    ]
+
 ];

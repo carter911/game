@@ -1,11 +1,14 @@
 <?php
 namespace app\api\controller;
 
+use app\common\logic\Pgw;
+use app\common\model\Merchant;
 use app\common\model\Order;
 use think\Db;
 use think\Log;
 use think\Request;
 use think\Validate;
+use tp5redis\Redis;
 
 class Index extends Base
 {
@@ -15,7 +18,9 @@ class Index extends Base
     public function __construct()
     {
         $token = Request::instance()->param('user',0);
-        $merchant =  Db::name('merchant')->where(['key'=>$token])->find();
+        $model = new Merchant();
+        $merchant =  $model->where(['key'=>$token])->find();
+        $merchant = $merchant->toArray();
         if(empty($merchant)){
             return retData(null,400,'auth error ');
         }
@@ -38,14 +43,22 @@ class Index extends Base
      */
     public function price()
     {
-
-        $param = Request::instance()->get('platform','ps4');
-        if(!$this->checkStatus($this->merchant)){
-            $this->merchant['status'] = 'offline';
-        }else{
-            $this->merchant['status'] = 'online';
+//        Redis::set('name',111);
+//        $name = Redis::get('name');
+//        echo $name;die;
+        $platform = Request::instance()->get('platform','FFA20PS4');
+        $model = new Merchant();
+        if(!in_array($platform,$model->gameType)){
+            return retData(null,1001,'params error');
         }
-        return retData(['price'=>$this->merchant['price'],'status'=>$this->merchant['status']]);
+        $param = ['platform'=>$platform,'price'=>$this->merchant['price'][$platform]];
+        $model = new Pgw();
+        $model->getSupplier($param);
+        $status = 'offline';
+        if($param['pgw_id']>0){
+            $status = $param['status'];
+        }
+        return retData(['price'=>$this->merchant['price'][$platform],'platform'=>$platform,'status'=>$status]);
     }
 
     /**
@@ -53,15 +66,11 @@ class Index extends Base
      */
     public function newOrder()
     {
-        if(!$this->checkStatus($this->merchant)){
-            return retData(null,500,'stock empty');
-        }
-
         $param = Request::instance()->only(['merchant_order_id','login','password','amount','platform','backup1','backup2','backup3']);
         Log::info($param);
         $param['merchant_id'] = $this->merchant['id'];
-        if($param['platform'] == 'FFA20PS4'){
-            $param['platform'] = 'ps4';
+        if($param['platform'] == 'ps4'){
+            $param['platform'] = 'FFA20PS4';
         }
         $rule = [
             'merchant_id'  => 'require',
@@ -89,22 +98,24 @@ class Index extends Base
         if (!$validate->check($param)) {
             return retData(null,3001,$validate->getError());
         }
-        $model = new Order();
-        $param['price'] = round($this->merchant['price']*($param['amount']/1000),2);
+        if(!isset($this->merchant['status'][$param['platform']]) || $this->merchant['status'][$param['platform']] !=='online'){
+            return retData(null,500,'gateway closed');
+        }
 
-        //找到最优质的的上游供货商
-        $info = Db::name('supplier')->where(['status'=>'online'])->order('price asc')->field('id,price')->find();
-        if($info){
-            //Undelivered
-            $param['pgw_id'] = $info['id'];
-            $param['pgw_price'] = round($info['price']*($param['amount']/1000),2);
-            $id = $model->store($param);
-            if(empty($id)){
-                return retData(null,500,'create order failed');
-            }
-        }else{
+        $param['price'] = round($this->merchant['price'][$param['platform']]*($param['amount']/1000),2);
+        $pgw = new Pgw();
+        $pgw->getSupplier($param);
+        if($param['pgw_id']<=0){
             return retData(null,500,'stock empty');
         }
+
+        $model = new Order();
+        $id = $model->store($param);
+        if(empty($id)){
+            return retData(null,500,'create order failed');
+        }
+
+        $pgw->pgw($param);
         return retData(['id'=>$id,'time'=>time(),'status'=>'ORDER CREATE'],200,'create order success');
     }
 

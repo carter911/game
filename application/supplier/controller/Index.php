@@ -1,6 +1,7 @@
 <?php
 namespace app\supplier\controller;
 
+use app\common\model\Supplier;
 use think\Db;
 use think\Request;
 
@@ -64,7 +65,9 @@ class Index extends Base
     {
 
         $supplier_id = session('supplier_id');
-        $info = Db::name('supplier')->find($supplier_id);
+
+        $model = new Supplier();
+        $info = $model->getInfo($supplier_id)->toArray();
         $list = Db::name('order')->where(['pgw_id'=>$supplier_id])->order('id desc')->paginate(20)->each(function($item, $key){
             if(!empty($item['image'])){
                 $item['image'] = Request::instance()->domain().'/uploads/'.$item['image'];
@@ -88,8 +91,9 @@ class Index extends Base
     {
         $supplier_id = session('supplier_id');
         $param = Request::instance()->only(['price','status']);
-        $status = isset($param['status'])?'online':'offline';
-        Db::name('supplier')->where(['id'=>$supplier_id])->update(['price'=>$param['price'],'status'=>$status,'update_at'=>time()]);
+        $model = new Supplier();
+        $model->update(['price'=>$param['price'],'status'=>$param['status'],'update_at'=>time(),'id'=>$supplier_id]);
+        $model->cache($supplier_id);
         $this->success('success');
     }
 

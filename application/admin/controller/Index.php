@@ -1,7 +1,9 @@
 <?php
 namespace app\admin\controller;
 
+use app\common\model\Merchant;
 use app\common\model\Order;
+use app\common\model\Supplier;
 use think\Db;
 use think\Log;
 use think\Request;
@@ -120,7 +122,9 @@ class Index extends Base
     public function update_supplier()
     {
         $id = Request::instance()->param('id',0);
-        $info = Db::name('supplier')->find(['id'=>$id]);
+
+        $model = new Supplier();
+        $info = $model->getInfo($id)->toArray();
         $this->assign('info',$info);
         return $this->fetch('supplier_info');
     }
@@ -133,7 +137,7 @@ class Index extends Base
             'name' => 'require',
             //'password' => 'require',
             'price' => 'require',
-            'status' => 'require',
+            //'status' => 'require',
         ];
         $validate =  new Validate($rule);
         if (!$validate->check($param)) {
@@ -145,15 +149,17 @@ class Index extends Base
         }else if(empty($param['password']) && $param['id'] <=0){
             $param['password'] =  hash('sha256','game2019');
         }
-
+        $model = new Supplier();
         if(isset($param['id']) && $param['id']>0){
             if(empty($param['password'])){
                 unset($param['password']);
             }
-            Db::name('supplier')->update($param);
+            $model->update($param);
+            $model->cache($param['id']);
         }else{
             $param['create_at'] = time();
-            Db::name('supplier')->insert($param);
+            $id = $model->insert($param,false,true);
+            $model->cache($id);
         }
         $this->success('success','supplier');
     }
@@ -185,7 +191,8 @@ class Index extends Base
     public function update_merchant()
     {
         $id = Request::instance()->param('id',0);
-        $info = Db::name('merchant')->find(['id'=>$id]);
+        $model = new Merchant();
+        $info =$model->getInfo($id)->toArray();
         $this->assign('info',$info);
         return $this->fetch('merchant_info');
     }
@@ -198,8 +205,9 @@ class Index extends Base
             'name' => 'require',
             //'password' => 'require',
             'price' => 'require',
-            'status' => 'require',
+            //'status' => 'require',
         ];
+
         $validate =  new Validate($rule);
         if (!$validate->check($param)) {
             $this->error($validate->getError());
@@ -210,19 +218,19 @@ class Index extends Base
             Log::notice($password);
             $param['password'] =  hash('sha256',$password);
         }
-
+        $model = new Merchant();
         if(isset($param['id']) && $param['id']>0){
             if(empty($param['password'])){
                 unset($param['password']);
             }
-            Db::name('merchant')->update($param);
+            $model->update($param);
         }else{
             if(empty($param['password'])){
                 $param['password'] =  hash('sha256','game2019');
             }
             $param['create_at'] = time();
             $param['key'] = hash('sha256',$param['name']);
-            Db::name('merchant')->insert($param);
+            $model->insert($param);
         }
         $this->success('success','merchant');
     }

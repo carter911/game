@@ -2,8 +2,9 @@
 namespace app\common\model;
 
  use think\Db;
+ use think\Model;
 
- class Order extends \think\Model {
+ class Order extends Model {
 
 
      protected $table = 'order';
@@ -34,9 +35,9 @@ namespace app\common\model;
      public function getInfo($id,$merchant_id=0)
      {
          if($merchant_id>0){
-             return Db::name('order')->where(['id'=>$id,'merchant_id'=>$merchant_id])->find();
+             return $this->where(['id'=>$id,'merchant_id'=>$merchant_id])->find();
          }
-         return Db::name('order')->where(['id'=>$id])->find();
+         return $this->where(['id'=>$id])->find();
      }
 
      public function getList()

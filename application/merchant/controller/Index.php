@@ -1,6 +1,8 @@
 <?php
 namespace app\merchant\controller;
 
+use app\common\logic\Pgw;
+use app\common\model\Merchant;
 use app\common\model\Order;
 use think\Db;
 use think\Request;
@@ -64,23 +66,40 @@ class Index extends Base
      */
     public function index( )
     {
-        $merchant_id = session('merchant_id');
-        $info = Db::name('merchant')->find($merchant_id);
+        $search = Request::instance()->param();
 
-        if(!$this->checkStatus($info)){
-            $info['status'] = 'offline';
-        }else{
-            $info['status'] = 'online';
+
+        if(!empty($search['supplier_id']) ){
+            $where['pgw_id'] = trim($search['supplier_id']);
         }
-        $list = Db::name('order')->where(['merchant_id'=>$merchant_id])->order('id desc')->paginate(20);
+
+
+        if(!empty($search['merchant_order_id']) ){
+            $where['merchant_order_id'] = trim($search['merchant_order_id']);
+        }
+
+        if(!empty($search['status']) ){
+            $where['status'] = trim($search['status']);
+        }else{
+            $search['status'] = "";
+        }
+
+        $merchant_id = session('merchant_id');
+        $where['merchant_id'] = $merchant_id;
+
+        $model = new Merchant();
+        $info = $model->getInfo($merchant_id)->toArray();
+        $list = Db::name('order')->where($where)->order('id desc')->paginate(20);
         $this->assign('list', $list);
         $this->assign('info', $info);
+        $this->assign('search', $search);
         return $this->fetch('index');
     }
 
     public function checkStatus($info)
     {
         //上游最低价格不能高于下游价格
+
         $price = Db::name('supplier')->where(['status'=>'online'])->order('price asc')->field('price')->find();
         $price = isset($price['price'])?$price['price']:0;
         if($info['price']<=$price){
@@ -127,12 +146,17 @@ class Index extends Base
         if (!$validate->check($param)) {
             $this->error($validate->getError());
         }
-        $param['price'] = round(session('merchant')['price']*($param['amount']/1000),2);
+
         //找到最优质的的上游供货商
-        $info = Db::name('supplier')->where(['status'=>'online'])->order('price asc')->field('id,price')->find();
-        //Undelivered
-        $param['pgw_id'] = $info['id'];
-        $param['pgw_price'] = round($info['price']*($param['amount']/1000),2);
+        $pgw = new Pgw();
+        $pgw->getSupplier($param);
+        $merchant = new Merchant();
+        $merchant_info = $merchant->getInfo($this->merchant_id)->toArray();
+        $param['price'] = round($merchant_info['price'][$param['platform']]*($param['amount']/1000),2);
+
+        if( $param['price']<=$param['pgw_price']){
+            $this->error('create order failed');
+        }
 
         $model = new Order();
         $id = $model->store($param);
@@ -141,6 +165,8 @@ class Index extends Base
         }
         $this->success('create success');
     }
+
+
 
     public function api()
     {
