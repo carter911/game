@@ -143,7 +143,7 @@ class Index extends Base
         $rule = [
             'name' => 'require',
             //'password' => 'require',
-            'price' => 'require',
+            //'price' => 'require',
             //'status' => 'require',
         ];
         $validate =  new Validate($rule);
