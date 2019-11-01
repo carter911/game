@@ -139,10 +139,17 @@ class Index extends Base
         if(!isset($info['transaction_already_ammount'])){
             $data['transaction_already_amount'] = 0;
         }
+
+
+
         if($info['status']  == 'end'){
             //$info['num'] = 100;
             $data['transaction_already_amount'] = $info['amount'];
         }
+        if('transferring' == $info['status'] ){
+            $data['transaction_already_amount'] = $info['amount']/0.1;
+        }
+
         $data['amount'] = $info['amount'];
         $data['status'] = $info['status'];
         $data['id'] = $info['id'];

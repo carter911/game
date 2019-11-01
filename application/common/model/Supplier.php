@@ -20,7 +20,7 @@ class Supplier extends Model
 
         $priceData = [];
         foreach ($this->gameType as $key => $val) {
-            if (empty($price[$val])) {
+            if (isset($price[$val])) {
                 $priceData[$val] = 999;
             } else {
                 $priceData[$val] = $price[$val];
@@ -62,7 +62,7 @@ class Supplier extends Model
         $price = json_decode($price, true);
         $priceData = [];
         foreach ($this->gameType as $key => $val) {
-            if (empty($price[$val])) {
+            if (isset($price[$val])) {
                 $priceData[$val] = 'offline';
             } else {
                 $priceData[$val] = $price[$val] == 'online' ? 'online' : 'offline';
