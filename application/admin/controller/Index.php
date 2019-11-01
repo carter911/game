@@ -115,7 +115,14 @@ class Index extends Base
 
     public function add_supplier()
     {
-        $this->assign('info',[]);
+        $info['price'] = [];
+        $info['status'] = [];
+        $this->assign('info',$info);
+        $model = new Merchant();
+        foreach ($model->gameType as $key => $val){
+            $info['price'][$val] = 999;
+            $info['status'][$val] = 999;
+        }
         return $this->fetch('supplier_info');
     }
 
