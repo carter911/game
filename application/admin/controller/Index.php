@@ -191,6 +191,14 @@ class Index extends Base
 
     public function add_merchant()
     {
+
+        $info['price'] = [];
+        $info['status'] = [];
+        $model = new Merchant();
+        foreach ($model->gameType as $key => $val){
+            $info['price'][$val] = 999;
+            $info['status'][$val] = 999;
+        }
         $this->assign('info',[]);
         return $this->fetch('merchant_info');
     }
