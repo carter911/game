@@ -92,6 +92,9 @@ class Index extends Base
         $supplier_id = session('supplier_id');
         $param = Request::instance()->only(['price','status']);
         $model = new Supplier();
+        if(!isset($param['status'])){
+            $param['status'] = "";
+        }
         $model->update(['price'=>$param['price'],'status'=>$param['status'],'update_at'=>time(),'id'=>$supplier_id]);
         $model->cache($supplier_id);
         $this->success('success');
