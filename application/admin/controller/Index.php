@@ -117,7 +117,6 @@ class Index extends Base
     {
         $info['price'] = [];
         $info['status'] = [];
-
         $model = new Merchant();
         foreach ($model->gameType as $key => $val){
             $info['price'][$val] = 999;
