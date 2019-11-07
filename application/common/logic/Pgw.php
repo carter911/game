@@ -6,7 +6,12 @@ namespace app\common\logic;
  use app\common\model\Supplier;
 
  class Pgw{
-     public function __construct()
+
+     static  $gameType = [
+         'FFA20PS4','FFA20XBO','FFA20PCC'
+     ];
+     public  $gateway = "";
+     public function __construct($gateway="")
      {
 
      }
@@ -48,6 +53,11 @@ namespace app\common\logic;
      public function pgw($param)
      {
             //redis
+     }
+
+     public function getPrice()
+     {
+
      }
 
  }

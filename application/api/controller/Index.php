@@ -43,9 +43,7 @@ class Index extends Base
      */
     public function price()
     {
-//        Redis::set('name',111);
-//        $name = Redis::get('name');
-//        echo $name;die;
+
         $platform = Request::instance()->get('platform','FFA20PS4');
         $model = new Merchant();
         if(!in_array($platform,$model->gameType)){
@@ -108,7 +106,6 @@ class Index extends Base
         if($param['pgw_id']<=0){
             return retData(null,500,'stock empty');
         }
-
         $model = new Order();
         $id = $model->store($param);
         if(empty($id)){

@@ -93,9 +93,9 @@ namespace app\common\model;
          return $this->where(['id'=>$id])->find();
      }
 
-     public function getList()
+     public function getList($where=[],$page=1)
      {
-
+         return $this->where($where)->limit($page)->select();
      }
 
      public function cache()

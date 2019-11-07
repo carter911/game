@@ -15,9 +15,9 @@ return [
     // +----------------------------------------------------------------------
 
     // 应用调试模式
-    'app_debug'              => false,
+    'app_debug'              => true,
     // 应用Trace
-    'app_trace'              => false,
+    'app_trace'              => true,
     // 应用模式状态
     'app_status'             => '',
     // 是否支持多模块
@@ -241,8 +241,8 @@ return [
         'list_rows' => 15,
     ],
     'redis'                  => [
-        'host' => '47.94.204.119', // redis主机
-        'port' => '3306',       // redis端口
+        'host' => '127.0.0.1', // redis主机
+        'port' => '6379',       // redis端口
         'password' => '', // 密码
         'select' => 10, // 操作库
         'expire' => 0, // 有效期(秒)

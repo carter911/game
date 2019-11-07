@@ -5,6 +5,12 @@ use think\Log;
 
 class Base  {
 
+    public $pgw = '';
+    public function __construct($pgw)
+    {
+        //$this->pgw = "app\common\gateway\".$pgw;
+    }
+
     public static function curlOpt($url, &$rdata, $options=array()) {  // 自定义选项执行CURL
         Log::info('远程请求地址'.$url.var_export($rdata,true).var_export($options,true));
 
@@ -161,5 +167,47 @@ class Base  {
 
         return $r;
     }
+
+
+
+    function curl( $url , $postFields = NULL )
+    {
+        $ch = curl_init();
+        curl_setopt( $ch , CURLOPT_TIMEOUT , 3 );
+        curl_setopt( $ch , CURLOPT_URL , $url );
+        curl_setopt( $ch , CURLOPT_FAILONERROR , FALSE );
+        curl_setopt( $ch , CURLOPT_RETURNTRANSFER , TRUE );
+        if ( strlen( $url ) > 5 && strtolower( substr( $url , 0 , 5 ) ) == 'https' ){
+            curl_setopt( $ch , CURLOPT_SSL_VERIFYPEER , FALSE );
+            curl_setopt( $ch , CURLOPT_SSL_VERIFYHOST , FALSE );
+        }
+
+        if ( is_array( $postFields ) && 0 < count( $postFields ) ){
+            $postBodyString = '';
+            $postMultipart  = FALSE;
+            foreach ( $postFields as $k => $v ) {
+                if ( '@' != substr( $v , 0 , 1 ) )
+                {
+                    $postBodyString .= "$k=" . urlencode( $v ) . "&";
+                } else {
+                    $postMultipart = TRUE;
+                }
+            }
+            $postFields = trim( $postBodyString , '&' );
+            unset( $k , $v );
+            curl_setopt( $ch , CURLOPT_POST , TRUE );
+            if ( $postMultipart ){
+                curl_setopt( $ch , CURLOPT_POSTFIELDS , $postFields );
+            } else {
+                curl_setopt( $ch , CURLOPT_POSTFIELDS , $postFields );
+            }
+        }
+
+        $reponse = curl_exec( $ch );
+        curl_close( $ch );
+        return $reponse;
+    }
+
+
 
 }

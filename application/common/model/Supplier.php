@@ -20,7 +20,7 @@ class Supplier extends Model
 
         $priceData = [];
         foreach ($this->gameType as $key => $val) {
-            if (isset($price[$val])) {
+            if (!isset($price[$val])) {
                 $priceData[$val] = 999;
             } else {
                 $priceData[$val] = $price[$val];
@@ -34,7 +34,7 @@ class Supplier extends Model
         $price = json_decode($price, true);
         $priceData = [];
         foreach ($this->gameType as $key => $val) {
-            if (isset($price[$val])) {
+            if (!isset($price[$val])) {
                 $priceData[$val] = 999;
             } else {
                 $priceData[$val] = $price[$val];
@@ -44,28 +44,29 @@ class Supplier extends Model
     }
 
 
-    public function setStatusAttr($price)
+    public function setStatusAttr($status)
     {
-        $priceData = [];
+        $statusData = [];
         foreach ($this->gameType as $key => $val) {
-            if (isset($price[$val])) {
-                $priceData[$val] = 'offline';
+
+            if (empty($status[$val])) {
+                $statusData[$val] = 'offline';
             } else {
-                $priceData[$val] = $price[$val] == 'on' ? 'online' : 'offline';
+                $statusData[$val] = ($status[$val] == 'on' || $status[$val] == 'online') ? 'online' : 'offline';
             }
         }
-        return json_encode($priceData);
+        return json_encode($statusData);
     }
 
-    public function getStatusAttr($price)
+    public function getStatusAttr($status)
     {
-        $price = json_decode($price, true);
+        $status = json_decode($status, true);
         $priceData = [];
         foreach ($this->gameType as $key => $val) {
-            if (isset($price[$val])) {
+            if (empty($status[$val])) {
                 $priceData[$val] = 'offline';
             } else {
-                $priceData[$val] = $price[$val] == 'online' ? 'online' : 'offline';
+                $priceData[$val] = $status[$val] == 'online' ? 'online' : 'offline';
             }
         }
         return $priceData;
@@ -75,12 +76,9 @@ class Supplier extends Model
     {
         if ($id > 0) {
             $data['update_at'] = time();
-            //$data['price'] = round(session('merchant')['price']*$data['amount'],2);
-            $res = $this->allowField(['status', 'price', 'update_at', 'pgw_return', 'pgw_gateway_id'])->save($data, ['id' => $id]);
+            $res = $this->allowField(['status', 'price', 'update_at', 'pgw_return', 'pgw_gateway_id','currency','balance'])->save($data, ['id' => $id]);
             return $res;
         }
-
-        $data['status'] = 'Undelivered';
         $data['create_at'] = time();
         $res = $this->allowField(true)->insert($data);
         if (empty($res)) {

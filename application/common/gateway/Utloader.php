@@ -7,7 +7,7 @@ use app\common\model\Merchant;
 use app\common\model\Order;
 use think\Log;
 
-class Ct extends Base
+class Utloader extends Base
 {
 
     protected $base_url = '';
@@ -21,15 +21,19 @@ class Ct extends Base
         }
     }
 
-    const USER_ID = 'alex-b5c9c562541sa45gd357z';
-    const PGW_URL = 'https://mmoo.pl/u7buy/';
+    const KEY = 'WoCuQvW-LHvsf5h-s5AnZnG-jmdnc47';
+    const USER_ID = '9290293';
+    const PGW_URL = 'https://utloader.com/stock';
 
     public static function getParam($action='getPrices')
     {
 
         //[{"key":"apiKey","value":"WoCuQvW-LHvsf5h-s5AnZnG-jmdnc47","equals":true,"description":"","enabled":true}]
         $param = [
-            'user'=>self::USER_ID,
+            'apiKey' => self::KEY,
+            //'timestamp' => time(),
+            'action' => $action,
+            'userID' => self::USER_ID,
         ];
         return $param;
     }
@@ -39,15 +43,17 @@ class Ct extends Base
     {
         $data = [];
         try {
-
-            $url = self::PGW_URL.'price';
-            $res = self::curlPost($url, self::getParam(),$data, ["Content-Type"=> "application/json"]);
+            $params = [];
+            foreach (self::getParam() as $key => $val){
+                $params[] = $key."=".$val;
+            }
+            $params = implode("&",$params);
+            $url = self::PGW_URL.'?'.$params;
+            $res = self::curlJson($url,[],$data,[],'GET');
             if($res !=200){
                 Log::error('Utloader远程请求地址'.$url.var_export($res,true).var_export($data,true));
                 return false;
             }
-
-            dump($data);die;
             $price = [];
             foreach ($data['prices'] as $key=> $item){
                 if(in_array($key,Pgw::$gameType)){
@@ -101,7 +107,6 @@ class Ct extends Base
         $params['platform'] = self::formatPlatform($orderInfo['platform']);
         $params['backup_code'] = $orderInfo['backup1'];
         $params['amount'] = $orderInfo['amount'];
-
         $param = [];
         foreach ($params as $key => $val){
             $param[] = $key."=".$val;
@@ -116,19 +121,46 @@ class Ct extends Base
         }
 
         if($data['status'] ==1){
-            $data['status'] = 'captcha';
+            $data['status'] = 'transferring';
         }else{
-            $data['status'] = 'wrongbackup';
+            $data['status'] = isset($data['reason'])?$data['reason']:'unexpected';
         }
         $data['pgw_message'] = isset($data['reason'])?$data['reason']:'';
-
-
         $data['pgw_order_id'] = isset($data['token'])?$data['token']:'';
         return $data;
     }
 
-    public function getStatus()
+    public function queryOrder($orderInfo)
     {
-
+        if(empty($orderInfo['pgw_prder_id'])){
+            return false;
+        }
+        $params = self::getParam('trackOrder');
+        $params['token'] = $orderInfo['pgw_prder_id'];
+        $param = [];
+        foreach ($params as $key => $val){
+            $param[] = $key."=".$val;
+        }
+        $param = implode("&",$param);
+        $data = [];
+        $res = self::curlJson(self::PGW_URL."?".$param,[],$data,[],'GET');
+        $data['pgw_return'] = json_encode($data);
+        if($res !=200){
+            Log::error('Utloader远程请求地址'.self::PGW_URL.var_export($res,true).var_export($data,true));
+            return $data;
+        }
+        if($data['result'] ==200){
+            if($data['coins_transferred'] == $data['transfer_amount']){
+                $data['status'] = 'end';
+            }
+            $data['transaction_already_amount'] = $data['coins_transferred'];
+        }else{
+            echo '订单不存在';
+            //TODO 应该是没有找到这个订单
+            Log::error($data);
+            exit;
+            //$data['status'] = isset($data['reason'])?$data['reason']:'unexpected';
+        }
+        return $data;
     }
 }
