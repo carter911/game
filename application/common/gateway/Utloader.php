@@ -106,7 +106,7 @@ class Utloader extends Base
         $params['password'] = trim($orderInfo['password']);
         $params['platform'] = self::formatPlatform($orderInfo['platform']);
         $params['backup_code'] = $orderInfo['backup1'];
-        $params['amount'] = $orderInfo['amount'];
+        $params['amount'] = $orderInfo['amount']/1000;
         $param = [];
         foreach ($params as $key => $val){
             $param[] = $key."=".$val;
