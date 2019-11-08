@@ -106,7 +106,13 @@ class Index extends Base
         if($param['pgw_id']<=0){
             return retData(null,500,'stock empty');
         }
+
+
         $model = new Order();
+        //$model->where(['status'=>['in',['']]])
+
+
+
         $id = $model->store($param);
         if(empty($id)){
             return retData(null,500,'create order failed');
