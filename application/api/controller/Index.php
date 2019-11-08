@@ -110,9 +110,6 @@ class Index extends Base
 
         $model = new Order();
         //$model->where(['status'=>['in',['']]])
-
-
-
         $id = $model->store($param);
         if(empty($id)){
             return retData(null,500,'create order failed');
@@ -142,9 +139,6 @@ class Index extends Base
         if(!isset($info['transaction_already_ammount'])){
             $data['transaction_already_amount'] = 0;
         }
-
-
-
         if($info['status']  == 'end'){
             //$info['num'] = 100;
             $data['transaction_already_amount'] = $info['amount'];
