@@ -103,6 +103,7 @@ class Ct extends Base
         $data = [];
         $url = self::PGW_URL.'new';
         $res = self::curlPost($url, json_encode($params),$data, ['X-AjaxPro-Method:ShowList', 'Content-Type: application/json; charset=utf-8',]);
+        $data['pgw_order_id'] = isset($data['orderid'])?$data['orderid']:'0';
         if($res !=200){
             Log::error('Utloader远程请求地址'.$url.var_export($res,true).var_export($data,true));
             return false;
@@ -114,7 +115,7 @@ class Ct extends Base
             $data['code'] = 'wrongbackup';
         }
         //$data['pgw_message'] = isset($data['reason'])?$data['reason']:'';
-        $data['pgw_order_id'] = isset($data['orderid'])?$data['orderid']:'';
+
         return $data;
     }
 
