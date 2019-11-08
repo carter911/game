@@ -119,7 +119,7 @@ class Ct extends Base
         return $data;
     }
 
-    public function getStatus($orderInfo)
+    public function queryOrder($orderInfo)
     {
 
         $url = 'https://mmoo.pl/u7buy/status';
