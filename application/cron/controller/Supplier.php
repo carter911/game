@@ -68,7 +68,7 @@ class Supplier
             $res = $pgw->newOrder($val);
             unset($res['amount']);
             unset($res['platform']);
-            Log::notice('交易结果'.$res);
+            Log::notice('交易结果pgw_order_id'.var_export($res,true));
             $res = $order->store($res,$val['id']);
             Log::info($order->getLastSql());
         }
