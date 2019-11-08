@@ -3,6 +3,7 @@
 namespace app\cron\controller;
 
 use app\common\gateway\Base;
+use app\common\gateway\Ct;
 use app\common\gateway\Gateway;
 use app\common\logic\Pgw;
 use think\Log;
@@ -59,10 +60,10 @@ class Supplier
     public function sendToPayment()
     {
         $order = new \app\common\model\Order();
-        $list = $order->where(['status'=>'Undelivered'])->order('id asc')->limit(5)->select();
+        $list = $order->where(['status'=>'Undelivered'])->order('id asc')->limit(1)->select();
         $list = $list->toArray();
         foreach ($list as $key=> $val){
-            $gateway = "app\\common\\gateway\\Utloader";
+            $gateway = "app\\common\\gateway\\".$val['pgw_payment'];
             $pgw = new $gateway();
             $res = $pgw->newOrder($val);
             Log::notice($res);
@@ -84,36 +85,21 @@ class Supplier
             $res = $order->store($res,$val['id']);
             Log::info($order->getLastSql());
         }
-
     }
 
     public function test()
     {
 
-        $url = 'https://mmoo.pl/u7buy/price';
-        $user = 'alex-b5c9c562541sa45gd357z';
-
-
-        $payload = array(
-            'user' => $user,
-        );
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HEADER,false);
-        $headers = array(
-            "Content-Type: application/json"
-        );
-
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0");
-        curl_setopt($ch, CURLOPT_POST, 1);
-        //$open = json_encode($payload);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-        $open = curl_exec($ch);
-
-        dump($open);
+//        $url = 'https://mmoo.pl/u7buy/price';
+//        $user = 'alex-b5c9c562541sa45gd357z';
+//
+//
+//        $payload = array(
+//            'user' => $user,
+//        );
+//        $open = json_encode($payload);
+        $gateway = new Ct();
+        $gateway->getPrice();
 
     }
 }

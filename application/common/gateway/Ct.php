@@ -24,7 +24,7 @@ class Ct extends Base
     const USER_ID = 'alex-b5c9c562541sa45gd357z';
     const PGW_URL = 'https://mmoo.pl/u7buy/';
 
-    public static function getParam($action='getPrices')
+    public static function getParam()
     {
 
         //[{"key":"apiKey","value":"WoCuQvW-LHvsf5h-s5AnZnG-jmdnc47","equals":true,"description":"","enabled":true}]
@@ -37,21 +37,28 @@ class Ct extends Base
 
     public function getPrice()
     {
+
         $data = [];
         try {
-
             $url = self::PGW_URL.'price';
-            $res = self::curlPost($url, self::getParam(),$data, ["Content-Type"=> "application/json"]);
+            $res = self::curlPost($url, json_encode(self::getParam()),$data, ['X-AjaxPro-Method:ShowList', 'Content-Type: application/json; charset=utf-8',]);
             if($res !=200){
                 Log::error('Utloader远程请求地址'.$url.var_export($res,true).var_export($data,true));
                 return false;
             }
-
-            dump($data);die;
+            $data = json_decode($data,true);
             $price = [];
-            foreach ($data['prices'] as $key=> $item){
-                if(in_array($key,Pgw::$gameType)){
-                    $price[$key] = round($item/100,2);
+            foreach ($data as $key=> $item){
+                if($key == 'ps4'){
+                    $price['FFA20PS4'] = round($item/1000,2);
+                }
+
+                if($key == 'xbox'){
+                    $price['FFA20XBO'] = round($item/1000,2);
+                }
+
+                if($key == 'pcc'){
+                    $price['FFA20PCC'] =  round($item/1000,2);
                 }
             }
             return $price;
@@ -64,27 +71,16 @@ class Ct extends Base
 
     public function balance()
     {
-        $params = [];
-        foreach (self::getParam('getAmountOwed') as $key => $val){
-            $params[] = $key."=".$val;
-        }
-        $params = implode("&",$params);
-        $url = self::PGW_URL.'?'.$params;
-        $res = self::curlJson($url,[],$data,[],'GET');
-        if($res !=200){
-            Log::error('Utloader远程请求地址'.$url.var_export($res,true).var_export($data,true));
-            return false;
-        }
-        return $data;
+        return true;
     }
 
 
     public static function formatPlatform($p)
     {
         $platform = [
-            'FFA20PS4'=>'PS',
-            'FFA20XBO'=>'XBOX',
-            'FFA20PCC'=>'PC',
+            'FFA20PS4'=>'ps4',
+            'FFA20XBO'=>'xbox',
+            'FFA20PCC'=>'pcc',
         ];
         return isset($platform[$p])?$platform[$p]:'PS';
     }
@@ -95,40 +91,55 @@ class Ct extends Base
             return false;
         }
 
-        $params = self::getParam('addOrder');
-        $params['email'] = trim($orderInfo['login']);
+        $params = self::getParam();
+        $params['login'] = trim($orderInfo['login']);
         $params['password'] = trim($orderInfo['password']);
         $params['platform'] = self::formatPlatform($orderInfo['platform']);
         $params['backup_code'] = $orderInfo['backup1'];
-        $params['amount'] = $orderInfo['amount'];
-
-        $param = [];
-        foreach ($params as $key => $val){
-            $param[] = $key."=".$val;
-        }
-        $param = implode("&",$param);
+        $params['amount']  = $orderInfo['amount']/1000;
+        $params['backup1'] = $orderInfo['backup1'];
+        $params['backup2'] = $orderInfo['backup2'];
+        $params['backup3'] = $orderInfo['backup3'];
+        $params['igvID']   = $orderInfo['id'];
         $data = [];
-        $res = self::curlJson(self::PGW_URL."?".$param,[],$data,[],'GET');
-        $data['pgw_return'] = json_encode($data);
+        $url = self::PGW_URL.'new';
+        $res = self::curlPost($url, json_encode($params),$data, ['X-AjaxPro-Method:ShowList', 'Content-Type: application/json; charset=utf-8',]);
         if($res !=200){
-            Log::error('Utloader远程请求地址'.self::PGW_URL.var_export($res,true).var_export($data,true));
-            return $data;
+            Log::error('Utloader远程请求地址'.$url.var_export($res,true).var_export($data,true));
+            return false;
         }
-
-        if($data['status'] ==1){
-            $data['status'] = 'captcha';
+        $data = json_decode($data,true);
+        if($data['code'] ==200){
+            $data['status'] = 'transferring';
         }else{
-            $data['status'] = 'wrongbackup';
+            $data['code'] = 'wrongbackup';
         }
-        $data['pgw_message'] = isset($data['reason'])?$data['reason']:'';
-
-
-        $data['pgw_order_id'] = isset($data['token'])?$data['token']:'';
+        //$data['pgw_message'] = isset($data['reason'])?$data['reason']:'';
+        $data['pgw_order_id'] = isset($data['orderid'])?$data['orderid']:'';
         return $data;
     }
 
-    public function getStatus()
+    public function getStatus($orderInfo)
     {
+
+        $url = 'https://mmoo.pl/u7buy/status';
+        $user = 'alex-b5c9c562541sa45gd357z';
+        $payload = array(
+            'user' => $user,
+            'orderid' => $orderInfo['pgw_order_id']
+        );
+        $res = self::curlPost($url, json_encode($payload),$data, ['X-AjaxPro-Method:ShowList', 'Content-Type: application/json; charset=utf-8',]);
+        if($res !=200){
+            Log::error('Utloader远程请求地址'.$url.var_export($res,true).var_export($data,true));
+            return false;
+            exit;
+        }
+        $data = json_decode($data,true);
+        if($data['code'] != 200){
+            return false;
+            exit;
+        }
+        return $data;
 
     }
 }

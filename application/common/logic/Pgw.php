@@ -36,18 +36,16 @@ namespace app\common\logic;
          }
          if($info){
              $param['pgw_id'] = $info['id'];
+             $param['pgw_payment'] = $info['pgw'];
              $param['status'] = $info['status'][$param['platform']];
              if(empty($param['amount'])){
-                 $param['amount'] = 1000;
+                 $param['amount'] = 1;
              }
              $param['pgw_price'] = round($info['price'][$param['platform']]*($param['amount']/1000),2);
              if($param['pgw_price']>=$param['price']){
                  $param['pgw_id'] = 0;
              }
          }
-
-
-
      }
 
      public function pgw($param)
