@@ -26,7 +26,6 @@ class Ct extends Base
 
     public static function getParam()
     {
-
         //[{"key":"apiKey","value":"WoCuQvW-LHvsf5h-s5AnZnG-jmdnc47","equals":true,"description":"","enabled":true}]
         $param = [
             'user'=>self::USER_ID,

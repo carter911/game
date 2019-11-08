@@ -80,7 +80,7 @@ class Supplier
         $list = $order->where(['status'=>'transferring'])->order('id asc')->limit(5)->select();
         $list = $list->toArray();
         foreach ($list as $key=> $val){
-            $gateway = "app\\common\\gateway\\Utloader";
+            $gateway = "app\\common\\gateway\\".$val['pgw_payment'];
             $pgw = new $gateway();
             $res = $pgw->queryOrder($val);
             Log::notice($res);

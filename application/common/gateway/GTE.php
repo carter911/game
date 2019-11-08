@@ -106,7 +106,7 @@ class GTE extends Base {
                 'orderId'=> 'game_'.$this->order['id'],
                 //'ownStock'=>$this->order['platform'],
             ];
-            $res = self::curlPost($this->base_url.'comfort/add',$param,$resData,$this->getHeader());
+            $res = self::curlPost($this->base_url.'comfort/add', $param, $resData, $this->getHeader());
             $this->order['pgw_return'] = $resData;
             Log::error('订单请求'.$res.var_export($resData,true));
             $this->order['pgw_error_code'] = $res;
