@@ -114,8 +114,10 @@ class Ct extends Base
         $data['pgw_order_id'] = isset($data['orderid'])?$data['orderid']:'0';
         if($data['code'] ==200){
             $data['status'] = 'transferring';
+        }else if($data['code'] !=400){
+            $data['code'] = 'unexpected';
         }else{
-            $data['code'] = 'wrongbackup';
+            $data['code'] = 'unexpected';
         }
         //$data['pgw_message'] = isset($data['reason'])?$data['reason']:'';
         return $data;
