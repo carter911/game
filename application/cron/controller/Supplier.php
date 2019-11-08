@@ -66,6 +66,8 @@ class Supplier
             $gateway = "app\\common\\gateway\\".$val['pgw_payment'];
             $pgw = new $gateway();
             $res = $pgw->newOrder($val);
+            unset($res['amount']);
+            unset($res['platform']);
             Log::notice($res);
             $res = $order->store($res,$val['id']);
             Log::info($order->getLastSql());
