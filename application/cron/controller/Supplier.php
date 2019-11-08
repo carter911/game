@@ -62,6 +62,8 @@ class Supplier
         $order = new \app\common\model\Order();
         $list = $order->where(['status'=>'Undelivered'])->order('id asc')->limit(1)->select();
         $list = $list->toArray();
+
+        dump($list);
         foreach ($list as $key=> $val){
             $gateway = "app\\common\\gateway\\".$val['pgw_payment'];
             $pgw = new $gateway();

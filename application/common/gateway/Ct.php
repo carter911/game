@@ -116,7 +116,6 @@ class Ct extends Base
             $data['code'] = 'wrongbackup';
         }
         //$data['pgw_message'] = isset($data['reason'])?$data['reason']:'';
-
         return $data;
     }
 
