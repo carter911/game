@@ -108,6 +108,7 @@ class Ct extends Base
             Log::error('Utloader远程请求地址'.$url.var_export($res,true).var_export($data,true));
             return false;
         }
+        $data['pgw_return'] = $data;
         $data = json_decode($data,true);
         $data['pgw_order_id'] = isset($data['orderid'])?$data['orderid']:'0';
         if($data['code'] ==200){
@@ -134,6 +135,7 @@ class Ct extends Base
             return false;
             exit;
         }
+        $data['pgw_return'] = $data;
         $data = json_decode($data,true);
         if($data['code'] != 200){
             return false;
