@@ -99,7 +99,7 @@ class Ct extends Base
         $params['backup1'] = $orderInfo['backup1'];
         $params['backup2'] = $orderInfo['backup2'];
         $params['backup3'] = $orderInfo['backup3'];
-        $params['igvID']   = $orderInfo['id'];
+        $params['igvID']   = 'alex-'.$orderInfo['id'];
         $data = [];
         $url = self::PGW_URL.'new';
         $res = self::curlPost($url, json_encode($params),$data, ['X-AjaxPro-Method:ShowList', 'Content-Type: application/json; charset=utf-8',]);
