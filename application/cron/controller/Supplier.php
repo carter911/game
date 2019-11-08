@@ -87,6 +87,7 @@ class Supplier
             $pgw = new $gateway();
             $res = $pgw->queryOrder($val);
             Log::notice($res);
+            dump($res);
             $res = $order->store($res,$val['id']);
             Log::info($order->getLastSql());
         }
