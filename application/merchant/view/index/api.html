@@ -31,7 +31,7 @@
                     <h4>1 Price Query</h4>
                     <p style="color:red">POST /price</p>
                     <p>Parameters:</p>
-                    <p>{'user': token,platform:’ps4’}</p>
+                    <p>{'user': token,platform:’FFA20PS4’}</p>
                     <p>Response:</p>
                     <p>{code: 200,message:’success’ ,data:{price:0.16,status:’online’}}</p>
                 </div>
@@ -44,12 +44,12 @@
                         login :EA e-mail (string)<br/>
                         password : EA password (string)<br/>
                         amount : Amount to fill in to account (int)<br/>
-                        platform :ps4 (string)<br/>
+                        platform :FFA20PS4 (string)<br/>
                         backup1 - backup code 1 (string)<br/>
                         backup2 - backup code 2 (string)<br/>
                         backup3 - backup code 3 (string)<br/>
                         <span style="color: #008800">example<br/>
-                        {user: token, merchant_id: 123123, login: 'test@test.com', 'password': 'password', 'amount': 1000, 'platform': 'ps4', 'backup1': '123456', 'backup2': '123456', 'backup3': '123456'}
+                        {user: token, merchant_id: 123123, login: 'test@test.com', 'password': 'password', 'amount': 1000, 'platform': 'FFA20PS4', 'backup1': '123456', 'backup2': '123456', 'backup3': '123456'}
                         </span>
                     </p>
                     <p>Response:</p>
@@ -81,6 +81,15 @@
                         <span class="status">checking info</span>-supplier is checking origin account info,waiting for delivery<br/>
                         <span class="status">end</span>-order finished<br/>
                         <span class="status">new</span>-new order not yet checked<br/>
+                    </p>
+                </div>
+
+                <div class="block">
+                    <h4>platform List</h4>
+                    <p>
+                        <span class="status">FFA20PS4</span><br/>
+                        <span class="status">FFA20XBO</span><br/>
+                        <span class="status">FFA20PCC</span><br/>
                     </p>
                 </div>
             </div>
