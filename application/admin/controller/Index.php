@@ -172,7 +172,7 @@ class Index extends Base
             }
             unset($param['id']);
             //dump($param);die;
-            $id = $model->insert($param,false,true);
+            $id = $model->store($param);
             $model->cache($id);
         }
         $this->success('success','supplier');
