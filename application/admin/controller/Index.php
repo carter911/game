@@ -140,6 +140,7 @@ class Index extends Base
     public function store_supplier()
     {
         $param = Request::instance()->only(['id','name','password','price','status']);
+        dump($param);die;
         $rule = [
             'name' => 'require',
             //'password' => 'require',
@@ -165,6 +166,7 @@ class Index extends Base
             $model->cache($param['id']);
         }else{
             $param['create_at'] = time();
+            dump($param);die;
             $id = $model->insert($param,false,true);
             $model->cache($id);
         }
