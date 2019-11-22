@@ -26,7 +26,6 @@ class Ct extends Base
 
     public static function getParam()
     {
-
         //[{"key":"apiKey","value":"WoCuQvW-LHvsf5h-s5AnZnG-jmdnc47","equals":true,"description":"","enabled":true}]
         $param = [
             'user'=>self::USER_ID,
@@ -96,30 +95,35 @@ class Ct extends Base
         $params['password'] = trim($orderInfo['password']);
         $params['platform'] = self::formatPlatform($orderInfo['platform']);
         $params['backup_code'] = $orderInfo['backup1'];
-        $params['amount']  = $orderInfo['amount']/1000;
+        $params['amount']  = intval($orderInfo['amount']/1000);
         $params['backup1'] = $orderInfo['backup1'];
         $params['backup2'] = $orderInfo['backup2'];
         $params['backup3'] = $orderInfo['backup3'];
-        $params['igvID']   = $orderInfo['id'];
+        $params['igvID']   = 'alex-'.$orderInfo['id'];
         $data = [];
         $url = self::PGW_URL.'new';
         $res = self::curlPost($url, json_encode($params),$data, ['X-AjaxPro-Method:ShowList', 'Content-Type: application/json; charset=utf-8',]);
+
         if($res !=200){
             Log::error('Utloader远程请求地址'.$url.var_export($res,true).var_export($data,true));
             return false;
         }
+
         $data = json_decode($data,true);
+        $data['pgw_return'] = json_encode($data);
+        $data['pgw_order_id'] = isset($data['orderid'])?$data['orderid']:'0';
         if($data['code'] ==200){
             $data['status'] = 'transferring';
+        }else if($data['code'] !=400){
+            $data['code'] = 'unexpected';
         }else{
-            $data['code'] = 'wrongbackup';
+            $data['code'] = 'unexpected';
         }
         //$data['pgw_message'] = isset($data['reason'])?$data['reason']:'';
-        $data['pgw_order_id'] = isset($data['orderid'])?$data['orderid']:'';
         return $data;
     }
 
-    public function getStatus($orderInfo)
+    public function queryOrder($orderInfo)
     {
 
         $url = 'https://mmoo.pl/u7buy/status';
@@ -135,6 +139,7 @@ class Ct extends Base
             exit;
         }
         $data = json_decode($data,true);
+        $data['pgw_return'] = json_encode($data);
         if($data['code'] != 200){
             return false;
             exit;

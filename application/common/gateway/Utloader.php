@@ -122,8 +122,12 @@ class Utloader extends Base
 
         if($data['status'] ==1){
             $data['status'] = 'transferring';
-        }else{
-            $data['status'] = isset($data['reason'])?$data['reason']:'unexpected';
+        }else {
+            if($data['coins_remaining'] == $data['transfer_amount']){
+                $data['status'] = 'end';
+            }else{
+                $data['status'] = 'transferring';
+            }
         }
         $data['pgw_message'] = isset($data['reason'])?$data['reason']:'';
         $data['pgw_order_id'] = isset($data['token'])?$data['token']:'';

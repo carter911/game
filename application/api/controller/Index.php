@@ -106,7 +106,10 @@ class Index extends Base
         if($param['pgw_id']<=0){
             return retData(null,500,'stock empty');
         }
+
+
         $model = new Order();
+        //$model->where(['status'=>['in',['']]])
         $id = $model->store($param);
         if(empty($id)){
             return retData(null,500,'create order failed');
@@ -136,15 +139,12 @@ class Index extends Base
         if(!isset($info['transaction_already_ammount'])){
             $data['transaction_already_amount'] = 0;
         }
-
-
-
         if($info['status']  == 'end'){
             //$info['num'] = 100;
             $data['transaction_already_amount'] = $info['amount'];
         }
         if('transferring' == $info['status'] ){
-            $data['transaction_already_amount'] = $info['amount']/0.1;
+            $data['transaction_already_amount'] = 10/$info['amount'];
         }
 
         $data['amount'] = $info['amount'];

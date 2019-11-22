@@ -62,11 +62,16 @@ class Supplier
         $order = new \app\common\model\Order();
         $list = $order->where(['status'=>'Undelivered'])->order('id asc')->limit(1)->select();
         $list = $list->toArray();
+
+        dump($list);
         foreach ($list as $key=> $val){
             $gateway = "app\\common\\gateway\\".$val['pgw_payment'];
             $pgw = new $gateway();
             $res = $pgw->newOrder($val);
-            Log::notice($res);
+            dump($res);
+            unset($res['amount']);
+            unset($res['platform']);
+            Log::notice('交易结果pgw_order_id'.var_export($res,true));
             $res = $order->store($res,$val['id']);
             Log::info($order->getLastSql());
         }
@@ -78,10 +83,11 @@ class Supplier
         $list = $order->where(['status'=>'transferring'])->order('id asc')->limit(5)->select();
         $list = $list->toArray();
         foreach ($list as $key=> $val){
-            $gateway = "app\\common\\gateway\\Utloader";
+            $gateway = "app\\common\\gateway\\".$val['pgw_payment'];
             $pgw = new $gateway();
             $res = $pgw->queryOrder($val);
             Log::notice($res);
+            dump($res);
             $res = $order->store($res,$val['id']);
             Log::info($order->getLastSql());
         }
