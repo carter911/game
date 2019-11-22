@@ -85,6 +85,7 @@ class Supplier extends Model
             return $res;
         }
         $data['create_at'] = time();
+        dump($data);die;
         $res = $this->allowField(true)->insert($data);
         if (empty($res)) {
             return false;
