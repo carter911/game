@@ -251,7 +251,7 @@ class Index extends Base
             }
             $param['create_at'] = time();
             $param['key'] = hash('sha256',$param['name']);
-            $model->insert($param);
+            $model->store($param);
         }
         $this->success('success','merchant');
     }

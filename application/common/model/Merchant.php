@@ -81,7 +81,7 @@ namespace app\common\model;
 
          $data['status'] = 'Undelivered';
          $data['create_at'] = time();
-         $res = $this->allowField(true)->insert($data);
+         $res = $this->allowField(true)->save($data);
          if(empty($res)){
              return false;
          }
