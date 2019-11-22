@@ -170,6 +170,7 @@ class Index extends Base
                     $param['status'][$key] = 'off';
                 }
             }
+            dump($param);die;
             $id = $model->insert($param,false,true);
             $model->cache($id);
         }
