@@ -200,11 +200,12 @@ class Index extends Base
     {
 
         $model = new Merchant();
+        $info = [];
         foreach ($model->gameType as $key => $val){
             $info['price'][$val] = 999;
             $info['status'][$val] = 999;
         }
-        $this->assign('info',[]);
+        $this->assign('info',$info);
         return $this->fetch('merchant_info');
     }
 
