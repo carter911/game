@@ -74,7 +74,7 @@ class Index extends Base
             }else{
 
             }
-            $item['tns_id'] = 'GC'.date("Ymd",$item['create_at']).'-'.$item['id'];
+            $item['tns_id'] = $item['id'];//'GC'.date("Ymd",$item['create_at']).'-'.$item['id'];
             return $item;
         });
 
