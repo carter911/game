@@ -27,15 +27,11 @@ class Exchange extends Base
         return isset($platform[$p])?$platform[$p]:'ps4';
     }
 
-    public static function formatPlatformBySupplier($p)
-    {
-        $platform = [
-            'ps4'=>'FFA20PS4',
-            'xbox'=>'FFA20XBO',
-        ];
-        return isset($platform[$p])?$platform[$p]:'';
-    }
 
+    public  $formatPlatformBySupplier = [
+        'ps4'=>'FFA20PS4',
+        'xbox'=>'FFA20XBO',
+    ];
     //Alex / JvbJeyCoLQJ   API key: BtDsk86rCJ7H8nvOaDsVnPE64oCntdk
 
 
@@ -70,10 +66,10 @@ class Exchange extends Base
             $price = [];
             foreach ($data['prices'] as $key=> $item){
 
-                if(in_array($key,array_keys(self::formatPlatformBySupplier()))){
-                    $price[self::formatPlatformBySupplier($key)] = round($item/1000,3);
+                if(in_array($key,array_keys($this->formatPlatformBySupplier))){
+                    $price[$this->formatPlatformBySupplier[$key]] = round($item/1000,3);
                     if($data['stock'][$key] <=0){
-                        $price[self::formatPlatformBySupplier($key)] = 999;
+                        $price[$this->formatPlatformBySupplier[$key]] = 999;
                     }
                 }
             }
