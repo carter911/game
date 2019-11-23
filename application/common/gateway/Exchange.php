@@ -28,7 +28,7 @@ class Exchange extends Base
     {
         $param = [
             'username'=>self::USER_ID,
-            'hash'=>md5(USER_ID.KEY),
+            'hash'=>md5(self::USER_ID.self::KEY),
         ];
         return $param;
     }
