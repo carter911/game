@@ -36,7 +36,7 @@ class Exchange extends Base
         try {
             $params = [];
             $url = self::PGW_URL.'getprices-ajax';
-            $res = self::curlJson($url,[],$data,[],'GET');
+            $res = self::curlJson($url,[],$data,[],'POST');
             if($res !=200){
                 Log::error('Utloader远程请求地址'.$url.var_export($res,true).var_export($data,true));
                 return false;
@@ -45,11 +45,14 @@ class Exchange extends Base
             foreach ($data['prices'] as $key=> $item){
                 if(in_array($key,Pgw::$gameType)){
                     $price[$key] = round($item/1000,3);
+                    if($data['stock'][$key] <=0){
+                        $price[$key] = 999;
+                    }
                 }
             }
             return $price;
         } catch (\Throwable $e) {
-            Log::error('Utloader远程请求地址'.$e->getMessage());
+            Log::error('Exchange远程请求地址'.$e->getMessage());
             return [];
             //echo $e->getMessage();
         }
