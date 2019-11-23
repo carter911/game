@@ -133,7 +133,7 @@ class Exchange extends Base
             if($data['status']  == 'Finished'){
                 $data['status'] = 'end';
             }
-            $data['transaction_already_amount'] = $data['order_amount'];
+            $data['transaction_already_amount'] = $data['transferred_amount'];
         } else {
             echo '订单不存在';
             //TODO 应该是没有找到这个订单
