@@ -71,9 +71,9 @@ class Exchange extends Base
             foreach ($data['prices'] as $key=> $item){
 
                 if(in_array($key,array_keys(self::formatPlatformBySupplier()))){
-                    $price[self::formatPlatformBySupplier()[$key]] = round($item/1000,3);
+                    $price[self::formatPlatformBySupplier($key)] = round($item/1000,3);
                     if($data['stock'][$key] <=0){
-                        $price[self::formatPlatformBySupplier()[$key]] = 999;
+                        $price[self::formatPlatformBySupplier($key)] = 999;
                     }
                 }
             }
