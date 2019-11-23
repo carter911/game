@@ -114,8 +114,51 @@ class Exchange extends Base
         if($data['code']  == 200){
             $data['status'] = 'transferring';
         }else{
+            if($data['stringCode'] == 'user_or_pass'){
+                $data['status'] = 'wrong login';
+            }else if( $data['stringCode'] == 'no_backup_code'){
+                $data['status'] = 'wrong no_backup_code';
+            }else if( $data['stringCode'] == 'captcha'){
+                $data['status'] = 'wrong captcha';
+            }else if($data['stringCode'] == 'ps4_diabled' || $data['stringCode'] == 'xbox_diabled' ){
+                //关闭考虑重新递送
+            }
+            else {
+                $data['status'] = 'unexpected';
+            }
+            //'auth-error' - error while authenticating
+            //'undefined' - undefined code, contact administrator
+            //'no-stock' - there is no available stock left
+            //'expired_session' - there is somebody logged on the account
+            //'captcha' - captcha solving needed
+            //'user_or_pass' - wrong credentials
+            //'no_backup_code' - there's no backup code
+            //'backup_code' - provided backup codes are wrong
+            //'no_club', 'persona_not_found' - didn't find persona on that account
+            //'market_disabled' - trade market is locked
+            //'too_low_coins_amount' - minimum start balance is 200 coins
+            //'tradepile_full' - tradepile is full, you need to make some space in there
+            //'no-order' - Order wasn't found
+            //'ps4_diabled' - ps4 orders are temporary disabled;
+            //'xbox_diabled' - xbox orders are temporary disabled;
+
+//                                <option  value="Undelivered">Undelivered</option>
+//                                <option  value="delivered">[delivered]delivered</option>
+//                                <option  value="transferring">[transferring]transfer in progress</option>
+//                                <option  value="end">[end]order finished</option>
+//                                <option  value="forbidden">[forbidden]EA web app is down</option>
+//                                <option   value="captcha">[captcha]can’t solve captcha</option>
+//                                <option  value="tradepilefull">[tradepilefull]there are no space no trade pile to move cards</option>
+//                                <option  value="too many action">[too many action]too many action</option>
+//                                <option  value="unexpected">[unexpected]technical issue on our site</option>
+//                                <option  value="< 200 coins">[< 200 coins]less then 200 coins in account</option>
+//                                <option  value="wrong backup">[wrong backup]wrong backup codes</option>
+//                                <option  value="wrong login">[wrong login]login or password is wrong</option>
+//                                <option  value="market locked">[market locked]web app market is locked</option>
+//                                <option  value="csm online">[csm online]customer online</option>
+//                                <option  value="no login verification">[no login verification]</option>
+//                                <option  value="new">[new]new order not checked yet</option>
             Log::error('exchange返回异常' . $url . var_export($res, true) . var_export($data, true));
-            return false;
         }
         $data['pgw_order_id'] = isset($data['orderID']) ? $data['orderID'] : '';
         return $data;
