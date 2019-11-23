@@ -104,8 +104,8 @@ class Exchange extends Base
             Log::error('exchange远程请求地址' . $url . var_export($res, true) . var_export($data, true));
             return false;
         }
-        $data['pgw_return'] = ($data);
         $data = json_decode($data, true);
+        $data['pgw_return'] = json_encode($data);
         if($data['code']  == 200){
             $data['status'] = 'transferring';
         }else{
