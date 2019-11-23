@@ -121,25 +121,19 @@ class Exchange extends Base
         if (empty($orderInfo['pgw_prder_id'])) {
             return false;
         }
-        $params = self::getParam('trackOrder');
-        $params['token'] = $orderInfo['pgw_prder_id'];
-        $param = [];
-        foreach ($params as $key => $val) {
-            $param[] = $key . "=" . $val;
-        }
-        $param = implode("&", $param);
-        $data = [];
-        $res = self::curlJson(self::PGW_URL . "?" . $param, [], $data, [], 'GET');
-        $data['pgw_return'] = json_encode($data);
+        $params = self::getParam();
+        $url = self::PGW_URL . 'getprices-ajax';
+        $res = self::curlPost($url, $params, $data);
+        $data['pgw_return'] = ($data);
         if ($res != 200) {
-            Log::error('Utloader远程请求地址' . self::PGW_URL . var_export($res, true) . var_export($data, true));
+            Log::error('exchange远程请求地址' . $url . var_export($res, true) . var_export($data, true));
             return $data;
         }
-        if ($data['result'] == 200) {
-            if ($data['coins_transferred'] == $data['transfer_amount']) {
+        if ($data['code'] == 200 ) {
+            if($data['status']  == 'Finished'){
                 $data['status'] = 'end';
             }
-            $data['transaction_already_amount'] = $data['coins_transferred'];
+            $data['transaction_already_amount'] = $data['order_amount'];
         } else {
             echo '订单不存在';
             //TODO 应该是没有找到这个订单
