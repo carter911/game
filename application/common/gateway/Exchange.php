@@ -98,7 +98,7 @@ class Exchange extends Base
         $params['platform'] = self::formatPlatform($orderInfo['platform']);
         $params['backup'] = json_encode([$orderInfo['backup1'],$orderInfo['backup2'],$orderInfo['backup3']]);
         $params['amount'] = $orderInfo['amount'] / 1000;
-        $url = self::PGW_URL . 'getprices-ajax';
+        $url = self::PGW_URL . 'createorder-ajax';
         $res = self::curlPost($url, $params, $data);
         if ($res != 200) {
             Log::error('exchange远程请求地址' . $url . var_export($res, true) . var_export($data, true));
@@ -122,7 +122,7 @@ class Exchange extends Base
             return false;
         }
         $params = self::getParam();
-        $url = self::PGW_URL . 'getprices-ajax';
+        $url = self::PGW_URL . 'checkorder-ajax';
         $res = self::curlPost($url, $params, $data);
         $data['pgw_return'] = ($data);
         if ($res != 200) {
