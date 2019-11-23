@@ -45,6 +45,8 @@ class Exchange extends Base
                 Log::error('exchange远程请求地址'.$url.var_export($res,true).var_export($data,true));
                 return false;
             }
+
+            $data = json_decode($data,true);
             $price = [];
             foreach ($data['prices'] as $key=> $item){
                 if(in_array($key,Pgw::$gameType)){
