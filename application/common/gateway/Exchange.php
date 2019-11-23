@@ -26,7 +26,11 @@ class Exchange extends Base
 
     public static function getParam($action='getPrices')
     {
-        //return $param;
+        $param = [
+            'username'=>self::USER_ID,
+            'hash'=>md5(USER_ID.KEY),
+        ];
+        return $param;
     }
 
 
@@ -36,7 +40,7 @@ class Exchange extends Base
         try {
             $params = [];
             $url = self::PGW_URL.'getprices-ajax';
-            $res = self::curlJson($url,[],$data,[],'POST');
+            $res = self::curlJson($url,self::getParam(),$data,[],'POST');
             if($res !=200){
                 Log::error('exchange远程请求地址'.$url.var_export($res,true).var_export($data,true));
                 return false;
