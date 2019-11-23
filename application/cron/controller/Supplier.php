@@ -24,6 +24,7 @@ class Supplier
         $list = $model->where(['is_auto' => 1])->select()->toArray();
         foreach ($list as $key => $val) {
             $gateway = "app\\common\\gateway\\".$val['pgw'];
+            echo $gateway.'<br />';
             $pgw = new $gateway();
             $price = $pgw->getPrice();
             $status = [];
