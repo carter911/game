@@ -18,7 +18,27 @@ class Exchange extends Base
         }
     }
 
+    public static function formatPlatform($p)
+    {
+        $platform = [
+            'FFA20PS4'=>'ps4',
+            'FFA20XBO'=>'xbox',
+        ];
+        return isset($platform[$p])?$platform[$p]:'ps4';
+    }
+
+    public static function formatPlatformBySupplier($p)
+    {
+        $platform = [
+            'ps4'=>'FFA20PS4',
+            'xbox'=>'FFA20XBO',
+        ];
+        return isset($platform[$p])?$platform[$p]:'';
+    }
+
     //Alex / JvbJeyCoLQJ   API key: BtDsk86rCJ7H8nvOaDsVnPE64oCntdk
+
+
 
     const KEY = 'BtDsk86rCJ7H8nvOaDsVnPE64oCntdk';
     const USER_ID = 'Alex';
@@ -49,10 +69,11 @@ class Exchange extends Base
             $data = json_decode($data,true);
             $price = [];
             foreach ($data['prices'] as $key=> $item){
-                if(in_array($key,Pgw::$gameType)){
-                    $price[$key] = round($item/1000,3);
+
+                if(in_array($key,array_keys(self::formatPlatformBySupplier()))){
+                    $price[self::formatPlatformBySupplier()[$key]] = round($item/1000,3);
                     if($data['stock'][$key] <=0){
-                        $price[$key] = 999;
+                        $price[self::formatPlatformBySupplier()[$key]] = 999;
                     }
                 }
             }
@@ -78,17 +99,6 @@ class Exchange extends Base
             return false;
         }
         return $data;
-    }
-
-
-    public static function formatPlatform($p)
-    {
-        $platform = [
-            'FFA20PS4'=>'PS',
-            'FFA20XBO'=>'XBOX',
-            'FFA20PCC'=>'PC',
-        ];
-        return isset($platform[$p])?$platform[$p]:'PS';
     }
 
     public function newOrder($orderInfo)
