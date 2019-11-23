@@ -113,6 +113,7 @@ class Exchange extends Base
         $data['pgw_return'] = json_encode($data);
         if($data['code']  == 200){
             $data['status'] = 'transferring';
+            $data['pgw_order_id'] = $data['orderID'];
         }else{
             if($data['stringCode'] == 'user_or_pass'){
                 $data['status'] = 'wrong login';
@@ -160,7 +161,6 @@ class Exchange extends Base
 //                                <option  value="new">[new]new order not checked yet</option>
             Log::error('exchange返回异常' . $url . var_export($res, true) . var_export($data, true));
         }
-        $data['pgw_order_id'] = isset($data['orderID']) ? $data['orderID'] : '';
         return $data;
     }
 
