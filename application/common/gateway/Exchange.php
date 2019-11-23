@@ -98,6 +98,11 @@ class Exchange extends Base
         $params['platform'] = self::formatPlatform($orderInfo['platform']);
         $params['backup'] = json_encode([$orderInfo['backup1'],$orderInfo['backup2'],$orderInfo['backup3']]);
         $params['amount'] = $orderInfo['amount'] / 1000;
+
+        if($params['amount']<30 || $params['amount']>5000){
+            echo '金额不对';
+            return false;
+        }
         $url = self::PGW_URL . 'createorder-ajax';
         $res = self::curlPost($url, $params, $data);
         if ($res != 200) {
