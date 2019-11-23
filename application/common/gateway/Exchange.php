@@ -38,7 +38,7 @@ class Exchange extends Base
             $url = self::PGW_URL.'getprices-ajax';
             $res = self::curlJson($url,[],$data,[],'POST');
             if($res !=200){
-                Log::error('Utloader远程请求地址'.$url.var_export($res,true).var_export($data,true));
+                Log::error('exchange远程请求地址'.$url.var_export($res,true).var_export($data,true));
                 return false;
             }
             $price = [];
