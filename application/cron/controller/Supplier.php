@@ -66,6 +66,10 @@ class Supplier
 
         dump($list);
         foreach ($list as $key=> $val){
+            if(empty($val['pgw_payment'])){
+                return false;
+            }
+
             $gateway = "app\\common\\gateway\\".$val['pgw_payment'];
             $pgw = new $gateway();
             $res = $pgw->newOrder($val);
