@@ -165,7 +165,14 @@ class Index extends Base
             $model->cache($param['id']);
         }else{
             $param['create_at'] = time();
-            $id = $model->insert($param,false,true);
+            if(empty($param['status'])){
+                foreach ($param['price'] as $key => $val){
+                    $param['status'][$key] = 'off';
+                }
+            }
+            unset($param['id']);
+            //dump($param);die;
+            $id = $model->store($param);
             $model->cache($id);
         }
         $this->success('success','supplier');
@@ -192,14 +199,13 @@ class Index extends Base
     public function add_merchant()
     {
 
-        $info['price'] = [];
-        $info['status'] = [];
         $model = new Merchant();
+        $info = [];
         foreach ($model->gameType as $key => $val){
             $info['price'][$val] = 999;
             $info['status'][$val] = 999;
         }
-        $this->assign('info',[]);
+        $this->assign('info',$info);
         return $this->fetch('merchant_info');
     }
 
@@ -245,7 +251,7 @@ class Index extends Base
             }
             $param['create_at'] = time();
             $param['key'] = hash('sha256',$param['name']);
-            $model->insert($param);
+            $model->store($param);
         }
         $this->success('success','merchant');
     }

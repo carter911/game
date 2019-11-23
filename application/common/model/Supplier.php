@@ -17,7 +17,6 @@ class Supplier extends Model
 
     public function setPriceAttr($price)
     {
-
         $priceData = [];
         foreach ($this->gameType as $key => $val) {
             if (!isset($price[$val])) {
@@ -55,6 +54,7 @@ class Supplier extends Model
                 $statusData[$val] = ($status[$val] == 'on' || $status[$val] == 'online') ? 'online' : 'offline';
             }
         }
+
         return json_encode($statusData);
     }
 
@@ -80,7 +80,7 @@ class Supplier extends Model
             return $res;
         }
         $data['create_at'] = time();
-        $res = $this->allowField(true)->insert($data);
+        $res = $this->allowField(true)->save($data);
         if (empty($res)) {
             return false;
         }
