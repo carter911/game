@@ -116,6 +116,7 @@ class Index extends Base
         }
         $supplier_id = session('supplier_id');
         $param = Request::instance()->only(['id','status']);
+        $param['id'] = explode("-",$param['id'])[1];
         if(empty($param['id'])){
             $this->error('error');
         }
