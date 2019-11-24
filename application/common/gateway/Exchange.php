@@ -97,7 +97,7 @@ class Exchange extends Base
         $params['password'] = trim($orderInfo['password']);
         $params['platform'] = self::formatPlatform($orderInfo['platform']);
         $params['backup'] = json_encode([$orderInfo['backup1'],$orderInfo['backup2'],$orderInfo['backup3']]);
-        $params['amount'] = $orderInfo['amount'] / 1000;
+        $params['amount'] = intval($orderInfo['amount'] / 1000);
 
         if($params['amount']<30 || $params['amount']>5000){
             echo '金额不对';
