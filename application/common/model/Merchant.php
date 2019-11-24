@@ -52,7 +52,6 @@ namespace app\common\model;
                  $priceData[$val] = $price[$val]=='on'?'online':'offline';
              }
          }
-         dump($priceData);die;
          return json_encode($priceData);
      }
 
