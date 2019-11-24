@@ -172,14 +172,12 @@ class Exchange extends Base
         $params = self::getParam();
         $url = self::PGW_URL . 'checkorder-ajax';
         $res = self::curlPost($url, $params, $data);
-        $data['pgw_return'] = ($data);
+        $data = json_decode($data, true);
+        $data['pgw_return'] = json_encode($data);
         if ($res != 200) {
             Log::error('exchange远程请求地址' . $url . var_export($res, true) . var_export($data, true));
             return $data;
         }
-
-
-        dump($data);
         if ($data['code'] == 200 ) {
             if($data['status']  == 'Finished'){
                 $data['status'] = 'end';
