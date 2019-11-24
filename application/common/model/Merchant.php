@@ -44,6 +44,7 @@ namespace app\common\model;
 
      public function setStatusAttr($price)
      {
+         dump($price);
          $priceData = [];
          foreach ($this->gameType as $key=>$val){
              if(empty($price[$val])){
