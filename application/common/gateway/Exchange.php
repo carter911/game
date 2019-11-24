@@ -182,6 +182,14 @@ class Exchange extends Base
         }
         if($data['status']  == 'Finished'){
             $data['status'] = 'end';
+        }else if($data['status']  == 'null'){
+            if($data['status_detail'] == 'market_disabled'){
+                $data['status'] = 'market locked';
+            }else {
+                $data['pgw_message'] = $data['status_detail'];
+                $data['status'] = 'unexpected';
+            }
+
         }
         $data['transaction_already_amount'] = $data['transferred_amount'];
         return $data;
