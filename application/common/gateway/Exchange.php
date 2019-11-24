@@ -168,7 +168,7 @@ class Exchange extends Base
     {
         if (empty($orderInfo['pgw_order_id'])) {
             echo '订单不存在';
-            return falseo;
+            return false;
         }
         $params = self::getParam();
         $url = self::PGW_URL . 'checkorder-ajax';
@@ -188,7 +188,7 @@ class Exchange extends Base
             echo '订单不存在';
             //TODO 应该是没有找到这个订单
             Log::error($data);
-            exit;
+            return false;
             //$data['status'] = isset($data['reason'])?$data['reason']:'unexpected';
         }
         return $data;
