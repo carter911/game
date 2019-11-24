@@ -40,7 +40,8 @@ namespace app\common\logic;
 
          foreach ($list as $key => $val){
              if($val['status'][$param['platform']] == 'online' && $val['price'][$param['platform']] !=999){
-                 if(empty($info)){
+                 $pgw_price = round($val['price'][$param['platform']]*($param['amount']/1000),2);
+                 if(empty($info) && $pgw_price<$param['price']){
                      $info = $val;
                  }else{
                      if($info['price'][$param['platform']]> $val['price'][$param['platform']]){
