@@ -242,7 +242,7 @@ class Index extends Base
             if(empty($param['password'])){
                 unset($param['password']);
             }
-            $model->update($param);
+            $model->store($param,$param['id']);
         }else{
             if(empty($param['password'])){
                 $param['password'] =  hash('sha256','game2019');
