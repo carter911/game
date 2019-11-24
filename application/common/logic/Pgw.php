@@ -53,7 +53,7 @@ namespace app\common\logic;
          if($info){
              $param['pgw_id'] = $info['id'];
              $param['pgw_payment'] = $info['pgw'];
-             $param['status'] = $info['status'][$param['platform']];
+             //$param['status'] = $info['status'][$param['platform']];
              if(empty($param['amount'])){
                  $param['amount'] = 1;
              }
