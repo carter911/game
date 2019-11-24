@@ -23,33 +23,28 @@ namespace app\common\logic;
          $list = $model->getList()->toArray();
          $info = [];
 
-         //规则 获取所有满足条件的上游 新的规则
-//         $supplier_list = [];
-//
-//         foreach ($list as $key => $val){
-//             if($val['status'][$param['platform']] == 'online'){
-//                 if(empty($info)){
-//                     $supplier_list[] = $val;
-//                 }
-//             }
-//         }
-//
-//         $num = count($supplier_list);
-//         $current = rand(0,$num-1);
-//         $info = $supplier_list[$current];
-        dump($list);
+         //规则 获取所有满足条件的上游
+         $supplier_list = [];
+
          foreach ($list as $key => $val){
-
-
              if($val['status'][$param['platform']] == 'online'){
-                 $pgw_price = round($val['price'][$param['platform']]*($param['amount']/1000),2);
-                 if($pgw_price<$param['price']){
-                     $info = $val;
+                 if(empty($info)){
+                     $supplier_list[] = $val;
                  }
              }
          }
+         foreach ($list as $key => $val){
+             if($val['status'][$param['platform']] == 'online'){
+                 if(empty($info)){
+                     $info = $val;
+                 }else{
+                     if($info['price'][$param['platform']]> $val['price'][$param['platform']]){
+                         $info = $val;
+                     }
+                 }
 
-         dump($info);die;
+             }
+         }
          if($info){
              $param['pgw_id'] = $info['id'];
              $param['pgw_payment'] = $info['pgw'];
@@ -58,7 +53,6 @@ namespace app\common\logic;
                  $param['amount'] = 1;
              }
              $param['pgw_price'] = round($info['price'][$param['platform']]*($param['amount']/1000),2);
-             $param['pgw_info'] = $info;
              if($param['pgw_price']>=$param['price']*0.95){
                  $param['pgw_id'] = 0;
              }
