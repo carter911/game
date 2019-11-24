@@ -61,7 +61,7 @@ class Supplier
     public function sendToPayment()
     {
         $order = new \app\common\model\Order();
-        $list = $order->where(['status'=>'Undelivered'])->order('id asc')->limit(1)->select();
+        $list = $order->where(['status'=>'Undelivered','pgw_payment'=>['neq','']])->order('id asc')->limit(1)->select();
         $list = $list->toArray();
 
         dump($list);
