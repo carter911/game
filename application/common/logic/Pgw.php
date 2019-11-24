@@ -37,7 +37,7 @@ namespace app\common\logic;
 //         $num = count($supplier_list);
 //         $current = rand(0,$num-1);
 //         $info = $supplier_list[$current];
-
+        dump($list);
          foreach ($list as $key => $val){
              if($val['status'][$param['platform']] == 'online' && $val['price'][$param['platform']] !=999){
                  $pgw_price = round($val['price'][$param['platform']]*($param['amount']/1000),2);
