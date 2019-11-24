@@ -167,6 +167,7 @@ class Exchange extends Base
     public function queryOrder($orderInfo)
     {
         if (empty($orderInfo['pgw_prder_id'])) {
+            echo '订单不存在';
             return false;
         }
         $params = self::getParam();
