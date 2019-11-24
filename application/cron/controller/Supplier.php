@@ -89,6 +89,7 @@ class Supplier
         $list = $order->where(['status'=>'Undelivered'])->order('id asc')->limit(1)->select();
         $list = $list->toArray();
         $pgw = new Pgw();
+        dump($list);
         foreach ($list as $key=> $val){
             $res = $pgw->getSupplier($val);
             dump($val);
