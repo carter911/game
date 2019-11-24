@@ -86,7 +86,7 @@ class Supplier
     public function againPgw()
     {
         $order = new \app\common\model\Order();
-        $list = $order->where(['status'=>['in',['Undelivered','New order']]])->order('id asc')->limit(1)->select();
+        $list = $order->where(['status'=>['in',['Undelivered']]])->order('id asc')->limit(1)->select();
         $list = $list->toArray();
         $pgw = new Pgw();
         dump($list);
@@ -101,7 +101,7 @@ class Supplier
     public function getOrderStatus()
     {
         $order = new \app\common\model\Order();
-        $list = $order->where(['status'=>'transferring'])->order('id asc')->limit(5)->select();
+        $list = $order->where(['status'=>['in',['transferring','New order']]])->order('id asc')->limit(5)->select();
         $list = $list->toArray();
         foreach ($list as $key=> $val){
             echo "需要更新状态为".$val['pgw_order_id'].'上游网管'.$val['pgw_payment'].'<br/>';
