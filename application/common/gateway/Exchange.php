@@ -171,6 +171,7 @@ class Exchange extends Base
             return false;
         }
         $params = self::getParam();
+        $params['orderID'] = $orderInfo['pgw_order_id'];
         $url = self::PGW_URL . 'checkorder-ajax';
         $res = self::curlPost($url, $params, $data);
         $data = json_decode($data, true);
