@@ -35,7 +35,7 @@ namespace app\common\logic;
          }
          foreach ($list as $key => $val){
              if($val['status'][$param['platform']] == 'online'){
-                 $pgw_price = round($val['price'][$param['platform']]*($param['amount']/1000),2);
+                 $pgw_price = round($val['price'][$param['platform']]*($param['amount']),2);
                  if($pgw_price<$param['price']*0.95){
                      $info = $val;
                  }
@@ -48,7 +48,7 @@ namespace app\common\logic;
              if(empty($param['amount'])){
                  $param['amount'] = 1;
              }
-             $param['pgw_price'] = round($info['price'][$param['platform']]*($param['amount']/1000),2);
+             $param['pgw_price'] = round($info['price'][$param['platform']]*($param['amount']),2);
              if($param['pgw_price']>=$param['price']*0.95){
                  $param['pgw_id'] = 0;
              }

@@ -152,7 +152,7 @@ class Index extends Base
         $pgw->getSupplier($param);
         $merchant = new Merchant();
         $merchant_info = $merchant->getInfo($this->merchant_id)->toArray();
-        $param['price'] = round($merchant_info['price'][$param['platform']]*($param['amount']/1000),2);
+        $param['price'] = round($merchant_info['price'][$param['platform']]*($param['amount']),2);
 
         if( $param['price']<=$param['pgw_price']){
             $this->error('create order failed');
