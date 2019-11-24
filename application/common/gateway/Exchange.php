@@ -177,6 +177,7 @@ class Exchange extends Base
             Log::error('exchange远程请求地址' . $url . var_export($res, true) . var_export($data, true));
             return $data;
         }
+        dump($data);
         if ($data['code'] == 200 ) {
             if($data['status']  == 'Finished'){
                 $data['status'] = 'end';
