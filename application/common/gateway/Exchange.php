@@ -180,7 +180,6 @@ class Exchange extends Base
             Log::error('exchange远程请求地址' . $url . var_export($res, true) . var_export($data, true));
             return $data;
         }
-
         if($data['status']  == 'Finished'){
             $data['status'] = 'end';
         }
