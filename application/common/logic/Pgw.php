@@ -39,7 +39,7 @@ namespace app\common\logic;
 //         $info = $supplier_list[$current];
 
          foreach ($list as $key => $val){
-             if($val['status'][$param['platform']] == 'online'){
+             if($val['status'][$param['platform']] == 'online' && $val['price'][$param['platform']] !=999){
                  if(empty($info)){
                      $info = $val;
                  }else{
