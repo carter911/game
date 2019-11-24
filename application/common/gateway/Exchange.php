@@ -209,9 +209,8 @@ class Exchange extends Base
                 $data['pgw_message'] = $data['status_detail'];
                 $data['status'] = 'unexpected';
             }
-
         }
-        $data['transaction_already_amount'] = $data['transferred_amount'];
+        $data['transaction_already_amount'] = intval($data['transferred_amount']/1000);
         return $data;
     }
 }
