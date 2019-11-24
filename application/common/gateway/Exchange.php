@@ -114,6 +114,8 @@ class Exchange extends Base
         if($data['code']  == 200){
             $data['status'] = 'transferring';
             $data['pgw_order_id'] = $data['orderID'];
+        }else if($data['code']  == 403){
+            $data['pgw_message'] = $data['status_detail'];
         }else{
             if($data['stringCode'] == 'user_or_pass'){
                 $data['status'] = 'wrong login';
@@ -123,8 +125,7 @@ class Exchange extends Base
                 $data['status'] = 'wrong captcha';
             }else if($data['stringCode'] == 'ps4_diabled' || $data['stringCode'] == 'xbox_diabled' ){
                 //关闭考虑重新递送
-            }
-            else {
+            } else {
                 $data['status'] = 'unexpected';
             }
             //'auth-error' - error while authenticating
