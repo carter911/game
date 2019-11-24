@@ -86,7 +86,7 @@ class Supplier
     public function againPgw()
     {
         $order = new \app\common\model\Order();
-        $list = $order->where(['status'=>'Undelivered'])->order('id asc')->limit(1)->select();
+        $list = $order->where(['status'=>['in',['Undelivered','New order']]])->order('id asc')->limit(1)->select();
         $list = $list->toArray();
         $pgw = new Pgw();
         dump($list);
