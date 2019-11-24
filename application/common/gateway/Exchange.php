@@ -180,18 +180,11 @@ class Exchange extends Base
             Log::error('exchange远程请求地址' . $url . var_export($res, true) . var_export($data, true));
             return $data;
         }
-        if ($data['code'] == 200 ) {
-            if($data['status']  == 'Finished'){
-                $data['status'] = 'end';
-            }
-            $data['transaction_already_amount'] = $data['transferred_amount'];
-        } else {
-            echo '订单不存在';
-            //TODO 应该是没有找到这个订单
-            Log::error($data);
-            return false;
-            //$data['status'] = isset($data['reason'])?$data['reason']:'unexpected';
+
+        if($data['status']  == 'Finished'){
+            $data['status'] = 'end';
         }
+        $data['transaction_already_amount'] = $data['transferred_amount'];
         return $data;
     }
 }
