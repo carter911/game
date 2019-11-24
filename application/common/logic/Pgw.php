@@ -58,6 +58,7 @@ namespace app\common\logic;
                  $param['amount'] = 1;
              }
              $param['pgw_price'] = round($info['price'][$param['platform']]*($param['amount']/1000),2);
+             $param['pgw_info'] = $info;
              if($param['pgw_price']>=$param['price']*0.95){
                  $param['pgw_id'] = 0;
              }

@@ -91,6 +91,7 @@ class Supplier
         $pgw = new Pgw();
         foreach ($list as $key=> $val){
             $res = $pgw->getSupplier($val);
+
             $res = $order->store($val,$val['id']);
             Log::info($order->getLastSql());
         }
