@@ -88,7 +88,7 @@ class Supplier
         $list = $order->where(['status'=>'transferring'])->order('id asc')->limit(5)->select();
         $list = $list->toArray();
         foreach ($list as $key=> $val){
-            echo "需要更新状态为".$val['id'].'上游网管'.$val['pgw_payment'].'<br/>';
+            echo "需要更新状态为".$val['pgw_order_id'].'上游网管'.$val['pgw_payment'].'<br/>';
             $gateway = "app\\common\\gateway\\".$val['pgw_payment'];
             $pgw = new $gateway();
             $res = $pgw->queryOrder($val);
