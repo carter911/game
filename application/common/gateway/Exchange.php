@@ -104,8 +104,6 @@ class Exchange extends Base
             return false;
         }
         $url = self::PGW_URL . 'createorder-ajax';
-        dump($params);die;
-        Log::info('exchange远程请求地址' . $url . var_export($params, true));
         $res = self::curlPost($url, $params, $data);
         if ($res != 200) {
             Log::error('exchange远程请求地址' . $url . var_export($res, true) . var_export($data, true));
