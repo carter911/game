@@ -51,6 +51,8 @@ namespace app\common\logic;
 
              }
          }
+
+         dump($info);die;
          if($info){
              $param['pgw_id'] = $info['id'];
              $param['pgw_payment'] = $info['pgw'];
