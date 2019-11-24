@@ -82,6 +82,20 @@ class Supplier
         }
     }
 
+
+    public function againPgw()
+    {
+        $order = new \app\common\model\Order();
+        $list = $order->where(['status'=>'Undelivered'])->order('id asc')->limit(1)->select();
+        $list = $list->toArray();
+        $pgw = new Pgw();
+        foreach ($list as $key=> $val){
+            $res = $pgw->getSupplier($val);
+            $res = $order->store($res,$val['id']);
+            Log::info($order->getLastSql());
+        }
+    }
+
     public function getOrderStatus()
     {
         $order = new \app\common\model\Order();

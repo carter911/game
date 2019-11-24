@@ -53,8 +53,6 @@ class Index extends Base
         session('admin','');
         $this->success('logout success','login');
     }
-
-
     /**
      * @return mixed
      * @throws \think\db\exception\DataNotFoundException

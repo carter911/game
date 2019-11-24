@@ -22,6 +22,22 @@ namespace app\common\logic;
          $model = new Supplier();
          $list = $model->getList()->toArray();
          $info = [];
+
+         //规则 获取所有满足条件的上游 新的规则
+//         $supplier_list = [];
+//
+//         foreach ($list as $key => $val){
+//             if($val['status'][$param['platform']] == 'online'){
+//                 if(empty($info)){
+//                     $supplier_list[] = $val;
+//                 }
+//             }
+//         }
+//
+//         $num = count($supplier_list);
+//         $current = rand(0,$num-1);
+//         $info = $supplier_list[$current];
+
          foreach ($list as $key => $val){
              if($val['status'][$param['platform']] == 'online'){
                  if(empty($info)){

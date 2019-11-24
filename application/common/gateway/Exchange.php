@@ -116,17 +116,36 @@ class Exchange extends Base
             $data['pgw_order_id'] = $data['orderID'];
         }else if($data['code']  == 403){
             $data['pgw_message'] = $data['status_detail'];
+            if(isset($data['stringCode'])){
+                if($data['stringCode'] == 'user_or_pass'){
+                    $data['status'] = 'wrong login';
+                }else if( $data['stringCode'] == 'no_backup_code'){
+                    $data['status'] = 'wrong no_backup_code';
+                }else if( $data['stringCode'] == 'captcha'){
+                    $data['status'] = 'wrong captcha';
+                }else if($data['stringCode'] == 'ps4_diabled' || $data['stringCode'] == 'xbox_diabled' ){
+                    //关闭考虑重新递送
+
+                }else if($data['stringCode'] == 'no-stock'){
+
+                }
+
+
+            }
+
         }else{
-            if($data['stringCode'] == 'user_or_pass'){
-                $data['status'] = 'wrong login';
-            }else if( $data['stringCode'] == 'no_backup_code'){
-                $data['status'] = 'wrong no_backup_code';
-            }else if( $data['stringCode'] == 'captcha'){
-                $data['status'] = 'wrong captcha';
-            }else if($data['stringCode'] == 'ps4_diabled' || $data['stringCode'] == 'xbox_diabled' ){
-                //关闭考虑重新递送
-            } else {
-                $data['status'] = 'unexpected';
+            if(isset($data['stringCode'])) {
+                if ($data['stringCode'] == 'user_or_pass') {
+                    $data['status'] = 'wrong login';
+                } else if ($data['stringCode'] == 'no_backup_code') {
+                    $data['status'] = 'wrong no_backup_code';
+                } else if ($data['stringCode'] == 'captcha') {
+                    $data['status'] = 'wrong captcha';
+                } else if ($data['stringCode'] == 'ps4_diabled' || $data['stringCode'] == 'xbox_diabled') {
+                    //关闭考虑重新递送
+                } else {
+                    $data['status'] = 'unexpected';
+                }
             }
             //'auth-error' - error while authenticating
             //'undefined' - undefined code, contact administrator
