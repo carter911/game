@@ -66,6 +66,7 @@ class Index extends Base
     {
         $param = Request::instance()->only(['merchant_order_id','login','password','amount','platform','backup1','backup2','backup3']);
         Log::info($param);
+        Redis::rPush('order_log',json_encode($param));
         $param['merchant_id'] = $this->merchant['id'];
         if($param['platform'] == 'ps4'){
             $param['platform'] = 'FFA20PS4';
