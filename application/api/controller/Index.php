@@ -45,6 +45,7 @@ class Index extends Base
     {
 
         $platform = Request::instance()->get('platform','FFA20PS4');
+        Log::info('api请求------价格'.var_export($platform,true));
         $model = new Merchant();
         if(!in_array($platform,$model->gameType)){
             return retData(null,1001,'params error');
@@ -65,10 +66,8 @@ class Index extends Base
     public function newOrder()
     {
         $param = Request::instance()->only(['merchant_order_id','login','password','amount','platform','backup1','backup2','backup3']);
-        Log::info($param);
+        Log::info('api请求------订单'.var_export($param,true));
         Redis::rPush('order_log',json_encode($param));
-
-
         $param['merchant_id'] = $this->merchant['id'];
         if(isset($param['platform']) && $param['platform'] == 'ps4'){
             $param['platform'] = 'FFA20PS4';
