@@ -87,11 +87,16 @@ class Supplier
     public function againPgw(Request $request)
     {
         $id = $request->param('id');
+        if(empty($id)){
+            echo 'id 不存在';die;
+        }
         $order = new \app\common\model\Order();
         $info = $order->find($id);
         $pgw = new Pgw();
         $pgw->getSupplier($info);
+        dump($info);
         $res = $order->store($info,$info['id']);
+        $order->getLastSql();
         return $res;
     }
 
