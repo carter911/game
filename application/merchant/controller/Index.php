@@ -148,16 +148,16 @@ class Index extends Base
         }
 
         //找到最优质的的上游供货商
-        $pgw = new Pgw();
-        $pgw->getSupplier($param);
+
         $merchant = new Merchant();
         $merchant_info = $merchant->getInfo($this->merchant_id)->toArray();
+        $param['amount'] = intval($param['amount']/1000);
         $param['price'] = round($merchant_info['price'][$param['platform']]*($param['amount']),2);
-
+        $pgw = new Pgw();
+        $pgw->getSupplier($param);
         if( $param['price']<=$param['pgw_price']){
             $this->error('create order failed');
         }
-
         $model = new Order();
         $id = $model->store($param);
         if(empty($id)){
