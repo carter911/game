@@ -30,20 +30,15 @@ class Transaction extends Base
     public function index( )
     {
         $search = Request::instance()->param();
-        $where = [];
+        $where = ['status'=>"end"] ;
+        $search['status'] = "end";
         if(!empty($search['supplier_id']) ){
             $where['pgw_id'] = trim($search['supplier_id']);
         }
-
         if(!empty($search['merchant_id']) ){
             $where['merchant_id'] = trim($search['merchant_id']);
         }
 
-        if(!empty($search['merchant_order_id']) ){
-            $where['merchant_order_id'] = trim($search['merchant_order_id']);
-        }
-
-        $search['status'] = "end";
         $list = Db::name('order')
             ->where($where)->order('id desc')
             ->field("sum(price) as merchant_price,sum(pgw_price) as pgw_price,pgw_id,merchant_id,FROM_UNIXTIME(create_at,'%Y-%m-%d') days")
