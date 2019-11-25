@@ -92,11 +92,11 @@ class Supplier
         }
         $order = new \app\common\model\Order();
         $info = $order->find($id);
+        $info = $info->toArray();
         $pgw = new Pgw();
         $pgw->getSupplier($info);
-        dump($info);
         $res = $order->store($info,$info['id']);
-        $order->getLastSql();
+        echo $order->getLastSql();
         return $res;
     }
 
