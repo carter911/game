@@ -55,7 +55,7 @@ class Index extends Base
         $model->getSupplier($param);
         $status = 'offline';
         if($param['pgw_id']>0){
-            $status = $param['status'];
+            $status = 'online';
         }
         Log::info('api请求------价格结束'.var_export($this->merchant,true));
         return retData(['price'=>$this->merchant['price'][$platform],'platform'=>$platform,'status'=>$status]);
