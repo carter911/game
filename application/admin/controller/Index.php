@@ -37,10 +37,10 @@ class Index extends Base
         $param = Request::instance()->only(['user_name','password']);
         $info = Db::name('admin')->where(['name'=>$param['user_name']])->find();
         if(!$info){
-            $this->error('account or password error');
+            $this->error('account or password error1');
         }
         if(hash('sha256',$param['password']) !=$info['password']){
-            $this->error('account or password error');
+            $this->error('account or password error2');
         }
         session('admin_id',$info['id']);
         session('admin',$info);
