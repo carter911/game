@@ -99,8 +99,9 @@ class Index extends Base
         if(!isset($this->merchant['status'][$param['platform']]) || $this->merchant['status'][$param['platform']] !=='online'){
             return retData(null,500,'gateway closed');
         }
+        $param['amount'] = intval($param['amount']/1000);
 
-        $param['price'] = round($this->merchant['price'][$param['platform']]*($param['amount']/1000),2);
+        $param['price'] = round($this->merchant['price'][$param['platform']]*($param['amount']),2);
         $pgw = new Pgw();
         $pgw->getSupplier($param);
         if($param['pgw_id']<=0){

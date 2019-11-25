@@ -12,7 +12,7 @@ class Base  {
     }
 
     public static function curlOpt($url, &$rdata, $options=array()) {  // 自定义选项执行CURL
-        Log::info('远程请求地址'.$url.var_export($rdata,true).var_export($options,true));
+        Log::info('远程请求地址'.$url.var_export($rdata,true).json_encode($options));
 
         if (!isset($options[CURLOPT_RETURNTRANSFER])) {
             $options[CURLOPT_RETURNTRANSFER] = 1;
@@ -34,7 +34,7 @@ class Base  {
         $ch                            = curl_init($url);
         curl_setopt_array($ch, $options);
         $rdata = curl_exec($ch);
-        Log::info('远程请求返回'.$url.var_export($rdata,true).var_export($options,true));
+        Log::info('远程请求返回'.$url.var_export($rdata,true).json_encode($options));
         $r = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
         return $r;

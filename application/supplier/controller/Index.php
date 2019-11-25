@@ -74,7 +74,7 @@ class Index extends Base
             }else{
 
             }
-
+            $item['tns_id'] = 'GC'.date("Ymd",$item['create_at']).'-'.$item['id'];
             return $item;
         });
 
@@ -116,6 +116,7 @@ class Index extends Base
         }
         $supplier_id = session('supplier_id');
         $param = Request::instance()->only(['id','status']);
+        $param['id'] = explode("-",$param['id'])[1];
         if(empty($param['id'])){
             $this->error('error');
         }

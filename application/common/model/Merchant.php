@@ -44,6 +44,7 @@ namespace app\common\model;
 
      public function setStatusAttr($price)
      {
+         dump($price);
          $priceData = [];
          foreach ($this->gameType as $key=>$val){
              if(empty($price[$val])){
@@ -52,6 +53,7 @@ namespace app\common\model;
                  $priceData[$val] = $price[$val]=='on'?'online':'offline';
              }
          }
+         dump($priceData);die;
          return json_encode($priceData);
      }
 
