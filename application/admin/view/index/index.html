@@ -76,8 +76,11 @@
                             {/if}
                             {$order.status|default="NONE"}
                         </td>
-                        <td class="active"><a target="_blank" href="{$order.image|default=''}"><img style="width: 50px" src="{$order.image|default=''}"/></a></td>
+                        <td class="active">
+                            <a href="distribution?id={$order.id}">重新分配</a>
+                        </td>
                         <td class="active">{$order.create_at|date="Y-m-d H:i:s",###}<br/>{$order.update_at|date="Y-m-d H:i:s",###}</td>
+
                     </tr>
                     {/volist}
 

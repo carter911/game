@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\controller;
 
+use app\common\logic\Pgw;
 use app\common\model\Merchant;
 use app\common\model\Order;
 use app\common\model\Supplier;
@@ -95,6 +96,21 @@ class Index extends Base
         $this->assign('list', $list);
         $this->assign('search', $search);
         return $this->fetch('index');
+    }
+
+    public function distribution(Request $request)
+    {
+        $id = $request->param('id');
+        if(empty($id)){
+            $this->success('id is empty','index');
+        }
+        $order = new \app\common\model\Order();
+        $info = $order->find($id);
+        $info = $info->toArray();
+        $pgw = new Pgw();
+        $pgw->getSupplier($info);
+        $res = $order->store($info,$info['id']);
+        $this->success('success','index');
     }
 
 

@@ -32,7 +32,6 @@ namespace app\common\logic;
                  }
              }
          }
-
          foreach ($list as $key => $val){
              if($val['status'][$param['platform']] == 'online'){
                  $pgw_price = round($val['price'][$param['platform']]*($param['amount']),2);
