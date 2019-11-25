@@ -7,6 +7,7 @@ use app\common\gateway\Ct;
 use app\common\gateway\Gateway;
 use app\common\logic\Pgw;
 use think\Log;
+use think\Request;
 use tp5redis\Redis;
 
 class Supplier
@@ -83,19 +84,15 @@ class Supplier
     }
 
 
-    public function againPgw()
+    public function againPgw(Request $request)
     {
+        $id = $request->param('id');
         $order = new \app\common\model\Order();
-        $list = $order->where(['status'=>['in',['Undelivered']]])->order('id asc')->limit(1)->select();
-        $list = $list->toArray();
+        $info = $order->find($id);
         $pgw = new Pgw();
-        dump($list);
-        foreach ($list as $key=> $val){
-            $res = $pgw->getSupplier($val);
-            dump($val);
-            $res = $order->store($val,$val['id']);
-            Log::info($order->getLastSql());
-        }
+        $pgw->getSupplier($info);
+        $res = $order->store($info,$info['id']);
+        return $res;
     }
 
     public function getOrderStatus()
