@@ -50,7 +50,7 @@ class Index extends Base
         if(!in_array($platform,$model->gameType)){
             return retData(null,1001,'params error');
         }
-        $param = ['platform'=>$platform,'price'=>$this->merchant['price'][$platform]];
+        $param = ['platform'=>$platform,'price'=>$this->merchant['price'][$platform],'amount'=>1];
         $model = new Pgw();
         $model->getSupplier($param);
         $status = 'offline';
