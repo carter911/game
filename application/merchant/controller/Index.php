@@ -155,7 +155,8 @@ class Index extends Base
         $param['price'] = round($merchant_info['price'][$param['platform']]*($param['amount']),2);
         $pgw = new Pgw();
         $pgw->getSupplier($param);
-        if( $param['price']<=$param['pgw_price']){
+
+        if(empty($param['pgw_price']) ||  $param['price']<=$param['pgw_price']){
             $this->error('create order failed');
         }
         $model = new Order();
