@@ -138,7 +138,7 @@ class Index extends Base
 
     public function store_supplier()
     {
-        $param = Request::instance()->only(['id','name','password','price','status']);
+        $param = Request::instance()->only(['id','name','password','price','status','is_auto']);
         $rule = [
             'name' => 'require',
             //'password' => 'require',
