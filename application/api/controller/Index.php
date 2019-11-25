@@ -20,10 +20,10 @@ class Index extends Base
         $token = Request::instance()->param('user',0);
         $model = new Merchant();
         $merchant =  $model->where(['key'=>$token])->find();
-        $merchant = $merchant->toArray();
         if(empty($merchant)){
             return retData(null,400,'auth error ');
         }
+        $merchant = $merchant->toArray();
         $this->merchant = $merchant;
     }
 
@@ -66,10 +66,14 @@ class Index extends Base
     {
         $param = Request::instance()->only(['merchant_order_id','login','password','amount','platform','backup1','backup2','backup3']);
         Log::info($param);
+        Redis::rPush('order_log',json_encode($param));
+
+
         $param['merchant_id'] = $this->merchant['id'];
-        if($param['platform'] == 'ps4'){
+        if(isset($param['platform']) && $param['platform'] == 'ps4'){
             $param['platform'] = 'FFA20PS4';
         }
+
         $rule = [
             'merchant_id'  => 'require',
             'merchant_order_id' => 'require',
@@ -96,6 +100,7 @@ class Index extends Base
         if (!$validate->check($param)) {
             return retData(null,3001,$validate->getError());
         }
+
         if(!isset($this->merchant['status'][$param['platform']]) || $this->merchant['status'][$param['platform']] !=='online'){
             return retData(null,500,'gateway closed');
         }
@@ -107,7 +112,6 @@ class Index extends Base
         if($param['pgw_id']<=0){
             return retData(null,500,'stock empty');
         }
-
 
         $model = new Order();
         //$model->where(['status'=>['in',['']]])

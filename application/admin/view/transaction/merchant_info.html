@@ -3,9 +3,9 @@
     {include file='./nav' /}
     <div class="container">
         <div class="panel panel-default">
-            <div class="panel-heading" style="text-align: left">Supplier Info <a href="supplier" class="btn btn-primary btn-xs" style="float: right">back</a></div>
+            <div class="panel-heading" style="text-align: left">Merchant Info <a href="merchant" class="btn btn-primary btn-xs" style="float: right">back</a></div>
             <div class="panel-body">
-                <form class="" action="store_supplier" method="post">
+                <form class="" action="store_merchant" method="post">
                     <div class="form-group">
                         <label for="exampleInputName2">Name</label>
                         <div class="input-group">
@@ -21,13 +21,7 @@
                             <input name="password" value="" type="password" class="form-control"  placeholder="password">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="exampleInputName2">is_auto</label>
-                        <div class="input-group">
-                            <div class="input-group-addon"><span class="glyphicon" aria-hidden="true"></span></div>
-                            <input name="is_auto" value="{$info.is_auto|default='0'}" type="text" class="form-control"  placeholder="is open auto transaction">
-                        </div>
-                    </div>
+
                     <div class="form-inline">
                         {foreach name='info.price' item='item' key="k" }
                         <div class="form-group">
@@ -41,7 +35,7 @@
                         </div>
                         {/foreach}
                     </div>
-                    <div style="text-align: center">
+                    <div style="text-align: center;margin-top: 20px">
                         <button  type="submit" class="btn btn-default">save</button>
 
                     </div>

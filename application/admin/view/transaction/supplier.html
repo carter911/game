@@ -3,16 +3,16 @@
     {include file='./nav' /}
     <div class="container">
         <div class="panel panel-default">
-            <div class="panel-heading" style="text-align: left">Merchant List <a href="add_merchant" class="btn btn-primary btn-xs" style="float: right">add</a></div>
+            <div class="panel-heading" style="text-align: left">Supplier List <a href="add_supplier" class="btn btn-primary btn-xs" style="float: right">add</a></div>
             <div class="panel-body">
                 <table class="table table-striped">
                     <tr>
-                        <td>ID</td>
-                        <td>名称</td>
-                        <td>状态/价格</td>
-                        <td>创建时间</td>
-                        <td>更新时间</td>
-                        <td>操做</td>
+                        <td>id</td>
+                        <td>name</td>
+                        <td>status/price</td>
+                        <td>create_time</td>
+                        <td>update_time</td>
+                        <td>option</td>
                     </tr>
                     {volist name='list' id='order'}
                     <tr style="text-align: left">
@@ -22,11 +22,12 @@
                         <td class="active">{$order.create_at|date="Y-m-d H:i:s",###}</td>
                         <td class="active">{$order.update_at|date="Y-m-d H:i:s",###}</td>
                         <td class="active">
-                            <a href="update_merchant?id={$order.id}">update</a>
-                            <a href="del_merchant?id={$order.id}">delete</a>
+                            <a href="update_supplier?id={$order.id}">update</a>
+                            <a href="del_supplier?id={$order.id}">delete</a>
                         </td>
                     </tr>
                     {/volist}
+
                     {empty name="list"}
                     <tr style="text-align: left">
                         <td style="text-align: center" colspan="7" class="active">list id empty</td>

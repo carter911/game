@@ -25,7 +25,6 @@ namespace app\common\logic;
 
          //规则 获取所有满足条件的上游
          $supplier_list = [];
-
          foreach ($list as $key => $val){
              if($val['status'][$param['platform']] == 'online'){
                  if(empty($info)){

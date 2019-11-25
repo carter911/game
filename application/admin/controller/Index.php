@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\controller;
 
+use app\common\logic\Pgw;
 use app\common\model\Merchant;
 use app\common\model\Order;
 use app\common\model\Supplier;
@@ -8,6 +9,7 @@ use think\Db;
 use think\Log;
 use think\Request;
 use think\Validate;
+use tp5redis\Redis;
 
 class Index extends Base
 {
@@ -37,10 +39,10 @@ class Index extends Base
         $param = Request::instance()->only(['user_name','password']);
         $info = Db::name('admin')->where(['name'=>$param['user_name']])->find();
         if(!$info){
-            $this->error('account or password error');
+            $this->error('account or password error1');
         }
         if(hash('sha256',$param['password']) !=$info['password']){
-            $this->error('account or password error');
+            $this->error('account or password error2');
         }
         session('admin_id',$info['id']);
         session('admin',$info);
@@ -96,6 +98,21 @@ class Index extends Base
         return $this->fetch('index');
     }
 
+    public function distribution(Request $request)
+    {
+        $id = $request->param('id');
+        if(empty($id)){
+            $this->success('id is empty','index');
+        }
+        $order = new \app\common\model\Order();
+        $info = $order->find($id);
+        $info = $info->toArray();
+        $pgw = new Pgw();
+        $pgw->getSupplier($info);
+        $res = $order->store($info,$info['id']);
+        $this->success('success','index');
+    }
+
 
     /**
      * @return mixed
@@ -137,7 +154,7 @@ class Index extends Base
 
     public function store_supplier()
     {
-        $param = Request::instance()->only(['id','name','password','price','status']);
+        $param = Request::instance()->only(['id','name','password','price','status','is_auto']);
         $rule = [
             'name' => 'require',
             //'password' => 'require',

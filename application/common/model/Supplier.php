@@ -4,6 +4,7 @@ namespace app\common\model;
 
 use think\Cache;
 use think\Model;
+use tp5redis\Redis;
 
 class Supplier extends Model
 {
@@ -77,6 +78,7 @@ class Supplier extends Model
         if ($id > 0) {
             $data['update_at'] = time();
             $res = $this->allowField(['status', 'price', 'update_at', 'pgw_return', 'pgw_gateway_id','currency','balance'])->save($data, ['id' => $id]);
+            $this->cache($id);
             return $res;
         }
         $data['create_at'] = time();
@@ -84,7 +86,9 @@ class Supplier extends Model
         if (empty($res)) {
             return false;
         }
-        return $this->getLastInsID();
+        $id = $this->getLastInsID();
+        $this->cache($id);
+        return $id;
     }
 
     public function getInfo($id)
@@ -101,6 +105,11 @@ class Supplier extends Model
     {
         $info = $this->getInfo($id)->toArray();
         foreach ($info['price'] as $key => $val) {
+            if($info['status'][$key] == 'online'){
+                Redis::hSet('h_supplier_price_'.$key,$info['id'],$val);
+            }else{
+                Redis::hDel('h_supplier_price_'.$key,$info['id']);
+            }
             Cache::set('supplier_' . $info['id'] . '_' . $key, $val);
         }
     }
