@@ -15,9 +15,10 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             {notempty name='admin_info'}
             <ul class="nav navbar-nav">
-                <li class="{eq name='action' value='index'}active{/eq}"><a href="index">Order</a></li>
-                <li class="{eq name='action' value='supplier'}active{/eq}"><a href="supplier">Supplier</a></li>
-                <li class="{eq name='action' value='merchant'}active{/eq}"><a href="merchant">Merchant</a></li>
+                <li class="{eq name='path' value='index/index'}active{/eq}"><a href="index">Order</a></li>
+                <li class="{eq name='path' value='index/supplier'}active{/eq}"><a href="supplier">Supplier</a></li>
+                <li class="{eq name='path' value='index/merchant'}active{/eq}"><a href="merchant">Merchant</a></li>
+                <li class="{eq name='path' value='transaction/index'}active{/eq}"><a href="/admin/transaction/index">Settle</a></li>
                 <!--                    <li><a href="#">Order</a></li>-->
                 <!--                    <li><a href="#">API</a></li>-->
             </ul>

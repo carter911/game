@@ -8,6 +8,7 @@ use think\Db;
 use think\Log;
 use think\Request;
 use think\Validate;
+use tp5redis\Redis;
 
 class Index extends Base
 {
