@@ -57,6 +57,7 @@ class Index extends Base
         if($param['pgw_id']>0){
             $status = $param['status'];
         }
+        Log::info('api请求------价格结束'.var_export($this->merchant,true));
         return retData(['price'=>$this->merchant['price'][$platform],'platform'=>$platform,'status'=>$status]);
     }
 
