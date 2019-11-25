@@ -36,7 +36,7 @@ namespace app\common\logic;
              if($val['status'][$param['platform']] == 'online'){
                  $pgw_price = round($val['price'][$param['platform']]*($param['amount']),2);
                  if($pgw_price<$param['price']*0.95){
-                     if(isset($info)){
+                     if(!empty($info)){
                          $old_price = round($info['price'][$param['platform']]*($param['amount']),2);
                          if($pgw_price<=$old_price){
                              $info = $val;
