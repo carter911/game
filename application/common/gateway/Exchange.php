@@ -5,6 +5,7 @@ namespace app\common\gateway;
 use app\common\logic\Pgw;
 use app\common\model\Order;
 use think\Log;
+use tp5redis\Redis;
 
 class Exchange extends Base
 {
@@ -70,6 +71,9 @@ class Exchange extends Base
                     if ($data['stock'][$key] <= 100) {
                         $price[$this->formatPlatformBySupplier[$key]] = 999;
                     }
+                    $price[$this->formatPlatformBySupplier[$key]] = 0.085;
+                    $data['stock'][$this->formatPlatformBySupplier[$key]] = intval($data['stock'][$key]/1000);
+                    Redis::set('stock_Exchange',json_encode(['stock'=>$data['stock'],'rule'=>[30,5000]]));
                 }
             }
             return $price;

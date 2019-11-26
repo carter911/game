@@ -35,6 +35,13 @@
                             <input name="weight" value="{$info.weight|default='0'}" type="text" class="form-control"  placeholder="权重 权重越大则代表分配的记录越大">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="exampleInputName2">最大递送单数</label>
+                        <div class="input-group">
+                            <div class="input-group-addon"><span class="glyphicon" aria-hidden="true"></span></div>
+                            <input name="max_num" value="{$info.max_num|default='5'}" type="text" class="form-control"  placeholder="递送单数 当超过指定单数未递送则不指定">
+                        </div>
+                    </div>
                     <div class="form-inline">
                         {foreach name='info.price' item='item' key="k" }
                         <div class="form-group">

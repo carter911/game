@@ -59,14 +59,47 @@ namespace app\common\logic;
          $merchant_price = $param['price']/$param['amount'];
 
          $count = 0;
+
+         $order = new \app\common\model\Order();
+         $count_list = $order->field('count(id) as num,pgw_id')->where(['status'=>'Undelivered'])->order('id asc')->group('pgw_id')->select();
+         $count_list = $count_list->toArray();
          foreach ($list as $key => $val){
              if($val['status'][$param['platform']] == 'online'){
+                 $config = Redis::get('stock_'.$val['pgw']);
+                 //stock_Exchange
                  if($val['price'][$param['platform']] <$merchant_price*self::RATE){
+                     if(!empty($config)){
+                         $config = json_decode($config,true);
+                         if(isset($config['rule']) && isset($config['stock'])){
+                             if($config['rule'][0]>$param['amount'] || $param['amount']>$config['rule'][1]){
+                                 Redis::hSet('log',time(),$val['pgw'].'不在价格范围'.json_encode(['config'=>$config,'param'=>$param]));
+                                 continue;
+                             }
+                             if($config['stock'][$param['platform']]<$param['amount']){
+                                 Redis::hSet('log',time(),$val['pgw'].'库存不足'.json_encode(['config'=>$config,'param'=>$param]));
+                                 continue;
+                             }
+                         }
+                     }
+                     $flag = false;
+                     if(!empty($count_list)){
+                         foreach ($count_list as $k=>$v){
+                             if($val['id'] == $v['pgw_id'] && $val['max_num']<=$v['num']){
+                                 Redis::hSet('log',time(),$val['pgw'].'超出限制'.json_encode(['config'=>$val,'param'=>$param]));
+                                 $flag = true;
+                             }
+                         }
+                     }
+
+                     if($flag){
+                         continue;
+                     }
                      $supplier_list[] = $val;
                      $count += intval($val['weight']);
                  }
              }
          }
+
          $changeNum = rand(0,$count-1);
          $count = 0;
          foreach ($supplier_list as $key =>$val){

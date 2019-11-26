@@ -13,6 +13,7 @@
                         <td>创建/更新时间</td>
                         <td>是否自动</td>
                         <td>权重</td>
+                        <td>最大单数</td>
                         <td>操做</td>
                     </tr>
                     {volist name='list' id='order'}
@@ -23,6 +24,7 @@
                         <td class="active">{$order.create_at|date="Y-m-d H:i:s",###}<br/>{$order.update_at|date="Y-m-d H:i:s",###}</td>
                         <td class="active">{$order.is_auto}</td>
                         <td class="active">{$order.weight}</td>
+                        <td class="active">{$order.max_num}</td>
                         <td class="active">
                             <a href="update_supplier?id={$order.id}">修改</a>
                             <a href="del_supplier?id={$order.id}">删除</a>
