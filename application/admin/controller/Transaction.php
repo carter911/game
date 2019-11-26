@@ -41,7 +41,7 @@ class Transaction extends Base
 
         $list = Db::name('order')
             ->where($where)->order('id desc')
-            ->field("sum(price) as merchant_price,sum(pgw_price) as pgw_price,sum(amount) as amount,pgw_id,merchant_id,FROM_UNIXTIME(create_at,'%Y-%m-%d') days")
+            ->field("sum(price) as merchant_price,sum(pgw_price) as pgw_price,sum(amount) as amount,count(id) as num,pgw_id,merchant_id,FROM_UNIXTIME(create_at,'%Y-%m-%d') days")
             ->group("pgw_id,merchant_id,FROM_UNIXTIME(create_at,'%Y-%m-%d')")->order("create_at desc")
             ->paginate(20);
         $this->assign('list', $list);
