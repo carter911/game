@@ -22,10 +22,17 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputName2">is_auto</label>
+                        <label for="exampleInputName2">是否自动交易</label>
                         <div class="input-group">
                             <div class="input-group-addon"><span class="glyphicon" aria-hidden="true"></span></div>
-                            <input name="is_auto" value="{$info.is_auto|default='0'}" type="text" class="form-control"  placeholder="is open auto transaction">
+                            <input name="is_auto" value="{$info.is_auto|default='0'}" type="text" class="form-control"  placeholder="1 代表自动交易 0 代表关闭自动交易">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName2">权重</label>
+                        <div class="input-group">
+                            <div class="input-group-addon"><span class="glyphicon" aria-hidden="true"></span></div>
+                            <input name="weight" value="{$info.weight|default='0'}" type="text" class="form-control"  placeholder="权重 权重越大则代表分配的记录越大">
                         </div>
                     </div>
                     <div class="form-inline">
