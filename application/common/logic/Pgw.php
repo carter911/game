@@ -71,7 +71,7 @@ namespace app\common\logic;
                      if(!empty($config)){
                          $config = json_decode($config,true);
                          if(isset($config['rule']) && isset($config['stock'])){
-                             if($config['rule'][0]>$param['amount'] || $param['amount']>$config['rule'][1]){
+                             if($config['rule'][0]>$param['amount'] || ($param['amount']>$config['rule'][1] && $param['amount'] !=1)){
                                  Redis::hSet('log',time(),$val['pgw'].'不在价格范围'.json_encode(['config'=>$config,'param'=>$param]));
                                  continue;
                              }
