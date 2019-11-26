@@ -4,9 +4,14 @@ namespace app\common\logic;
 
 
  use app\common\model\Supplier;
+ use tp5redis\Redis;
 
  class Pgw{
 
+     /**
+      * @param array $gameType
+      */
+     const RATE=0.95;
      static  $gameType = [
          'FFA20PS4','FFA20XBO','FFA20PCC'
      ];
@@ -16,48 +21,85 @@ namespace app\common\logic;
 
      }
 
+
+     public function autoSyncPrice()
+     {
+         $model = new \app\common\model\Supplier();
+         $list = $model->where(['is_auto' => 1])->select()->toArray();
+         foreach ($list as $key => $val) {
+             $gateway = "app\\common\\gateway\\".$val['pgw'];
+             $pgw = new $gateway();
+             $price = $pgw->getPrice();
+             $status = [];
+             foreach ($price as $k => $v){
+                 $status[$k] = 'offline';
+                 if($v!=999 && $v>0){
+                     $status[$k] = 'online';
+                 }
+             }
+             $res = $model->store(['status'=>$status,'price'=>$price],$val['id']);
+         }
+     }
+
      public function getSupplier(&$param)
      {
-        //选择不同的供应商
+         $this->autoSyncPrice();
+         //选择不同的供应商
          $model = new Supplier();
          $list = $model->getList()->toArray();
          $info = [];
+         if(empty($param['amount'])){
+             $param['amount'] = 1;
+         }
 
          //规则 获取所有满足条件的上游
+         //$param['platform']
+         //$list = Redis::hGetAll('h_supplier_price_'.$param['platform']);
          $supplier_list = [];
+         $merchant_price = $param['price']/$param['amount'];
+
+         $count = 0;
          foreach ($list as $key => $val){
              if($val['status'][$param['platform']] == 'online'){
-                 if(empty($info)){
+                 if($val['price'][$param['platform']] <$merchant_price*self::RATE){
                      $supplier_list[] = $val;
+                     $count += intval($val['weight']);
                  }
              }
          }
-         foreach ($list as $key => $val){
-             if($val['status'][$param['platform']] == 'online'){
-                 $pgw_price = round($val['price'][$param['platform']]*($param['amount']),2);
-                 if($pgw_price<$param['price']*0.95){
-                     if(!empty($info)){
-                         $old_price = round($info['price'][$param['platform']]*($param['amount']),2);
-                         if($pgw_price<=$old_price){
-                             $info = $val;
-                         }
-                     }else{
-                         $info = $val;
-                     }
-                 }
+         $changeNum = rand(0,$count-1);
+         $count = 0;
+         foreach ($supplier_list as $key =>$val){
+             $count += intval($val['weight']);
+             if($changeNum<=$count){
+                 $info = $val;
+                 break;
              }
          }
+
+//         foreach ($list as $key => $val){
+//             if($val['status'][$param['platform']] == 'online'){
+//                 $pgw_price = round($val['price'][$param['platform']]*($param['amount']),2);
+//                 if($pgw_price<$param['price']*self::RATE){
+//                     if(!empty($info)){
+//                         $old_price = round($info['price'][$param['platform']]*($param['amount']),2);
+//                         if($pgw_price<=$old_price){
+//                             $info = $val;
+//                         }
+//                     }else{
+//                         $info = $val;
+//                     }
+//                 }
+//             }
+//         }
+         $param['pgw_id'] = 0;
          if($info){
              $param['pgw_id'] = $info['id'];
              $param['pgw_payment'] = $info['pgw'];
-             //$param['status'] = $info['status'][$param['platform']];
-             if(empty($param['amount'])){
-                 $param['amount'] = 1;
-             }
              $param['pgw_price'] = round($info['price'][$param['platform']]*($param['amount']),2);
-             if($param['pgw_price']>=$param['price']*0.95){
-                 $param['pgw_id'] = 0;
-             }
+//             if($param['pgw_price']>=$param['price']*0.95){
+//                 $param['pgw_id'] = 0;
+//             }
          }
      }
 

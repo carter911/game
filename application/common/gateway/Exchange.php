@@ -65,10 +65,9 @@ class Exchange extends Base
             $data = json_decode($data, true);
             $price = [];
             foreach ($data['prices'] as $key => $item) {
-
                 if (in_array($key, array_keys($this->formatPlatformBySupplier))) {
                     $price[$this->formatPlatformBySupplier[$key]] = round($item / 1000, 3);
-                    if ($data['stock'][$key] <= 0) {
+                    if ($data['stock'][$key] <= 100) {
                         $price[$this->formatPlatformBySupplier[$key]] = 999;
                     }
                 }

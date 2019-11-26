@@ -65,7 +65,6 @@ class Index extends Base
     {
 
         $supplier_id = session('supplier_id');
-
         $model = new Supplier();
         $info = $model->getInfo($supplier_id)->toArray();
         $list = Db::name('order')->where(['pgw_id'=>$supplier_id])->order('id desc')->paginate(20)->each(function($item, $key){
