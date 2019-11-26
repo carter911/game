@@ -29,16 +29,17 @@
                         <td>日期</td>
                         <td>商户名称</td>
                         <td>供应商</td>
+                        <td>金币数量</td>
                         <td>供应商金额</td>
                         <td>商户金额</td>
                         <td>利润</td>
-
                     </tr>
                     {volist name='list' id='order'}
                     <tr style="text-align: left">
                         <td class="active">{$order.days}</td>
                         <td class="active">{$order.merchant_id}</td>
                         <td class="active">{$order.pgw_id}</td>
+                        <td class="active">{$order.amount}</td>
                         <td class="active">{$order.pgw_price}</td>
                         <td class="active">{$order.merchant_price}</td>
                         <td class="active">{$order.merchant_price-$order.pgw_price}</td>
