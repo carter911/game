@@ -118,11 +118,11 @@ class Exchange extends Base
             $data['pgw_message'] = $data['status_detail'];
             if(isset($data['stringCode'])){
                 if($data['stringCode'] == 'user_or_pass'){
-                    $data['status'] = 'wrong login';
+                    $data['status'] = 'wronglogin';
                 }else if( $data['stringCode'] == 'no_backup_code'){
                     $data['status'] = 'wrong no_backup_code';
                 }else if( $data['stringCode'] == 'captcha'){
-                    $data['status'] = 'wrong captcha';
+                    $data['status'] = 'wrongcaptcha';
                 }else if($data['stringCode'] == 'ps4_diabled' || $data['stringCode'] == 'xbox_diabled' ){
                     //关闭考虑重新递送
 
@@ -136,11 +136,11 @@ class Exchange extends Base
         }else{
             if(isset($data['stringCode'])) {
                 if ($data['stringCode'] == 'user_or_pass') {
-                    $data['status'] = 'wrong login';
+                    $data['status'] = 'wronglogin';
                 } else if ($data['stringCode'] == 'no_backup_code') {
                     $data['status'] = 'wrong no_backup_code';
                 } else if ($data['stringCode'] == 'captcha') {
-                    $data['status'] = 'wrong captcha';
+                    $data['status'] = 'wrongcaptcha';
                 } else if ($data['stringCode'] == 'ps4_diabled' || $data['stringCode'] == 'xbox_diabled') {
                     //关闭考虑重新递送
                 } else {
@@ -204,7 +204,7 @@ class Exchange extends Base
             $data['status'] = 'end';
         }else if($data['status']  == 'null'){
             if($data['status_detail'] == 'market_disabled'){
-                $data['status'] = 'market locked';
+                $data['status'] = 'marketlocked';
             }else {
                 $data['pgw_message'] = $data['status_detail'];
                 $data['status'] = 'unexpected';
