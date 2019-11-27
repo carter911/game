@@ -13,6 +13,7 @@ class Index extends Controller
 
     public function test()
     {
+        error_reporting(0);
         $reader = new PHPExcelReader('./111.xlsx');
         $tatal = $reader->count();
         $data = [];
