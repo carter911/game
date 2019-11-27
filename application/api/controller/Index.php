@@ -44,7 +44,7 @@ class Index extends Base
     public function price()
     {
 
-        $platform = Request::instance()->get('platform','FFA20PS4');
+        $platform = Request::instance()->post('platform','FFA20PS4');
         Log::info('api请求------价格'.var_export($platform,true));
         $model = new Merchant();
         if(!in_array($platform,$model->gameType)){
@@ -58,6 +58,7 @@ class Index extends Base
             $status = 'online';
         }
         Log::info('api请求------价格结束'.var_export($this->merchant,true));
+        Redis::hSet('价格日志',time(),var_export($platform,true).var_export($this->merchant,true));
         return retData(['price'=>$this->merchant['price'][$platform],'platform'=>$platform,'status'=>$status]);
     }
 
