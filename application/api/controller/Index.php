@@ -150,7 +150,7 @@ class Index extends Base
             $data['transaction_already_amount'] = $info['amount'];
         }
         if('transferring' == $info['status'] ){
-            $data['transaction_already_amount'] = 10/$info['amount'];
+            $data['transaction_already_amount'] = $info['amount']/10;
         }
 
         $data['amount'] = $info['amount'];
