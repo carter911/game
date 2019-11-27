@@ -155,6 +155,7 @@ class Index extends Base
         $data['amount'] = $info['amount'];
         $data['status'] = $info['status'];
         $data['id'] = $info['id'];
+        Redis::hSet('状态日志',time(),var_export($data,true));
         return retData($data,200,'success');
     }
 
