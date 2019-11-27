@@ -18,7 +18,8 @@
     "require": {
         "php": ">=5.4.0",
         "topthink/framework": "5.0.*",
-        "xiucaiwu/tp5redis": "^1.0"
+        "xiucaiwu/tp5redis": "^1.0",
+        "writethesky/php-excel-reader": "^1.0"
     },
     "autoload": {
         "psr-4": {
