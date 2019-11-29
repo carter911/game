@@ -90,7 +90,6 @@ class Index extends Base
             }else{
 
             }
-
             return $item;
         });
         $this->assign('list', $list);
