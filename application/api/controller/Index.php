@@ -108,7 +108,7 @@ class Index extends Base
         $param['amount'] = intval($param['amount']/1000);
 
         if($param['amount']<= 200){
-            return retData(null,500,'amount limit 200k');
+            //return retData(null,500,'amount limit 200k');
         }
 
 
