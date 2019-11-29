@@ -107,6 +107,11 @@ class Index extends Base
         }
         $param['amount'] = intval($param['amount']/1000);
 
+        if($param['amount']<= 200){
+            return retData(null,500,'amount limit 200k');
+        }
+
+
         $param['price'] = round($this->merchant['price'][$param['platform']]*($param['amount']),2);
         $pgw = new Pgw();
         $pgw->getSupplier($param);
