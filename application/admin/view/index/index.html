@@ -49,7 +49,9 @@
                     <button type="submit" class="btn btn-default">Query</button>
 
                 </form>
-                <table class="table table-striped" style="font-size: 13px;">
+                <div class="">
+
+                <table class="table table-striped " style="font-size: 13px;width: 100%">
                     <tr>
                         <td>id/m_order_id</td>
                         <td>platform/amount</td>
@@ -89,8 +91,10 @@
                     </tr>
                     {/empty}
                 </table>
+                </div>
                 <div style="text-align: center">{$list->render()}</div>
             </div>
+
         </div>
     </div>
 </div>
