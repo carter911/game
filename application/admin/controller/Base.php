@@ -4,6 +4,7 @@ namespace app\admin\controller;
 use think\Controller;
 use think\Db;
 use think\Request;
+use tp5redis\Redis;
 
 class Base extends Controller
 {
@@ -23,6 +24,7 @@ class Base extends Controller
         $this->assign('admin_info', $info);
         $this->assign('action',$action);
         $this->assign('controller',$controller);
+        Redis::hSet('request_log',time(),json_encode(['ip'=>$this->request->ip(),'info'=>$info]));
         $this->assign('path',strtolower($controller).'/'.strtolower($action));
     }
 

@@ -54,7 +54,7 @@ class Supplier
         $model = new \app\common\model\Supplier();
         $list = $model->where(['is_auto' => 1])->select()->toArray();
         foreach ($list as $key => $val) {
-            echo '更新渠道价格'.var_export($val).'<br />';
+            echo '更新渠道余额'.var_export($val).'<br />';
             $gateway = "app\\common\\gateway\\".$val['pgw'];
             $pgw = new $gateway();
             $price = $pgw->balance();

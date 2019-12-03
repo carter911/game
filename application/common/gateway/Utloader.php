@@ -6,6 +6,7 @@ use app\common\logic\Pgw;
 use app\common\model\Merchant;
 use app\common\model\Order;
 use think\Log;
+use tp5redis\Redis;
 
 class Utloader extends Base
 {
@@ -54,12 +55,17 @@ class Utloader extends Base
                 Log::error('Utloader远程请求地址'.$url.var_export($res,true).var_export($data,true));
                 return false;
             }
+            $balance = $this->balance();
+            dump($balance);
             $price = [];
             foreach ($data['prices'] as $key=> $item){
                 if(in_array($key,Pgw::$gameType)){
                     $price[$key] = round($item/1000,3);
                 }
+                Redis::set('stock_Utloader',json_encode(['rule'=>[0,1000000]]));
             }
+
+
             return $price;
         } catch (\Throwable $e) {
             Log::error('Utloader远程请求地址'.$e->getMessage());
@@ -119,7 +125,7 @@ class Utloader extends Base
             Log::error('Utloader远程请求地址'.self::PGW_URL.var_export($res,true).var_export($data,true));
             return $data;
         }
-
+        dump($data);die;
         if($data['status'] ==1){
             $data['status'] = 'transferring';
         }else {
