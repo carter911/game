@@ -70,6 +70,13 @@ class Index extends Base
             $where['pgw_id'] = trim($search['supplier_id']);
         }
 
+        if(!empty($search['order_id']) ){
+            $order_id = explode("-",$search['order_id']);
+            if(isset($order_id[1])){
+                $where['id'] = trim($order_id[1]);
+            }
+
+        }
         if(!empty($search['merchant_id']) ){
             $where['merchant_id'] = trim($search['merchant_id']);
         }
@@ -84,7 +91,7 @@ class Index extends Base
             $search['status'] = "";
         }
 
-        $list = Db::name('order')->where($where)->order('id desc')->paginate(20)->each(function($item, $key){
+        $list = Db::name('order')->where($where)->order('id desc')->paginate(20,false,['query' => $search])->each(function($item, $key){
             if(!empty($item['image'])){
                 $item['image'] = Request::instance()->domain().'/uploads/'.$item['image'];
             }else{
