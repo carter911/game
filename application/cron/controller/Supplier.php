@@ -70,6 +70,7 @@ class Supplier
      */
     public function sendToPayment()
     {
+        echo "提交订单".'上游网管'.'<br/>';
         $order = new \app\common\model\Order();
         $list = $order->where(['status'=>'Undelivered','pgw_payment'=>['neq','']])->order('id asc')->limit(1)->select();
         $list = $list->toArray();
