@@ -12,6 +12,7 @@ use tp5redis\Redis;
 
 class Supplier
 {
+
     /**
      * 更新上游价格
      * @throws \think\db\exception\DataNotFoundException
@@ -110,11 +111,15 @@ class Supplier
 
     public function getOrderStatus()
     {
+        Log::notice('获取上游订单状态');
         $order = new \app\common\model\Order();
         $list = $order->where(['status'=>['in',['Transferring','transferring','New order']]])->order('id asc')->limit(5)->select();
         $list = $list->toArray();
         foreach ($list as $key=> $val){
             echo "需要更新状态为".$val['pgw_order_id'].'上游网管'.$val['pgw_payment'].'<br/>';
+            if(empty($val['pgw_payment'])){
+                continue;
+            }
             $gateway = "app\\common\\gateway\\".$val['pgw_payment'];
             $pgw = new $gateway();
             $res = $pgw->queryOrder($val);
