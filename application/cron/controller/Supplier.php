@@ -72,15 +72,14 @@ class Supplier
     {
         echo "提交订单".'上游网管'.'<br/>';
         $order = new \app\common\model\Order();
-        $list = $order->where(['status'=>'Undelivered','pgw_payment'=>['neq','']])->order('id asc')->limit(1)->select();
+        $list = $order->where(['status'=>'Undelivered','pgw_payment'=>['neq','']])->order('id asc')->limit(5)->select();
         $list = $list->toArray();
 
         dump($list);
         foreach ($list as $key=> $val){
             if(empty($val['pgw_payment'])){
-                return false;
+                continue;
             }
-
             $gateway = "app\\common\\gateway\\".$val['pgw_payment'];
             $pgw = new $gateway();
             $res = $pgw->newOrder($val);
