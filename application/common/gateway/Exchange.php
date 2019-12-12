@@ -129,7 +129,7 @@ class Exchange extends Base
                     //关闭考虑重新递送
 
                 }else if($data['stringCode'] == 'no-stock'){
-
+                    $data['status'] = 'nostock';
                 }
             }
 
