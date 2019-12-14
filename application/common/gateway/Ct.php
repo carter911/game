@@ -152,6 +152,10 @@ class Ct extends Base
         }
         $data['pgw_message'] = $data['code']."-";
         if($data['code'] ==200 || $data['code'] ==400){
+            if(isset($data['sent'])){
+                $data['transaction_already_amount'] = isset($data['sent'])?$data['sent']:0;
+            }
+
             if(isset($data['status'])){
                 $status = self::formatStatus($data['status']);
                 if(!empty($status)){
@@ -160,6 +164,7 @@ class Ct extends Base
             }
             $data['pgw_message'] .= isset($data['error'])?$data['error']:'';
         }
+
         return $data;
 
     }
