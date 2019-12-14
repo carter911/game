@@ -153,7 +153,10 @@ class Ct extends Base
         $data['pgw_message'] = $data['code']."-";
         if($data['code'] ==200 || $data['code'] ==400){
             if(isset($data['status'])){
-                $data['status'] = self::formatStatus($data['status']);
+                $status = self::formatStatus($data['status']);
+                if(!empty($status)){
+                    $data['status'] = self::formatStatus($data['status']);
+                }
             }
             $data['pgw_message'] .= isset($data['error'])?$data['error']:'';
         }
@@ -176,6 +179,6 @@ class Ct extends Base
             'wrongplatform'=>'unexpected',
             'new'=>'new',
         ];
-        return isset($statusList[$status])?$statusList[$status]:'unexpected';
+        return isset($statusList[$status])?$statusList[$status]:'';
     }
 }
