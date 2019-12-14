@@ -137,7 +137,7 @@ class Ct extends Base
 
         $payload = array(
             'user' => $user,
-            'orderid' => $orderInfo['pgw_order_id']
+            'orderid' => 'alex-'.$orderInfo['pgw_order_id']
         );
         $res = self::curlPost($url, json_encode($payload),$data, ['X-AjaxPro-Method:ShowList', 'Content-Type: application/json; charset=utf-8',]);
         if($res !=200){
