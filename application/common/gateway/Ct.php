@@ -174,6 +174,7 @@ class Ct extends Base
             'transferring'=>'transferring',
             '< 200 coins'=>'<200 coins',
             'wrongplatform'=>'unexpected',
+            'new'=>'new',
         ];
         return isset($statusList[$status])?$statusList[$status]:'unexpected';
     }
