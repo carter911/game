@@ -120,6 +120,10 @@ class Supplier
             if(empty($val['pgw_payment'])){
                 continue;
             }
+            if(empty($val['pgw_order_id'])){
+                echo "上游订单id不存在<br />";
+                continue;
+            }
             $gateway = "app\\common\\gateway\\".$val['pgw_payment'];
             $pgw = new $gateway();
             $res = $pgw->queryOrder($val);

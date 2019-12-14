@@ -6,6 +6,7 @@ use app\common\logic\Pgw;
 use app\common\model\Merchant;
 use app\common\model\Order;
 use think\Log;
+use tp5redis\Redis;
 
 class Ct extends Base
 {
@@ -49,15 +50,18 @@ class Ct extends Base
             $price = [];
             foreach ($data as $key=> $item){
                 if($key == 'ps4'){
-                    $price['FFA20PS4'] = round($item/1000,2);
+                    $price['FFA20PS4'] = round($item/1000,4);
                 }
 
                 if($key == 'xbox'){
-                    $price['FFA20XBO'] = round($item/1000,2);
+                    $price['FFA20XBO'] = round($item/1000,4);
                 }
 
                 if($key == 'pcc'){
-                    $price['FFA20PCC'] =  round($item/1000,2);
+                    $price['FFA20PCC'] =  round($item/1000,4);
+                }
+                if($key == 'maxcoinsps4'){
+                    Redis::set('stock_Ct',json_encode(['rule'=>[0,$item]]));
                 }
             }
             return $price;
@@ -108,16 +112,18 @@ class Ct extends Base
             Log::error('Utloader远程请求地址'.$url.var_export($res,true).var_export($data,true));
             return false;
         }
-
         $data = json_decode($data,true);
         $data['pgw_return'] = json_encode($data);
         $data['pgw_order_id'] = isset($data['orderid'])?$data['orderid']:'0';
+        $data['pgw_message'] = $data['code']."-";
         if($data['code'] ==200){
             $data['status'] = 'transferring';
-        }else if($data['code'] !=400){
-            $data['code'] = 'unexpected';
+        }else if($data['code'] ==400){
+            $data['status'] = 'unexpected';
+            $data['pgw_message'] .= isset($data['error'])?$data['error']:'';
         }else{
-            $data['code'] = 'unexpected';
+            $data['status'] = 'unexpected';
+            $data['pgw_message'] = isset($data['error'])?$data['error']:'';
         }
         //$data['pgw_message'] = isset($data['reason'])?$data['reason']:'';
         return $data;
@@ -128,6 +134,7 @@ class Ct extends Base
 
         $url = 'https://mmoo.pl/u7buy/status';
         $user = 'alex-b5c9c562541sa45gd357z';
+
         $payload = array(
             'user' => $user,
             'orderid' => $orderInfo['pgw_order_id']
@@ -140,11 +147,34 @@ class Ct extends Base
         }
         $data = json_decode($data,true);
         $data['pgw_return'] = json_encode($data);
-        if($data['code'] != 200){
-            return false;
-            exit;
+        if(!isset($data['code'])){
+            return $data;
+        }
+        $data['pgw_message'] = $data['code']."-";
+        if($data['code'] ==200 || $data['code'] ==400){
+            if(isset($data['status'])){
+                $data['status'] = self::formatStatus($data['status']);
+            }
+            $data['pgw_message'] .= isset($data['error'])?$data['error']:'';
         }
         return $data;
 
+    }
+
+    public static function formatStatus($status= "")
+    {
+        $statusList = [
+            'csm online'=>'csmonline',
+            'end'=>'end',
+            'wrong backup'=>'wrongbackup',
+            'market locked'=>'marketlocked',
+            'verification off'=>'unexpected',
+            'unexpected'=>'unexpected',
+            'wrong login'=>'wronglogin',
+            'transferring'=>'transferring',
+            '< 200 coins'=>'<200 coins',
+            'wrongplatform'=>'unexpected',
+        ];
+        return isset($statusList[$status])?$statusList[$status]:'unexpected';
     }
 }
