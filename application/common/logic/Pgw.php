@@ -70,12 +70,12 @@ namespace app\common\logic;
                  if($val['price'][$param['platform']] <$merchant_price*self::RATE){
                      if(!empty($config)){
                          $config = json_decode($config,true);
-                         if(isset($config['rule']) && isset($config['stock'])){
+                         if(isset($config['rule'])){
                              if($config['rule'][0]>$param['amount'] || ($param['amount']>$config['rule'][1] && $param['amount'] !=1)){
                                  Redis::hSet('log',time(),$val['pgw'].'不在价格范围'.json_encode(['config'=>$config,'param'=>$param]));
                                  continue;
                              }
-                             if($config['stock'][$param['platform']]<$param['amount']){
+                             if(isset($config['stock']) && $config['stock'][$param['platform']]<$param['amount']){
                                  Redis::hSet('log',time(),$val['pgw'].'库存不足'.json_encode(['config'=>$config,'param'=>$param]));
                                  continue;
                              }
@@ -109,7 +109,6 @@ namespace app\common\logic;
                  break;
              }
          }
-
 //         foreach ($list as $key => $val){
 //             if($val['status'][$param['platform']] == 'online'){
 //                 $pgw_price = round($val['price'][$param['platform']]*($param['amount']),2);

@@ -60,7 +60,7 @@ class Utloader extends Base
             $price = [];
             foreach ($data['prices'] as $key=> $item){
                 if(in_array($key,Pgw::$gameType)){
-                    $price[$key] = round($item/1000,3);
+                    $price[$key] = round($item/1000,4);
                 }
                 Redis::set('stock_Utloader',json_encode(['rule'=>[0,1000000]]));
             }
