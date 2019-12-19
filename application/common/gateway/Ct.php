@@ -48,22 +48,38 @@ class Ct extends Base
             }
             $data = json_decode($data,true);
             $price = [];
+
+
             foreach ($data as $key=> $item){
                 if($key == 'ps4'){
-                    $price['FFA20PS4'] = round($item/1000,4);
+                    if($data['maxcoinsps4'] == 0){
+                        $price['FFA20PS4'] = 999;
+                    }else{
+                        $price['FFA20PS4'] = round($item/1000,4);
+                    }
                 }
 
                 if($key == 'xbox'){
-                    $price['FFA20XBO'] = round($item/1000,4);
+                    if($data['maxcoinsps4'] == 0){
+                        $price['FFA20PS4'] = 999;
+                    }else{
+                        $price['FFA20XBO'] = round($item/1000,4);
+                    }
                 }
 
                 if($key == 'pcc'){
                     $price['FFA20PCC'] =  round($item/1000,4);
                 }
                 if($key == 'maxcoinsps4'){
-                    Redis::set('stock_Ct',json_encode(['rule'=>[0,$item]]));
+                    Redis::set('stock_Ct',json_encode(['rule'=>[0,$item],'sto']));
                 }
             }
+
+            $stock = [
+                'FFA20PCC'=>$data['maxcoinsps4'],
+                'FFA20PS4'=>$data['maxcoinsx1'],
+            ];
+            Redis::set('stock_Ct',json_encode(['rule'=>[0,1000],'stock'=>$stock]));
             return $price;
         } catch (\Throwable $e) {
             Log::error('Utloader远程请求地址'.$e->getMessage());
