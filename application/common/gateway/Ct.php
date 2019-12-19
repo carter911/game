@@ -49,7 +49,6 @@ class Ct extends Base
             $data = json_decode($data,true);
             $price = [];
 
-
             foreach ($data as $key=> $item){
                 if($key == 'ps4'){
                     if($data['maxcoinsps4'] == 0){
@@ -60,8 +59,8 @@ class Ct extends Base
                 }
 
                 if($key == 'xbox'){
-                    if($data['maxcoinsps4'] == 0){
-                        $price['FFA20PS4'] = 999;
+                    if($data['maxcoinsx1'] == 0){
+                        $price['FFA20XBO'] = 999;
                     }else{
                         $price['FFA20XBO'] = round($item/1000,4);
                     }
