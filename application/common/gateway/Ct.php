@@ -121,7 +121,10 @@ class Ct extends Base
         }else if($data['code'] ==400){
             $data['status'] = 'unexpected';
             $data['pgw_message'] .= isset($data['error'])?$data['error']:'';
-        }else{
+        }else if($data['code'] ==404){
+            $data['status'] = self::formatStatus('nostock');
+        }
+        else{
             $data['status'] = 'unexpected';
             $data['pgw_message'] = isset($data['error'])?$data['error']:'';
         }
@@ -163,6 +166,8 @@ class Ct extends Base
                 }
             }
             $data['pgw_message'] .= isset($data['error'])?$data['error']:'';
+        }else if($data['code'] ==404){
+            $data['status'] = self::formatStatus('nostock');
         }
 
         return $data;
@@ -183,6 +188,7 @@ class Ct extends Base
             '< 200 coins'=>'<200 coins',
             'wrongplatform'=>'unexpected',
             'new'=>'new',
+            'nostock'=>'nostock',
         ];
         return isset($statusList[$status])?$statusList[$status]:'';
     }
