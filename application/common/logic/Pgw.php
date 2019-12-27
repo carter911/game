@@ -94,6 +94,9 @@ namespace app\common\logic;
                      if($flag){
                          continue;
                      }
+                     if(intval($val['weight'])<=0){
+                         continue;
+                     }
                      $supplier_list[] = $val;
                      $count += intval($val['weight']);
                  }
