@@ -70,16 +70,19 @@ namespace app\common\logic;
                  if($val['price'][$param['platform']] <$merchant_price*self::RATE){
                      if(!empty($config)){
                          $config = json_decode($config,true);
-                         if(isset($config['rule'])){
-                             if($config['rule'][0]>$param['amount'] || ($param['amount']>$config['rule'][1] && $param['amount'] !=1)){
-                                 Redis::hSet('log',time(),$val['pgw'].'不在价格范围'.json_encode(['config'=>$config,'param'=>$param]));
-                                 continue;
-                             }
-                             if(isset($config['stock']) && $config['stock'][$param['platform']]<$param['amount']){
-                                 Redis::hSet('log',time(),$val['pgw'].'库存不足'.json_encode(['config'=>$config,'param'=>$param]));
-                                 continue;
+                         if($param['amount'] !=1){
+                             if(isset($config['rule'])){
+                                 if($config['rule'][0]>$param['amount'] || ($param['amount']>$config['rule'][1] && $param['amount'] !=1)){
+                                     Redis::hSet('log',time(),$val['pgw'].'不在价格范围'.json_encode(['config'=>$config,'param'=>$param]));
+                                     continue;
+                                 }
+                                 if(isset($config['stock']) && $config['stock'][$param['platform']]<$param['amount']){
+                                     Redis::hSet('log',time(),$val['pgw'].'库存不足'.json_encode(['config'=>$config,'param'=>$param]));
+                                     continue;
+                                 }
                              }
                          }
+
                      }
                      $flag = false;
                      if(!empty($count_list)){
@@ -102,7 +105,7 @@ namespace app\common\logic;
                  }
              }
          }
-
+         Redis::hSet('log-supplier_list',time(),var_export($supplier_list,true));
          $changeNum = rand(0,$count-1);
          $count = 0;
          foreach ($supplier_list as $key =>$val){
@@ -112,21 +115,6 @@ namespace app\common\logic;
                  break;
              }
          }
-//         foreach ($list as $key => $val){
-//             if($val['status'][$param['platform']] == 'online'){
-//                 $pgw_price = round($val['price'][$param['platform']]*($param['amount']),2);
-//                 if($pgw_price<$param['price']*self::RATE){
-//                     if(!empty($info)){
-//                         $old_price = round($info['price'][$param['platform']]*($param['amount']),2);
-//                         if($pgw_price<=$old_price){
-//                             $info = $val;
-//                         }
-//                     }else{
-//                         $info = $val;
-//                     }
-//                 }
-//             }
-//         }
          $param['pgw_id'] = 0;
          if($info){
              $param['pgw_id'] = $info['id'];
