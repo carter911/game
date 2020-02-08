@@ -160,9 +160,9 @@ class FutFill extends Base
     {
         $statusList = [
             0=>'end',
+            11=>'transferring',
             12=>'transferring',
             13=>'checking info',
-            12=>'transferring',
             201=>'csmonline',
             210=>'marketlocked',
             211=>'tradepilefull',
