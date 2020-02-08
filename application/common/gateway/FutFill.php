@@ -141,7 +141,7 @@ class FutFill extends Base
             return $data;
         }
 
-        if($status==0){
+        if($status<=200){
             if($data['Amount']>=$data['Delivered']){
                 $data['status'] = 'end';
             }else{
