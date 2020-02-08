@@ -56,7 +56,6 @@ class Utloader extends Base
                 return false;
             }
             $balance = $this->balance();
-            dump($balance);
             $price = [];
             foreach ($data['prices'] as $key=> $item){
                 if(in_array($key,Pgw::$gameType)){
@@ -64,8 +63,6 @@ class Utloader extends Base
                 }
                 Redis::set('stock_Utloader',json_encode(['rule'=>[0,1000000]]));
             }
-
-
             return $price;
         } catch (\Throwable $e) {
             Log::error('Utloader远程请求地址'.$e->getMessage());
@@ -113,7 +110,6 @@ class Utloader extends Base
         $params['platform'] = self::formatPlatform($orderInfo['platform']);
         $params['backup_code'] = $orderInfo['backup1'];
         $params['amount'] = $orderInfo['amount'];
-        $param = [];
         foreach ($params as $key => $val){
             $param[] = $key."=".$val;
         }
@@ -125,7 +121,6 @@ class Utloader extends Base
             Log::error('Utloader远程请求地址'.self::PGW_URL.var_export($res,true).var_export($data,true));
             return $data;
         }
-        dump($data);die;
         if($data['status'] ==1){
             $data['status'] = 'transferring';
         }else {

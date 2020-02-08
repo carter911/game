@@ -6,10 +6,15 @@ use think\Log;
 class Base  {
 
     public $pgw = '';
+
+    static  $gameType = [
+        'FFA20PS4','FFA20XBO','FFA20PCC'
+    ];
     public function __construct($pgw)
     {
         //$this->pgw = "app\common\gateway\".$pgw;
     }
+
 
     public static function curlOpt($url, &$rdata, $options=array()) {  // 自定义选项执行CURL
         Log::info('远程请求地址'.$url.var_export($rdata,true).json_encode($options));
