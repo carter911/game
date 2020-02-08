@@ -99,7 +99,8 @@ class FutFill extends Base
         $params['amount']  = intval($orderInfo['amount']*1000);
         $params['backup1'] = $orderInfo['backup1'];
         $params['backup2'] = $orderInfo['backup2'];
-        $params['charges'] = $orderInfo*0.056;
+
+        $params['charges'] = $orderInfo*0.058;
         $params['note']   = '';
         $data = [];
         $url = self::PGW_URL.'New';
