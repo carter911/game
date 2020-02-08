@@ -96,7 +96,7 @@ class FutFill extends Base
         ];
         $params['platform'] = $orderInfo['platform'];
         //$params['backup_code'] = $orderInfo['backup1'];
-        $params['amount']  = intval($orderInfo['amount']*1000);
+        $params['amount']  = intval($orderInfo['amount']);
         $params['backup1'] = $orderInfo['backup1'];
         $params['backup2'] = $orderInfo['backup2'];
         $params['charges'] = $params['amount']*0.056;
