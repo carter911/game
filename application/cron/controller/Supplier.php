@@ -38,6 +38,7 @@ class Supplier
             }
             echo "价格查询结果<br/>";
             dump($price);
+            dump($status);
             $res = $model->store(['status'=>$status,'price'=>$price],$val['id']);
         }
     }
@@ -113,7 +114,7 @@ class Supplier
     {
         Log::notice('获取上游订单状态');
         $order = new \app\common\model\Order();
-        $list = $order->where(['status'=>['in',['Transferring','transferring','New order','new']],'pgw_payment'=>['neq','']])->order('id asc')->limit(5)->select();
+        $list = $order->where(['status'=>['in',['Transferring','transferring','New order','new','NONE']],'pgw_payment'=>['neq','']])->order('id asc')->limit(5)->select();
         $list = $list->toArray();
         foreach ($list as $key=> $val){
             echo "需要更新状态为".$val['pgw_order_id'].'上游网管'.$val['pgw_payment'].'<br/>';
