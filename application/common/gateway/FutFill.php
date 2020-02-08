@@ -147,14 +147,7 @@ class FutFill extends Base
             }
             $data['transaction_already_amount'] = isset($data['Delivered'])?$data['Delivered']:0;
         }
-        else if($status>0 && $status <= 200){
-//            if($data['Amount']>=$data['Delivered']){
-//                $data['status'] = 'end';
-//            }else{
-//                $data['status'] = 'transferring';
-//            }
-//            $data['transaction_already_amount'] = isset($data['Delivered'])?$data['Delivered']:0;
-        }else{
+        else{
             $data['status'] = self::formatStatus($status);
         }
         return $data;
