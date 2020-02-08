@@ -37,6 +37,7 @@ class Supplier
                 }
             }
             echo "价格查询结果<br/>";
+            dump($price);
             $res = $model->store(['status'=>$status,'price'=>$price],$val['id']);
         }
     }
