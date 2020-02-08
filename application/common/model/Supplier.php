@@ -26,6 +26,7 @@ class Supplier extends Model
                 $priceData[$val] = $price[$val];
             }
         }
+        //dump(json_encode($priceData));
         return json_encode($priceData);
     }
 
@@ -55,7 +56,7 @@ class Supplier extends Model
                 $statusData[$val] = ($status[$val] == 'on' || $status[$val] == 'online') ? 'online' : 'offline';
             }
         }
-
+        //dump(json_encode($statusData));
         return json_encode($statusData);
     }
 
@@ -77,7 +78,9 @@ class Supplier extends Model
     {
         if ($id > 0) {
             $data['update_at'] = time();
+            //$res = $this->allowField(true)->($data, ['id' => $id]);
             $res = $this->allowField(['status', 'price', 'update_at', 'pgw_return', 'pgw_gateway_id','currency','balance'])->save($data, ['id' => $id]);
+            //echo $this->getLastSql();
             $this->cache($id);
             return $res;
         }
