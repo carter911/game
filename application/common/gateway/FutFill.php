@@ -60,6 +60,11 @@ class FutFill extends Base
                     $stock[$item['SKU']] = $item['Credits'];
                 }
             }
+            foreach (self::$gameType as $key => $val){
+                if(!isset($price[$val])){
+                    $price[$val] = 999;
+                }
+            }
             Redis::set('stock_FutFill',json_encode(['rule'=>[0,100000],'stock'=>$stock]));
             Redis::set('stock_FutFill_price',json_encode($price));
             return $price;
