@@ -164,21 +164,24 @@ class FutFill extends Base
     public static function formatStatus($status= "")
     {
         $statusList = [
-            201=>'wronglogin',
+            0=>'end',
+            13=>'checking info',
+            12=>'transferring',
+            201=>'csmonline',
             210=>'marketlocked',
             211=>'tradepilefull',
-            212=>'marketlocked',
+            212=>'<200 coins',
             401=>'wronglogin',
             402=>'wrongbackup',
-            404=>'wronglogin',
-            405=>'csmonline',
+            404=>'unexpected',
+            405=>'unexpected',
             407=>'nologinverification',
             417=>'captcha',
-            418=>'marketlocked',
-            419=>'marketlocked',
-            420=>'marketlocked',
+            418=>'unexpected',
+            419=>'forbidden',
+            420=>'unexpected',
             429=>'toomanyaction',
-            1001=>'nostock',
+            1001=>'unexpected',
             1010=>'unexpected',
         ];
         return isset($statusList[$status])?$statusList[$status]:'';
