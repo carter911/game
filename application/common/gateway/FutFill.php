@@ -57,7 +57,7 @@ class FutFill extends Base
                     }else{
                         $price[$item['SKU']] = 999;
                     }
-                    $stock[$item['SKU']] = $item['Credits']*100;
+                    $stock[$item['SKU']] = $item['Credits']*1000;
                 }
             }
             foreach (self::$gameType as $key => $val){
