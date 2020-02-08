@@ -83,7 +83,7 @@ class Supplier extends Model
             $data['update_at'] = time();
             //$res = $this->allowField(true)->($data, ['id' => $id]);
             $res = $this->allowField(['status', 'price', 'update_at', 'pgw_return', 'pgw_gateway_id','currency','balance'])->save($data, ['id' => $id]);
-            echo $this->getLastSql();
+            Log::info(var_export(json_encode($this->getLastSql()),true));
             $this->cache($id);
             return $res;
         }
