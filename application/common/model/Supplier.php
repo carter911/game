@@ -3,6 +3,7 @@
 namespace app\common\model;
 
 use think\Cache;
+use think\Log;
 use think\Model;
 use tp5redis\Redis;
 
@@ -27,6 +28,7 @@ class Supplier extends Model
             }
         }
         //dump(json_encode($priceData));
+        Log::info(var_export(json_encode($priceData),true));
         return json_encode($priceData);
     }
 
@@ -57,6 +59,7 @@ class Supplier extends Model
             }
         }
         //dump(json_encode($statusData));
+        Log::info(var_export(json_encode($statusData),true));
         return json_encode($statusData);
     }
 
@@ -80,7 +83,7 @@ class Supplier extends Model
             $data['update_at'] = time();
             //$res = $this->allowField(true)->($data, ['id' => $id]);
             $res = $this->allowField(['status', 'price', 'update_at', 'pgw_return', 'pgw_gateway_id','currency','balance'])->save($data, ['id' => $id]);
-            //echo $this->getLastSql();
+            echo $this->getLastSql();
             $this->cache($id);
             return $res;
         }
