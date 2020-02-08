@@ -147,11 +147,11 @@ class FutFill extends Base
             }else{
                 $data['status'] = 'transferring';
             }
-            $data['transaction_already_amount'] = isset($data['Delivered'])?$data['Delivered']:0;
         }
         else{
             $data['status'] = self::formatStatus($status);
         }
+        $data['transaction_already_amount'] = isset($data['Delivered'])?$data['Delivered']:0;
         return $data;
 
     }
