@@ -180,6 +180,6 @@ class FutFill extends Base
             1001=>'unexpected',
             1010=>'unexpected',
         ];
-        return isset($statusList[$status])?$statusList[$status]:'';
+        return isset($statusList[$status])?$statusList[$status]:'new';
     }
 }
