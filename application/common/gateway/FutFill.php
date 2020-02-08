@@ -131,9 +131,10 @@ class FutFill extends Base
             return false;
             exit;
         }
-        $data = $data['d'];
+
         $data = json_decode($data,true);
         $data['pgw_return'] = json_encode($data);
+        $data = $data['d'];
         $status = $data['Status'];
         if(!isset($status)){
             return $data;
