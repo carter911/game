@@ -105,6 +105,7 @@ class FutFill extends Base
         $data = [];
         $url = self::PGW_URL.'New';
         $res = self::curlPost($url, json_encode($params),$data, ['X-AjaxPro-Method:ShowList', 'Content-Type: application/json; charset=utf-8',]);
+        Redis::hSet('gateway_log'.date("Y-m-d"),$orderInfo['id'].'_'.time(),$data);
         dump($data);die;
         if($res !=200){
             Log::error('FutFill新建订单请求地址'.$url.var_export($res,true).var_export($data,true));
@@ -128,6 +129,8 @@ class FutFill extends Base
             'token' => $orderInfo['pgw_order_id']
         );
         $res = self::curlPost($url, json_encode($payload),$data, ['X-AjaxPro-Method:ShowList', 'Content-Type: application/json; charset=utf-8',]);
+        Redis::hSet('gateway_query_log'.date("Y-m-d"),$orderInfo['id'].'_'.time(),$data);
+
         if($res !=200){
             Log::error('Utloader远程请求地址'.$url.var_export($res,true).var_export($data,true));
             return false;
