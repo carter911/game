@@ -147,6 +147,8 @@ class Index extends Base
         }
         Log::info($info);
         $data['num'] = $info['amount'];
+
+        $data['transaction_already_amount'] =$info['transaction_already_amount'];
         if(empty($info['transaction_already_amount'])){
             $data['transaction_already_amount'] = 0;
         }

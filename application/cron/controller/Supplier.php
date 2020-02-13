@@ -22,9 +22,11 @@ class Supplier
     public function autoSyncPrice()
     {
         echo "价格查询中<br/>";
-        $model = new \app\common\model\Supplier();
-        $list = $model->where(['is_auto' => 1])->select()->toArray();
+        $model1 = new \app\common\model\Supplier();
+        $list = $model1->where(['is_auto' => 1])->select()->toArray();
         foreach ($list as $key => $val) {
+
+            $model = new \app\common\model\Supplier();
             $gateway = "app\\common\\gateway\\".$val['pgw'];
             echo $gateway.'<br />';
             $pgw = new $gateway();
@@ -44,18 +46,12 @@ class Supplier
     }
 
 
-
-
-
-
-
-
-
     public function balance()
     {
-        $model = new \app\common\model\Supplier();
-        $list = $model->where(['is_auto' => 1])->select()->toArray();
+        $model1 = new \app\common\model\Supplier();
+        $list = $model1->where(['is_auto' => 1])->select()->toArray();
         foreach ($list as $key => $val) {
+            $model = new \app\common\model\Supplier();
             echo '更新渠道余额'.var_export($val).'<br />';
             $gateway = "app\\common\\gateway\\".$val['pgw'];
             $pgw = new $gateway();
@@ -72,12 +68,13 @@ class Supplier
     public function sendToPayment()
     {
         echo "提交订单".'上游网管'.'<br/>';
-        $order = new \app\common\model\Order();
-        $list = $order->where(['status'=>'Undelivered','pgw_payment'=>['neq','']])->order('id asc')->limit(5)->select();
+        $order1 = new \app\common\model\Order();
+        $list = $order1->where(['status'=>'Undelivered','pgw_payment'=>['neq','']])->order('id asc')->limit(5)->select();
         $list = $list->toArray();
-        echo $order->getLastSql();
+        echo $order1->getLastSql();
         dump($list);
         foreach ($list as $key=> $val){
+            $order = new \app\common\model\Order();
             if(empty($val['pgw_payment'])){
                 continue;
             }
@@ -113,10 +110,11 @@ class Supplier
     public function getOrderStatus()
     {
         Log::notice('获取上游订单状态');
-        $order = new \app\common\model\Order();
-        $list = $order->where(['status'=>['in',['Transferring','transferring','New order','new','NONE']],'pgw_payment'=>['neq','']])->order('id asc')->limit(5)->select();
+        $order1 = new \app\common\model\Order();
+        $list = $order1->where(['status'=>['in',['Transferring','transferring','New order','new','NONE']],'pgw_payment'=>['neq','']])->order('id asc')->limit(5)->select();
         $list = $list->toArray();
         foreach ($list as $key=> $val){
+            $order = new \app\common\model\Order();
             echo "需要更新状态为".$val['pgw_order_id'].'上游网管'.$val['pgw_payment'].'<br/>';
             if(empty($val['pgw_payment'])){
                 continue;
@@ -127,10 +125,13 @@ class Supplier
             }
             $gateway = "app\\common\\gateway\\".$val['pgw_payment'];
             $pgw = new $gateway();
-            $res = $pgw->queryOrder($val);
-            Log::notice($res);
-            dump($res);
-            $res = $order->store($res,$val['id']);
+            $res1 = $pgw->queryOrder($val);
+            Log::notice($res1);
+            dump($res1);
+
+            //$res1['status'] = 'transferring';
+            $res = $order->store($res1,$val['id']);
+            echo $order->getLastSql();
             Log::info($order->getLastSql());
         }
     }

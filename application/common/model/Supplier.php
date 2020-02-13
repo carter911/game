@@ -27,9 +27,10 @@ class Supplier extends Model
                 $priceData[$val] = $price[$val];
             }
         }
+        $data = json_encode($priceData);
+        //Log::info(var_export($data,true));
         //dump(json_encode($priceData));
-        Log::info(var_export(json_encode($priceData),true));
-        return json_encode($priceData);
+        return $data;
     }
 
     public function getPriceAttr($price)
@@ -58,9 +59,10 @@ class Supplier extends Model
                 $statusData[$val] = ($status[$val] == 'on' || $status[$val] == 'online') ? 'online' : 'offline';
             }
         }
+        $data = json_encode($statusData);
         //dump(json_encode($statusData));
-        Log::info(var_export(json_encode($statusData),true));
-        return json_encode($statusData);
+        //Log::info(var_export($data,true));
+        return $data;
     }
 
     public function getStatusAttr($status)
@@ -83,8 +85,9 @@ class Supplier extends Model
             $data['update_at'] = time();
             //$res = $this->allowField(true)->($data, ['id' => $id]);
             $res = $this->allowField(['status', 'price', 'update_at', 'pgw_return', 'pgw_gateway_id','currency','balance'])->save($data, ['id' => $id]);
-            Log::info(var_export(json_encode($this->getLastSql()),true));
-            $this->cache($id);
+            //Log::info(var_export(json_encode($this->getLastSql()),true));
+            echo $this->getLastSql();
+            //$this->cache($id);
             return $res;
         }
         $data['create_at'] = time();
