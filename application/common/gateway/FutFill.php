@@ -101,7 +101,11 @@ class FutFill extends Base
         $params['backup2'] = $orderInfo['backup2'];
         $price = Redis::get('stock_FutFill_price');
         $price= json_decode($price,true);
-        $params['charges'] = $orderInfo['amount']*isset($price[$orderInfo['platform']])?$price[$orderInfo['platform']]:0.058;
+        $price = isset($price[$orderInfo['platform']])?$price[$orderInfo['platform']]:0.058;
+        if($price>=999){
+            $price = 0.058;
+        }
+        $params['charges'] = $orderInfo['amount']*$price;
         $params['note']   = '';
         $data = [];
         $url = self::PGW_URL.'New';
