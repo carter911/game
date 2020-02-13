@@ -99,14 +99,14 @@ class FutFill extends Base
         $params['amount']  = intval($orderInfo['amount']*1000);
         $params['backup1'] = $orderInfo['backup1'];
         $params['backup2'] = $orderInfo['backup2'];
-
-        $params['charges'] = $orderInfo['amount']*0.058;
+        $price = Redis::get('stock_FutFill_price');
+        $price= json_decode($price,true);
+        $params['charges'] = $orderInfo['amount']*isset($price[$orderInfo['platform']])?$price[$orderInfo['platform']]:0.058;
         $params['note']   = '';
         $data = [];
         $url = self::PGW_URL.'New';
         $res = self::curlPost($url, json_encode($params),$data, ['X-AjaxPro-Method:ShowList', 'Content-Type: application/json; charset=utf-8',]);
         Redis::hSet('gateway_log'.date("Y-m-d"),$orderInfo['id'].'_'.time(),$data);
-        dump($data);die;
         if($res !=200){
             Log::error('FutFill新建订单请求地址'.$url.var_export($res,true).var_export($data,true));
             return false;
