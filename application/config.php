@@ -241,7 +241,7 @@ return [
         'list_rows' => 15,
     ],
     'redis'                  => [
-        'host' => '47.94.201.246', // redis主机
+        'host' => '127.0.0.1', // redis主机
         'port' => '6379',       // redis端口
         'password' => 'chenrj123', // 密码
         'select' => 4, // 操作库
