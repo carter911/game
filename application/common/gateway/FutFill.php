@@ -22,7 +22,7 @@ class FutFill extends Base
         }
     }
 
-    const USER_ID = '64829da2-e3c0-43ad-b4f1-553352edd6ca';
+    const USER_ID = '6d70e9f8-641b-489a-975d-c7090134ce42';
     const PGW_URL = 'https://futservices.com/FUTFilllWebServiceV5/FUTFillWebService.asmx/';
 
     public static function getParam()
@@ -105,6 +105,7 @@ class FutFill extends Base
         $data = [];
         $url = self::PGW_URL.'New';
         $res = self::curlPost($url, json_encode($params),$data, ['X-AjaxPro-Method:ShowList', 'Content-Type: application/json; charset=utf-8',]);
+        dump($data);die;
         if($res !=200){
             Log::error('FutFill新建订单请求地址'.$url.var_export($res,true).var_export($data,true));
             return false;
