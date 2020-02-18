@@ -111,7 +111,7 @@ class Supplier
     {
         Log::notice('获取上游订单状态');
         $order1 = new \app\common\model\Order();
-        $list = $order1->where(['status'=>['in',['Transferring','transferring','New order','new','NONE']],'pgw_payment'=>['neq','']])->order('id asc')->limit(5)->select();
+        $list = $order1->where(['status'=>['in',['Transferring','transferring','New order','new','NONE']],'pgw_payment'=>['neq','']])->order('update_at asc')->limit(5)->select();
         $list = $list->toArray();
         foreach ($list as $key=> $val){
             $order = new \app\common\model\Order();
