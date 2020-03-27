@@ -75,11 +75,10 @@ class Ct extends Base
             }
 
             $stock = [
-                'FFA20PCC'=>$data['maxcoinsps4'],
+//                'FFA20PCC'=>$data['maxcoinsps4'],
                 'FFA20PS4'=>$data['maxcoinsps4'],
-                //'FFA20PS4'=>$data['maxcoinsx1'],
             ];
-            Redis::set('stock_Ct',json_encode(['rule'=>[0,1000],'stock'=>$stock]));
+            Redis::set('stock_Ct',json_encode(['rule'=>[0,2000],'stock'=>$stock]));
             return $price;
         } catch (\Throwable $e) {
             Log::error('Utloader远程请求地址'.$e->getMessage());
