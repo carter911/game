@@ -55,7 +55,7 @@ class Csdd extends Base
                 return false;
             }
             dump($res);
-            dump($data);die;
+            dump($data);
             $data = json_decode($data,true);
             $price = [];
             $stock = [];
