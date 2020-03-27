@@ -34,7 +34,7 @@ class Csdd extends Base
         $param = [
             'user'  => self::USER_ID,
             'data'  => ['type'=>'comfort_ps4'],
-            'timestamp' => 'comfort_ps4',
+            'timestamp' => $time,
             'hash'  => $hash,
         ];
         return $param;
