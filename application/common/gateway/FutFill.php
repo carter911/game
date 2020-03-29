@@ -113,7 +113,7 @@ class FutFill extends Base
         $data = [];
         $url = self::PGW_URL.'New';
         $res = self::curlPost($url, json_encode($params),$data, ['X-AjaxPro-Method:ShowList', 'Content-Type: application/json; charset=utf-8',]);
-        Redis::hSet('gateway_log'.date("Y-m-d"),$orderInfo['id'].'_'.time(),$data);
+        Redis::hSet('gateway_log'.date("Y-m-d"),$orderInfo['id'].$res.'_'.time(),$data);
         Redis::expire('gateway_log'.date("Y-m-d"),72000);
         if($res !=200){
             Log::error('FutFill新建订单请求地址'.$url.var_export($res,true).var_export($data,true));
@@ -185,7 +185,7 @@ class FutFill extends Base
             405=>'unexpected',
             407=>'nologinverification',
             417=>'captcha',
-            418=>'unexpected',
+            418=>'marketlocked',
             419=>'forbidden',
             420=>'unexpected',
             429=>'toomanyaction',
