@@ -21,6 +21,9 @@ class Supplier
      */
     public function autoSyncPrice()
     {
+        try{
+
+
         echo "价格查询中<br/>";
         $model1 = new \app\common\model\Supplier();
         $list = $model1->where(['is_auto' => 1])->select()->toArray();
@@ -46,6 +49,9 @@ class Supplier
             dump($price);
             dump($status);
             $res = $model->store(['status'=>$status,'price'=>$price],$val['id']);
+        }
+        }catch (\Error $e){
+            echo $e->getMessage();
         }
     }
 
