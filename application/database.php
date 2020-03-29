@@ -17,9 +17,9 @@ return [
     // 数据库名
     'database'        => 'game',
     // 用户名
-    'username'        => 'game',
+    'username'        => 'root',
     // 密码
-    'password'        => 'HH7wbAed5fCx4CNr',
+    'password'        => '123456',
     // 端口
     'hostport'        => '',
     // 连接dsn

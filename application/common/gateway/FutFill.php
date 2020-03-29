@@ -46,10 +46,13 @@ class FutFill extends Base
                 Log::error('futFill远程请求地址'.$url.var_export($res,true).var_export($data,true));
                 return false;
             }
-
+            Redis::hSet('FutFill-价格请求返回',time(),json_encode($data));
             $data = json_decode($data,true);
             $price = [];
             $stock = [];
+            if(!isset($data['d'])  || empty($data['d'])){
+                return false;
+            }
             foreach ($data['d'] as $key=> $item){
                 if(in_array($item['SKU'],self::$gameType)){
                     if($item['Credits']>0){
