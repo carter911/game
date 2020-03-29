@@ -84,7 +84,7 @@ class Supplier
         $list = $order1->where(['status' => 'Undelivered', 'pgw_payment' => ['neq', '']])->order('id asc')->limit(5)->select();
         $list = $list->toArray();
         echo $order1->getLastSql();
-        dump($list);
+        dump(array_column($list,'login'));
         foreach ($list as $key => $val) {
             $order = new \app\common\model\Order();
             if (empty($val['pgw_payment'])) {
