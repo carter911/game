@@ -32,6 +32,9 @@ class Supplier
             $pgw = new $gateway();
             $price = $pgw->getPrice();
             $status = [];
+            if(empty($price)){
+                echo "价格查询结果失败<br/>";
+            }
             foreach ($price as $k => $v){
                 $status[$k] = 'offline';
                 if($v!=999 && $v>0){
