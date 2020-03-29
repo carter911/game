@@ -41,8 +41,8 @@ class Base  {
         curl_setopt_array($ch, $options);
         $rdata = curl_exec($ch);
         Log::info('远程请求返回'.$url.var_export($rdata,true).json_encode($options));
-        Redis::hSet('request_gateway',$url.'_'.time().rand(100000,999999),json_encode(['data'=>$rdata,'param'=>$options]));
-        Redis::expire('request_gateway',72000);
+        Redis::hSet('request_gateway'.$url,date("Y-m-d H:i:s",time()).rand(100000,999999),json_encode(['data'=>$rdata,'param'=>$options]));
+        Redis::expire('request_gateway'.$url,72000);
         $r = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
         return $r;
