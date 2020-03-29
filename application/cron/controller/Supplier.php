@@ -34,6 +34,7 @@ class Supplier
             $status = [];
             if(empty($price)){
                 echo "价格查询结果失败<br/>";
+                die;
             }
             foreach ($price as $k => $v){
                 $status[$k] = 'offline';
