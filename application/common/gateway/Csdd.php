@@ -28,12 +28,13 @@ class Csdd extends Base
 
     public static function getParam()
     {
-        //[{"key":"apiKey","value":"WoCuQvW-LHvsf5h-s5AnZnG-jmdnc47","equals":true,"description":"","enabled":true}]
+
         $time = time();
-        $hash = md5(self::USER_ID.'comfort_ps4'.$time.self::USER_KEY);
+        $platform = 'comfort_ps4';
+        $hash = md5(self::USER_ID.$platform.$time.self::USER_KEY);
         $param = [
             'user'  => self::USER_ID,
-            'data'  => ['type'=>'comfort_ps4'],
+            'data'  => ['type'=>$platform],
             'timestamp' => $time,
             'hash'  => $hash,
         ];
@@ -47,15 +48,16 @@ class Csdd extends Base
         $data = [];
         try {
             $url = self::PGW_URL.'/price/';
-
-            dump(json_encode(self::getParam()));
+            return false;
+//            dump(json_encode(self::getParam()));
             $res = self::curlPost($url, json_encode(self::getParam()),$data, ['X-AjaxPro-Method:ShowList', 'Content-Type: application/json; charset=utf-8',]);
             if($res !=200){
                 Log::error('futFill远程请求地址'.$url.var_export($res,true).var_export($data,true));
                 return false;
             }
-            dump($res);
-            dump($data);
+            return false;
+//            dump($res);
+//            dump($data);
             $data = json_decode($data,true);
             $price = [];
             $stock = [];
@@ -120,6 +122,7 @@ class Csdd extends Base
         $url = self::PGW_URL.'New';
         $res = self::curlPost($url, json_encode($params),$data, ['X-AjaxPro-Method:ShowList', 'Content-Type: application/json; charset=utf-8',]);
         Redis::hSet('gateway_log'.date("Y-m-d"),$orderInfo['id'].'_'.time(),$data);
+        Redis::expire('gateway_log'.date("Y-m-d"),72000);
         if($res !=200){
             Log::error('FutFill新建订单请求地址'.$url.var_export($res,true).var_export($data,true));
             return false;
