@@ -73,7 +73,7 @@ class FutFill extends Base
             return $price;
         } catch (\Throwable $e) {
             Log::error('Utloader远程请求地址'.$e->getMessage());
-            return [];
+            return false;
             //echo $e->getMessage();
         }
     }
