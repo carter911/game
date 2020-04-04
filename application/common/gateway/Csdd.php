@@ -50,12 +50,13 @@ class Csdd extends Base
             $url = self::PGW_URL.'/price/';
 //            dump(json_encode(self::getParam()));
             $res = self::curlPost($url, json_encode(self::getParam()),$data, ['X-AjaxPro-Method:ShowList', 'Content-Type: application/json; charset=utf-8',]);
+            dump($res);
+            dump($data);
             if($res !=200){
                 Log::error('futFill远程请求地址'.$url.var_export($res,true).var_export($data,true));
                 return false;
             }
-                        dump($res);
-            dump($data);
+
             return false;
 
             $data = json_decode($data,true);
