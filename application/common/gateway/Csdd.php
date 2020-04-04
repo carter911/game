@@ -48,7 +48,7 @@ class Csdd extends Base
         $data = [];
         try {
             $url = self::PGW_URL.'/price/';
-//            dump(json_encode(self::getParam()));
+            dump(json_encode(self::getParam()));
             $res = self::curlPost($url, json_encode(self::getParam()),$data, ['X-AjaxPro-Method:ShowList', 'Content-Type: application/json; charset=utf-8',]);
             dump($res);
             dump($data);
