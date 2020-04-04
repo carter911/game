@@ -23,7 +23,7 @@ class Csdd extends Base
     }
 
     const USER_ID   = 'id2299';
-    const USER_KEY  = 'WRgTFPIvMRskH3t8';
+    const USER_KEY  = 'UJdCkTRNlMh7HFkR';
     const PGW_URL   = 'https://cdss.machineword.com/buyer_interface/';
 
     public static function getParam()
