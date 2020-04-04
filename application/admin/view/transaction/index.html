@@ -2,6 +2,42 @@
 <div class="row">
     {include file='./nav' /}
     <div class="container">
+
+        <div class="panel panel-default">
+            <div class="panel-heading" style="text-align: center">Dashboard</div>
+            <div class="panel-body">
+                <div class="row" >
+                    <div class="col-xs-6 col-sm-3">
+                        <div style="background-color: #dedef8;margin: 4px;border-radius: 2px;text-align: center;padding: 25px">
+                            正在交易单数<br />
+                            {$transferringCount.num} 单
+                        </div>
+
+                    </div>
+                    <div class="col-xs-6 col-sm-3">
+                        <div style="background-color: #dedef8;margin: 4px;border-radius: 2px;text-align: center;padding: 25px">
+                            今日完成单数<br />
+                            {$endCount.num} 单
+                        </div>
+
+                    </div>
+                    <div class="col-xs-6 col-sm-3">
+                        <div style="background-color: #dedef8;margin: 4px;border-radius: 2px;text-align: center;padding: 25px">
+                            正在交易金额<br />
+                            {$transferringCount.amount} EUR
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-3">
+                        <div style="background-color: #dedef8;margin: 4px;border-radius: 2px;text-align: center;padding: 25px">
+                            今日完成金额<br />
+                            {$endCount.amount} EUR
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="panel panel-default">
             <div class="panel-heading" style="text-align: center">Settle List</div>
             <div class="panel-body">
