@@ -65,7 +65,7 @@
                         <td>price/pgw_price</td>
                         <td>merchant/pgw_id</td>
                         <td>status</td>
-                        <td>image</td>
+                        <td>option</td>
                         <td>create/update_time</td>
                     </tr>
                     {volist name='list' id='order'}
@@ -85,7 +85,11 @@
                         </td>
                         <td class="active">
                             <a href="distribution?id={$order.id}">{if condition="$order.status eq 'Undelivered'"}分配{/if}</a>
+                            <a href="exit_status?id={$order.id}">{if condition="$order.status eq 'Undelivered'"}取消递送{/if}</a>
                         </td>
+                        <!--<td class="active">-->
+                            <!--<a href="distribution?id={$order.id}">{if condition="$order.status eq 'Undelivered'"}分配{/if}</a>-->
+                        <!--</td>-->
                         <td class="active">{$order.create_at|date="Y-m-d H:i:s",###}<br/>{$order.update_at|date="Y-m-d H:i:s",###}</td>
                     </tr>
                     {/volist}

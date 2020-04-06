@@ -120,6 +120,15 @@ class Index extends Base
     }
 
 
+    public function exit_status(Request $request)
+    {
+        $id = $request->param('id');
+        $order = new Order();
+        $res = $order->store(['status'=>'unexpected'],$id);
+        $this->success('success','index',1);
+    }
+
+
     /**
      * @return mixed
      * @throws \think\db\exception\DataNotFoundException
