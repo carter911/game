@@ -1,74 +1,44 @@
 <?php
 namespace app\index\controller;
 
-use think\Controller;
-use think\Db;
+use app\common\model\Order;
+use app\index\library\Column;
+use app\index\library\Grid;
 use think\Request;
-use writethesky\PHPExcelReader\PHPExcelReader;
 
 class Index extends Base
 {
-    use Table;
-    use VueTable;
+    //引用VueTable 必须要指定对应的表
+    use \app\index\library\VueTable;
+
     public function __construct()
     {
         parent::__construct();
-        $this->model = 'order';
+        $this->table = "order";
+        $this->relationTable = [
+            [
+                'merchant m',
+                'm.id = order.merchant_id',
+                'left',
+                'm.name'
+            ]
+        ];
     }
-    public $searchField =['id','merchant_id',];
-    public $showField =[];
-    public $ignoreList = [];
 
-    public function index()
+    public function tableConfig()
     {
-        return $this->fetch('index');
-
+        $table = Grid::make(new Order(),function (Grid $grid  ){
+            $grid->column('image')->setLabel('id')->setSearch(true);
+            $grid->column('id')->setReadonly(true)->setLabel('id')->setSearch(true);
+            $grid->column('name')->setLabel('名称')->setSearch(true);
+            $grid->column('name')->setLabel('啊哈哈');
+            $grid->column('name')->setLabel('666')->setType('textarea');
+            $grid->column('name')->setLabel('666')->setSearch(true)->setType('date');
+            $grid->column('name');
+        })->setTitle('哈哈哈哈哈哈哈哈')
+            ->setAddBtn(true)->setExcelBtn(false)->setPrintBtn(false);
+        $grid = json_encode($table,true);
+        return $grid;
     }
 
-    public function indexLog1265434568()
-    {
-        return retData();
-        return $this->fetch('index');
-        return retData();
-    }
-
-
-
-    public function test()
-    {
-        error_reporting(0);
-        $reader = new PHPExcelReader('./111.xlsx');
-        $tatal = $reader->count();
-        $data = [];
-        foreach($reader as $key => $row){
-            $data[$row[1]][] = $row;					// 循环行内数据
-        }
-
-        unset($data['日']);
-        $customer = [];
-        foreach ($data as $key => $val){
-            $total = 0;
-            $user_list = [];
-
-            foreach ($val as $k=>$u){
-                $total++;
-                if(isset($user_list[$u[0]])){
-                    $user_list[$u[0]] +=1;
-                }else{
-                    $user_list[$u[0]] = 1;
-                }
-            }
-            $user_total = count($user_list);
-            if($user_list>0){
-                $avg = round($total/$user_total,2);
-            }else{
-                $avg =0;
-            }
-
-            $customer[$key] = ['user_num'=>$user_total,'total'=>$total,'avg'=>$avg,'day'=>$key];
-        }
-        $this->assign('list',$customer);
-        return $this->fetch('index');
-        //dump($customer);
-    }
 }
