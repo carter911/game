@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title></title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.bootcss.com/vue/2.5.17/vue.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.12.0/theme-chalk/index.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.12.0/index.js"></script>
+<!--    <link rel="stylesheet" href="/static/lib/index.css" />-->
+<!--    <script src="/static/lib/avue.js"></script>-->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.bootcss.com/qs/6.5.1/qs.min.js"></script>
+
+
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/vxe-table/lib/index.css">
+    <!-- 引入脚本 -->
+    <script src="https://unpkg.com/xe-utils"></script>
+    <script src="https://unpkg.com/vxe-table"></script>
+</head>
+
+<body>
+<div id="app">
+    <div class="block" style="height:800px">
+
+        <vxe-grid
+                border
+                resizable
+                row-id="id"
+                height="100%"
+                :loading="loading"
+                :start-index="(tablePage.currentPage - 1) * tablePage.pageSize"
+                :pager-config="tablePage"
+                :columns="tableColumn"
+                :proxy-config="tableProxy"
+                :toolbar="tableToolbar"
+                @page-change="handlePageChange"></vxe-grid>
+    </div>
+</div>
+</body>
+<script>
+
+    new Vue({
+        el: '#app',
+        data () {
+            return {
+                indexUrl :'/index/index/getList',
+                updateUrl :'/index/index/store',
+                saveUrl :'/index/index/store',
+                deleteUrl :'/index/index/delete',
+                loading: false,
+                tablePage: {
+                    total: 0,
+                    currentPage: 1,
+                    pageSize: 20,
+                    align: 'left',
+                    pageSizes: [10, 20, 50, 100, 200, 500],
+                    layouts: ['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total'],
+                    perfect: true
+                },
+
+                tableProxy: {
+                    index: true, // 启用动态序号代理
+                    props: {
+                        result: 'data.data.data',
+                        total: 'data.data.page.total'
+                    },
+                    ajax: {
+                        // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
+                        query: ({ page }) => axios.get(this.indexUrl),
+                        save:({ page }) => axios.get(this.indexUrl),
+                    }
+                },
+                tableToolbar: {
+                    id: 'treeEdit_demo1',
+                    buttons: [
+                        { code: 'save', name: '新增' },
+                        // {
+                        //     code: 'mark_cancel',
+                        //     name: 'app.body.button.markCancel',
+                        //     dropdowns: [
+                        //         { code: 'delete_selection', name: 'app.body.button.deleteSelectedRecords' },
+                        //         { code: 'remove_selection', name: '移除数据' }
+                        //     ]
+                        // },
+                        // { code: 'save', name: 'app.body.button.save' },
+                        // {
+                        //     name: '数据导出',
+                        //     dropdowns: [
+                        //         { code: 'open_import', name: '高级导入' },
+                        //         { code: 'open_export', name: '高级导出' }
+                        //     ]
+                        // },
+                        // { code: 'myBtn', name: '自定义按钮' }
+                    ],
+                    refresh: true, // 刷新按钮
+                    import: true, // 导入按钮
+                    export: true, // 导出按钮
+                    zoom: true, // 最大化按钮
+                    // 列宽操作记录
+                    resizable: {
+                        storage: true
+                    },
+                    // 列操作记录
+                    custom: {
+                        storage: true
+                    }
+                },
+                tableColumn: [
+                    { type: 'checkbox', width: 50 },
+                    { field: 'amount', title: 'Amount'},
+                    { field: 'backup1', title: 'backup1' },
+                    { field: 'pgw_payment', title: 'pgw_payment' },
+                    { field: 'platform', title: 'platform' },
+                    { field: 'platform', title: 'platform' },
+                    { field: 'platform', title: 'platform' },
+                    { field: 'platform', title: 'platform' },
+                    { field: 'platform', title: 'platform' },
+                    { field: 'price', title: 'price', showOverflow: true }
+                ],
+                tableData: []
+            }
+        },
+        created() {
+            var first = true;
+            //this.getList(first);
+
+        },
+        methods: {
+            currentDate: function(){
+                let d = new Date()
+                return d.format('yyyy-MM-dd')
+            },
+            searchChange(params,done) {
+                this.page.currentPage = 1;
+                this.search = params;
+                this.getList();
+                done();
+
+            },
+            getList(first= false) {
+                this.loading = true;
+                this.loading = false
+                // this.$ajax.get('/api/user/page/list/${this.tablePage.pageSize}/${this.tablePage.currentPage}').then(({ page, result }) => {
+                //     this.tableData = result
+                //     this.tablePage.total = page.total
+                //     this.loading = false
+                // }).catch(e => {
+                //     this.loading = false
+                // })
+
+                var params ={};
+                var that = this;
+                axios.get(this.indexUrl,{params:params}).then(res=>{
+                    console.log(res);
+                    if(res.data.code == 200){
+                        if(first){
+                            that.page = res.data.data.page;
+                            that.option = res.data.data.option;
+                        }
+                        that.tableData = res.data.data.data;
+                        that.tablePage.total = res.data.data.page.total;
+                        // that.page.total = res.data.data.page.total;
+                        // that.data = res.data.data.data;
+                    }
+                }).catch(err=>{
+                    console.log(err);
+                })
+            },
+
+
+            searchEvent () {
+                this.tablePage.currentPage = 1
+                this.findList()
+            },
+            handlePageChange ({ currentPage, pageSize }) {
+                this.tablePage.currentPage = currentPage
+                this.tablePage.pageSize = pageSize
+                this.findList()
+            },
+
+            handleRowSave(row,done,loading){
+                console.log(row,done,loading)
+            },
+            handleRowUpdate(row,index,done,loading){
+                console.log(row,index,done,loading)
+            },
+            sizeChange(val){
+                this.page.currentPage = 1;
+                this.page.pageSize = val;
+                this.getList()
+            },
+            currentChange(val) {
+                this.page.currentPage = val;
+                this.getList();
+                this.$message.success('页码' + val)
+            }
+        }
+    })
+</script>
+
+</html>

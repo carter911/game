@@ -16,17 +16,17 @@
             <div class="panel-body">
                 <table class="table table-striped" style="font-size: 13px;">
                     <tr>
-                        <td>email</td>
-                        <td>order_num</td>
-                        <td>paid_num</td>
-                        <td>coupon_num</td>
+                        <td>day</td>
+                        <td>total</td>
+                        <td>user_num</td>
+                        <td>avg</td>
                     </tr>
                     {volist name='list' id='order'}
                     <tr style="text-align: left">
-                        <td class="active">{$order.email}</td>
-                        <td class="active">{$order.order_num}</td>
-                        <td class="active">{$order.paid_num}</td>
-                        <td class="active">{$order.coupon_num}</td>
+                        <td class="active">{$order.day}</td>
+                        <td class="active">{$order.total}</td>
+                        <td class="active">{$order.user_num}</td>
+                        <td class="active">{$order.avg}</td>
                     </tr>
                     {/volist}
                 </table>
