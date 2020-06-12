@@ -101,7 +101,7 @@ trait VueTable
     public function store()
     {
         list($data,$where) = $this->buildParams(self::$option_update);
-
+        die;
         //防止条件为空批量更新造成异常
         if(empty($where)){
             retData([],500,'系统在开小差 请稍后重试');
@@ -224,6 +224,7 @@ trait VueTable
             $data = $params['params'];
             $data['update_time'] = date("Y-m-d H:i:s",time());
             $data = $this->filedBySql($data);
+
             $where = ['id'=>$data['id']];
             return $this->paramsUpdate([$data,$where], $type);
         }else if(self::$option_delete == $type){// 删除
