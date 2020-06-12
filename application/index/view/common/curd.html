@@ -8,6 +8,7 @@
                        @row-save="rowSave"
                        @cell-click="rowEdit"
                        @row-update="rowUpdate"
+                       @row-del="rowDel"
                        :upload-before="uploadBefore"
                        :upload-after="uploadAfter"
                        :upload-delete="uploadDel"
@@ -187,7 +188,10 @@
                 axios.post(this.addUrl,{params:row}).then(res=>{
                     console.log(res.data);
                     if(res.data.code == 200){
+                        that.$message.success(res.data.message);
                         that.getList();
+                    }else{
+                        that.$message.success(res.data.message);
                     }
                 }).catch(err=>{
                     alert('系统加载异常 请稍后重试');
@@ -208,6 +212,22 @@
                 }).catch(err=>{
 
                     alert('系统加载异常 请稍后重试');
+                    loading()
+                })
+            },
+
+            rowDel(row,index,done,loading){
+                var that = this;
+                axios.post(this.delUrl,row).then(res=>{
+                    if(res.data.code == 200){
+                        that.$message.success('删除成功');
+                        that.getList();
+                    }else{
+                        that.$message.success(res.data.message);
+                    }
+                    done();
+                }).catch(err=>{
+                    that.$message.success('系统异常');
                     loading()
                 })
             },

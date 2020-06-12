@@ -136,12 +136,15 @@ trait VueTable
      */
     public function del()
     {
-        list($data) = $this->buildParams(self::$option_delete);
-        $result = Db::name($this->tableName)->delete($data);
+        list($where) = $this->buildParams(self::$option_delete);
+        if(empty($where) && empty($where['id'])){
+            retData([],403,'系统在开小差 请稍后重试');
+        }
+        $result = Db::name($this->tableName)->where($where)->delete();
         if($result){
             retData([],500,'系统在开小差 请稍后重试');
         }
-        $this->optionExt($data,self::$option_delete);
+        $this->optionExt($where,self::$option_delete);
         retData([],200,'删除成功');
     }
 
@@ -224,7 +227,8 @@ trait VueTable
             $where = ['id'=>$data['id']];
             return $this->paramsUpdate([$data,$where], $type);
         }else if(self::$option_delete == $type){// 删除
-            $where = [];
+            $params = Request::instance()->param();
+            $where['id'] = $params['id'];
             return $this->paramsUpdate([$where], $type);
         }else{
             return [];

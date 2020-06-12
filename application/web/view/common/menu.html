@@ -1,0 +1,20 @@
+<!-- 导航菜单 -->
+<div class="menu">
+    <a class="menu-home icon-all" href="/web/index/index">HOME</a>
+    <div class="menu-list">
+        {volist name="menu" id="item"}
+        <div class="menu-list_item menu-list_item-select">
+            <a class="menu-list_item__a" href="javascript:void(0);">{$item.category_name}</a>
+            {present name="item.children"}
+            <ul class="menu-list_item-select_ul">
+                {volist name="item.children" id="c_item"}
+                <li>
+                    <a href="/web/index/detail/">{$c_item.category_name}</a>
+                </li>
+                {/volist}
+            </ul>
+            {/present}
+        </div>
+        {/volist}
+    </div>
+</div>

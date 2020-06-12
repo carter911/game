@@ -51,14 +51,14 @@ class Category extends AdminBase
                 ->setAddDisplay(true)
                 ->setWidth(100)
                 ->setSpan(12)
-                ->setEditDisabled(true)
+                ->setEditDisabled(false)
                 ->setSearch(true);
             $grid->column('parent_id')
                 ->setLabel('上级分类')
                 ->setAddDisplay(true)
                 ->setWidth(100)
                 ->setSpan(12)
-                ->setEditDisabled(true)
+                ->setEditDisabled(false)
                 ->setType(Column::$FORM_SELECT)
                 ->setDicData(self::getCategory())
                 ->setSearch(true);
