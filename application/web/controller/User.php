@@ -1,13 +1,10 @@
 <?php
 
-namespace app\index\controller;
+namespace app\web\controller;
 
-use app\BaseController;
-use app\index\model\User as userModel;
-use think\facade\Session;
-use think\response\Redirect;
+use app\web\model\User as userModel;
 
-class User extends BaseController
+class User extends Base
 {
     public function index()
     {

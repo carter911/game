@@ -1,6 +1,6 @@
 <?php
 
-use think\facade\Route;
+use think\Route;
 
 // 选择支付方式 和 优惠券页面
 Route::rule('order', 'order/index');

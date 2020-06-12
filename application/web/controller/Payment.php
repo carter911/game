@@ -8,8 +8,6 @@
 
 namespace app\web\controller;
 
-use app\web\controller\Base;
-
 class Payment extends Base
 {
     public function index()
