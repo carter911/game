@@ -18,7 +18,7 @@
                        @search-change="searchChange"
             >
                 <template slot="expand" slot-scope="{row}">
-                    {{row}}
+                    <pre>{{row}}</pre>
                 </template>
                 <template v-for=" item in option.column" v-if="item.slot" :slot="item.prop" slot-scope="{row}" >
                     <div v-html="1111222"></div>

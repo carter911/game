@@ -35,7 +35,7 @@ class Login extends AdminBase
             retData([],500,'账号或者密码错误'.$error_num);
         }
         if(Admin::makePassword($param['password']) == $admin['password']){
-            session('admin_user',$param);
+            session('admin_user',$admin);
             Db::name('f_admin')->where(['user_name'=>$param['user_name']])->update(['login_time'=>date("Y-m-d H:i:s",time())]);
             retData([],200,'登录成功');
         }else{
