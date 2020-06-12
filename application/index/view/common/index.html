@@ -1,0 +1,151 @@
+{include file="common/header" /}
+{include file="common/nav" /}
+<div id="app">
+    <div class="block">
+        <el-card style="height: 100%">
+            <avue-crud :data="data" :option="option"
+                       :before-close="beforeOpen"
+                       :upload-before="uploadBefore"
+                       :upload-after="uploadAfter"
+                       :upload-delete="uploadDel"
+                       :upload-preview="uploadPreview"
+                       @row-save="rowSave"
+                       @row-update="rowUpdate"
+            >
+                <template slot="expand" slot-scope="{row}">
+                    {{row}}
+                </template>
+                <template v-for=" item in option.column" v-if="item.slot" :slot="item.prop" slot-scope="{row}" >
+                    <div v-html="formatHtml(item.html,row)"></div>
+                </template>
+            </avue-crud>
+        </el-card>
+    </div>
+</div>
+</body>
+<script>
+
+    Vue = new Vue({
+        el: '#app',
+        data() {
+            return {
+                indexUrl:"{$indexUrl}",
+
+                addUrl:"{$addUrl}",
+                updateUrl:"{$updateUrl}",
+                delUrl:"{$delUrl}",
+                data: [],
+                option:{$tableOption}
+            }
+        },
+        created() {
+            this.getList();
+
+        },
+        methods: {
+            currentDate: function(){
+                let d = new Date()
+                return d.format('yyyy-MM-dd')
+            },
+            beforeOpen(){
+
+            },
+            uploadBefore(file,done,loading){
+                console.log('----------upload before----------');
+                console.log(file);
+                console.log(done);
+                console.log(loading);
+                done();
+            },
+            uploadAfter(res,done){
+                console.log('----------uploadAfter----------');
+                console.log(res);
+                console.log(done);
+                done();
+
+            },
+            uploadDel(column){
+                console.log('----------uploadDel----------');
+                console.log(column);
+            },
+            uploadPreview(file,column){
+                console.log('----------uploadPreview----------');
+                console.log(file);
+                console.log(column);
+            },
+            searchChange(params,done) {
+                this.page.currentPage = 1;
+                this.search = params;
+                this.getList();
+                done();
+            },
+            getList() {
+                var that = this;
+                let params={
+                    search:this.search,
+                    page:this.page,
+                };
+                axios.get(this.indexUrl,{params:params}).then(res=>{
+                    console.log(res.data);
+                    if(res.data.code == 200){
+                        //that.page = res.data.list;
+                        //that.option = res.data.data.option;
+                        that.data = res.data.data.list;
+                    }
+                }).catch(err=>{
+                    alert('系统加载异常 请稍后重试')
+                    console.log(err);
+                })
+            },
+            rowSave(row,done,loading){
+                var that = this;
+                done();
+                axios.post(this.addUrl,{params:row}).then(res=>{
+                    console.log(res.data);
+                    if(res.data.code == 200){
+                        that.getList();
+                        done();
+                    }
+                }).catch(err=>{
+                    alert('系统加载异常 请稍后重试');
+                    console.log(err);
+                })
+                done();
+                console.log(row,done,loading)
+            },
+            rowUpdate(row,index,done,loading){
+                var that = this;
+                axios.post(this.updateUrl,{params:row}).then(res=>{
+                    if(res.data.code == 200){
+                        done();
+                        that.getList();
+                    }
+                }).catch(err=>{
+                    alert('系统加载异常 请稍后重试');
+                    loading()
+                });
+                done();
+            },
+            sizeChange(val){
+                this.page.currentPage = 1;
+                this.page.pageSize = val;
+                this.getList()
+            },
+            currentChange(val) {
+                this.page.currentPage = val;
+                this.getList();
+                this.$message.success('页码' + val)
+            },
+            formatHtml(html,row){
+                // var html = "123123,213,12312,312,3,Cat,cat,dsfsdfs";
+                var reCat = /{{.*}}/g;
+                console.log(html.replace(reCat,"-"));
+                //alert(data.replace(reCat,"-"));
+                //{{row.date}}
+                return "我是格式化以后的"+html+row.date;
+            }
+        }
+    });
+</script>
+
+</html>

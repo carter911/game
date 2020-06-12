@@ -9,12 +9,43 @@
 namespace app\index\library;
 
 
+use app\index\library\form\Element;
 use think\Db;
 use think\Exception;
 use think\Request;
 
 class Column
 {
+    use Element;
+    public static $FORM_INPUT='input';
+    public static $FORM_SELECT='select';
+    public static $FORM_TEXTAREA='textarea';
+    public static $FORM_ARRAY='array';
+    public static $FORM_COLOR='color';
+    public static $FORM_CASCADER='cascader';
+    public static $FORM_CHECKBOX='checkbox';
+    public static $FORM_DATE='date';
+    public static $FORM_DATETIME='datetime';
+    public static $FORM_DATERANGE='daterange';
+    public static $FORM_DATETIMERANGE='datetimerange';
+    public static $FORM_DATES='dates';
+    public static $FORM_DYNAMIC='dynamic';
+    public static $FORM_ICON='icon';
+    public static $FORM_IMG='img';
+    public static $FORM_MONTH='month';
+    public static $FORM_PASSWORD='password';
+    public static $FORM_RADIO='radio';
+    public static $FORM_SWITCH='switch';
+    public static $FORM_SLIDER='slider';
+    public static $FORM_RATE='rate';
+    public static $FORM_TIME='time';
+    public static $FORM_TIMERANGE='timerange';
+    public static $FORM_TREE='tree';
+    public static $FORM_URL='url';
+    public static $FORM_WEEK='week';
+    public static $FORM_YEAR='week';
+    public static $FORM_UPLOAD='upload';
+    public static $FORM_UEDITOR='ueditor';
 
 //    public $accept="";
 //    public $addDisabled=false;
@@ -52,19 +83,44 @@ class Column
 //    public $readonly=false;
 //    public $rules="";
 //    public $size="medium";
-//    public $showColumn=true;
+    public $dicData="";
+    public $showColumn=true;
 //    public $sortable=false;
-//    public $slot=false;
+    public $slot=false;
 //    public $span=12;
 //    public $gutter=20;
 //    public $startPlaceholder="";
-//    public $type="";
+    public $type="";
 //    public $valueFormat="";
 //    public $display=true;
 //    public $viewDisplay=true;
 //    public $tags=false;
 //    public $width='auto';
 //    public $value="";
+
+
+
+
+
+
+    /**
+     * @param string $component
+     * @return Column
+     */
+    public function setComponent($component)
+    {
+        $this->component = $component;
+        return $this;
+    }
+    /**
+     * @param string $dicData
+     * @return Column
+     */
+    public function setDicData($dicData)
+    {
+        $this->dicData = $dicData;
+        return $this;
+    }
 
     public $search = false;
 
@@ -469,6 +525,17 @@ class Column
     }
 
     /**
+     * @param bool $slot
+     * @return Column
+     */
+    public function setHtml($html)
+    {
+        $this->slot = true;
+        $this->html = $html;
+        return $this;
+    }
+
+    /**
      * @param int $span
      * @return Column
      */
@@ -568,6 +635,46 @@ class Column
         return $this;
     }
 
+
+    /**
+     * @param string $value
+     * @return Column
+     */
+    public function setPropsHttp($value)
+    {
+        $this->propsHttp = $value;
+        return $this;
+    }
+
+    /**
+     * @param string $value
+     * @return Column
+     */
+    public function setTip($value)
+    {
+        $this->tip = $value;
+        return $this;
+    }
+
+    /**
+     * @param string $value
+     * @return Column
+     */
+    public function setAction($value)
+    {
+        $this->action = $value;
+        return $this;
+    }
+
+    /**
+     * @param string $value
+     * @return Column
+     */
+    public function setListType($value)
+    {
+        $this->listType = $value;
+        return $this;
+    }
 
 
 }

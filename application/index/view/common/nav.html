@@ -1,0 +1,28 @@
+<el-row :gutter="20">
+    <el-col :span="12" :offset="4">
+        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" >
+            <el-menu-item index="/index/dashboard/index"><a href="/index/dashboard/index">Dashboard</a></el-menu-item>
+            <el-menu-item index="/index/banner/index"><a href="/index/banner/index">轮播图管理</a></el-menu-item>
+            <el-submenu index="/index/product/index">
+                <template slot="title">产品管理</template>
+                <el-menu-item index="/index/category/index" ><a href="/index/category/index">产品分类</a></el-menu-item>
+                <el-menu-item index="/index/product/index"><a href="/index/product/index">产品列表</a></el-menu-item>
+            </el-submenu>
+            <el-menu-item index="/index/order/index"><a href="/index/order/index">订单列表</a></el-menu-item>
+            <el-menu-item index="/index/user/index"><a href="/index/user/index">用户列表</a></el-menu-item>
+            <el-menu-item index="/index/article/index"><a href="/index/article/index">文章列表</a></el-menu-item>
+<!--            <el-menu-item index="/index/chat/index"><a href="/index/order/index">客服中心(未开放)</a></el-menu-item>-->
+            <el-menu-item index="/index/admin/index"><a href="/index/admin/index">管理员列表</a></el-menu-item>
+        </el-menu>
+    </el-col>
+    <el-col :span="4" >
+        <el-menu  class="el-menu-demo" mode="horizontal" @select="handleSelect">
+            <el-submenu index="/index/admin/index">
+                <template slot="title"><i class="el-icon-user-solid"></i>{$admin_user.user_name}</template>
+                <el-menu-item index="/index/admin/index"><a href="/index/admin/index">修改密码</a></el-menu-item>
+                <el-menu-item index="/index/admin/category" ><a href="/index/login/logout">退出登录</a></el-menu-item>
+            </el-submenu>
+        </el-menu>
+    </el-col>
+</el-row>
+

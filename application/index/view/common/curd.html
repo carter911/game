@@ -1,0 +1,209 @@
+{include file="common/header" /}
+{include file="common/nav" /}
+<!--:before-close="beforeOpen"-->
+        <el-card style="height: 100%">
+            <avue-crud :data="data" :option="option" v-model="obj"
+
+                       :before-open="beforeOpen"
+                       @row-save="rowSave"
+                       @cell-click="rowEdit"
+                       @row-update="rowUpdate"
+                       :upload-before="uploadBefore"
+                       :upload-after="uploadAfter"
+                       :upload-delete="uploadDel"
+                       :upload-preview="uploadPreview"
+                       :page.sync="page"
+                       @size-change="sizeChange"
+                       @current-change="currentChange"
+                       @search-change="searchChange"
+            >
+                <template slot="expand" slot-scope="{row}">
+                    {{row}}
+                </template>
+                <template v-for=" item in option.column" v-if="item.slot" :slot="item.prop" slot-scope="{row}" >
+                    <div v-html="1111222"></div>
+                </template>
+
+                <template v-for=" item in option.column"  :slot="item.html" slot-scope="{row}" >
+                    <template v-show="item.type='ueditor'">
+<!--                        <input v-model="this.text[item.prop]" value="{{row[item.prop]}}">-->
+                        <div v-if="item.formslot" :id="item.prop" >
+                        </div>
+                    </template>
+                </template>
+            </avue-crud>
+        </el-card>
+    </div>
+</div>
+</body>
+
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                text:{},
+                upload: {
+                    //普通图片上传
+                    action: "http://www.game.test/index/common/upload",
+                    props: {
+                        res: "data",
+                        url: "url"
+                    },
+                },
+                indexUrl:"{$indexUrl}",
+                addUrl:"{$addUrl}",
+                updateUrl:"{$updateUrl}",
+                delUrl:"{$delUrl}",
+                activeIndex:"{$router}",
+                obj:{},
+                data: [],
+                page: {
+                    pageSizes: [10, 20, 30, 40],
+                    currentPage: 1,
+                    total: 100,
+                    pageSize: 10
+                },
+                editRow:{},
+                editIndex:{},
+                option:{$tableOption}
+            }
+        },
+        created() {
+            this.getList();
+        },
+        mounted() {
+
+        },
+        methods: {
+            init() {
+                const E = window.wangEditor;
+                const column = this.option.column;
+                var that = this;
+                for (var i=0;i<column.length;i++){
+                    if(column[i].type=='ueditor'  && column[i].formslot){
+                        this.editor = new E(document.getElementById(column[i].prop));
+                        this.editor.customConfig.uploadImgServer = '/upload_img/';
+                        this.editor.customConfig.showLinkImg = false;
+                        this.editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
+                        this.editor.customConfig.uploadImgMaxLength = 5;
+                        this.editor.customConfig.withCredentials = true;
+                        this.editor.create();
+                        this.editor.txt.html(this.editRow[column[i].prop]);
+                        //console.log('--------------------->',this.editRow[this.option.column[i].prop]);
+                        var that = this;
+                        document.getElementById(column[i].prop).addEventListener('click', function () {
+                            console.log(that.editRow[column[i].prop]);
+                            //editIndex
+                            // // 如果未配置 editor.customConfig.onchange，则 editor.change 为 undefined
+                            // editor.change && editor.change()
+                        })
+                    }
+                };
+            },
+            rowEdit(row,index){
+                this.editRow = row;
+            },
+            beforeOpen(done,type){
+                setTimeout(()=>{
+                    this.init();
+                },300)
+                done();
+            },
+            handleSelect(){
+
+            },
+            searchChange(params,done) {
+                this.page.currentPage = 1;
+                this.search = params;
+                this.getList();
+                done();
+            },
+            uploadBefore(file,done,loading){
+                console.log('----------upload before----------');
+                console.log(file);
+                console.log(done);
+                console.log(loading);
+                done();
+            },
+            uploadAfter(res,done){
+                console.log('----------uploadAfter----------');
+                console.log(res);
+                console.log(done);
+                done();
+
+            },
+            uploadDel(column){
+                console.log('----------uploadDel----------');
+                console.log(column);
+            },
+            uploadPreview(file,column){
+                console.log('----------uploadPreview----------');
+                console.log(file);
+                console.log(column);
+            },
+            getList() {
+                var that = this;
+                let params={
+                    search:this.search,
+                    page:this.page,
+                };
+                axios.get(this.indexUrl,{params:params}).then(res=>{
+                    console.log(res.data);
+                    if(res.data.code == 200){
+                        that.page = res.data.data.page;
+                        //that.option = res.data.data.option;
+                        that.data = res.data.data.list;
+                    }
+                }).catch(err=>{
+                    alert('系统加载异常 请稍后重试')
+                    console.log(err);
+                })
+            },
+            rowSave(row,done,loading){
+                var that = this;
+                console.log('--------------------------->add',row)
+                axios.post(this.addUrl,{params:row}).then(res=>{
+                    console.log(res.data);
+                    if(res.data.code == 200){
+                        that.getList();
+                    }
+                }).catch(err=>{
+                    alert('系统加载异常 请稍后重试');
+                    console.log(err);
+                })
+                done();
+                console.log(row,done,loading)
+            },
+
+            rowUpdate(row,index,done,loading){
+                var that = this;
+                axios.post(this.updateUrl,{params:row}).then(res=>{
+                    console.log(res.data);
+                    if(res.data.code == 200){
+                        that.getList();
+                    }
+                    done();
+                }).catch(err=>{
+
+                    alert('系统加载异常 请稍后重试');
+                    loading()
+                })
+            },
+            sizeChange(val){
+                this.page.currentPage = 1;
+                this.page.pageSize = val;
+                this.getList()
+            },
+            currentChange(val) {
+                this.page.currentPage = val;
+                this.getList();
+            },
+            formatHtml(html,row){
+                return "我是格式化以后的"+html+row.date;
+            }
+        }
+    })
+</script>
+
+</html>

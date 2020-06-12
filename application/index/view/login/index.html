@@ -1,0 +1,92 @@
+{include file="common/header" /}
+<div style="background:url('./img/bg.jpg');position: absolute;left: 0;right: 0px;top: 0px;bottom: 0px;">
+
+        <el-card class="box-card">
+            <h2 style="text-align: center;margin-bottom: 3rem">后台管理系统</h2>
+            <avue-form ref="form" v-model="form" :option="option" @submit="handleSubmit">
+            </avue-form>
+        </el-card>
+
+</div>
+
+
+
+
+</div>
+</div>
+</body>
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                form:{},
+                option:{
+                    card: true,
+                    emptyBtn:false,
+                    submitBtn:true,
+                    submitText:'登  录',
+                    submitIcon:'el-icon-user-solid',
+                    column: [{
+                        span:24,
+                        label: "账号",
+                        prop: "user_name",
+                        rules: [{
+                            required: true,
+                            message: "请输入账号",
+                            trigger: "blur"
+                        }]
+                    },{
+                        span:24,
+                        label: "密码",
+                        prop: "password",
+                        type:"password",
+                        rules: [{
+                            required: true,
+                            message: "请输入密码",
+                            trigger: "blur"
+                        }]
+                    }]
+                },
+                indexUrl:"{$indexUrl}",
+
+            }
+        },
+        methods: {
+            handleEmpty() {
+                this.$refs.form.resetForm();
+            },
+            handleSubmit(form,done) {
+                var that = this;
+                this.$refs.form.validate(vaild => {
+                    if (vaild) {
+                        axios.post(that.indexUrl,that.form).then(res=>{
+                            console.log(res.data);
+                            if(res.data.code == 200){
+                                this.$message.success('登录成功');
+                                window.location.href="/index/dashboard/index";
+                            }else{
+                                this.$message.error(res.data.message);
+                            }
+                            done();
+                        }).catch(err=>{
+                            this.$message.error('系统加载异常 请稍后重试');
+                            done();
+                        })
+                    }
+                })
+            }
+        }
+    })
+</script>
+
+</html>
+<style>
+    .box-card{
+        width:28rem;
+        margin: 10rem auto 10rem;
+        padding-top: 3rem;
+        min-height: 30rem;
+        min-width: 22rem;
+    }
+</style>

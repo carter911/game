@@ -456,11 +456,11 @@ class Grid
         return new static(...$params);
     }
 
-    public function column($params)
+    public function column($prop,$label="")
     {
         $grid = new Column();
-        $grid = $grid->setProp($params);
-        $grid = $grid->setLabel($params);
+        $grid = $grid->setProp($prop);
+        $grid = $grid->setLabel(empty($label)?$prop:$label);
         $this->column[] = $grid;
         return $grid;
     }

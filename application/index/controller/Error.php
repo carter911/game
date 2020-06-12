@@ -9,7 +9,7 @@ use think\Controller;
 use think\Db;
 use think\Request;
 
-class Index extends Controller
+class Error extends Controller
 {
     public function index()
     {
