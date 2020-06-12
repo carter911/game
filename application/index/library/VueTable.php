@@ -101,7 +101,6 @@ trait VueTable
     public function store()
     {
         list($data,$where) = $this->buildParams(self::$option_update);
-        die;
         //防止条件为空批量更新造成异常
         if(empty($where)){
             retData([],500,'系统在开小差 请稍后重试');
