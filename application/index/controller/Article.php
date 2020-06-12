@@ -34,6 +34,7 @@ class Article extends AdminBase
             $grid->column('image')->setLabel('图片')->setType(Column::$FORM_UPLOAD)->setWidth(120)->setSpan(12)->setEditDisabled(false)->setSearch(false)
                 ->setAction('http://www.game.test/index/common/upload')->setSpan(24)->setListType('picture-img')->setPropsHttp(["home"=>'','res'=>'data']);
             $grid->column('intro')->setLabel('简介')->setOverHidden(true)->setType(Column::$FORM_TEXTAREA)->setAddDisplay(true)->setSpan(24)->setEditDisabled(false)->setSearch(false);
+            $grid->column('keyword')->setLabel('关键字')->setOverHidden(true)->setType(Column::$FORM_INPUT)->setAddDisplay(true)->setSpan(24)->setEditDisabled(false)->setSearch(false);
             $grid->column('content')->setShowColumn(false)
                 ->setLabel('内容')->setOverHidden(true)
                 ->setType(Column::$FORM_UEDITOR)
