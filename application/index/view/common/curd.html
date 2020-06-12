@@ -24,7 +24,7 @@
                     <div v-html="1111222"></div>
                 </template>
 
-                <template v-for=" item in option.column"  :slot="item.html" slot-scope="{row}" >
+                <template v-for=" item in option.column"  :slot="item.formHtml" slot-scope="{row}" >
                     <template v-show="item.type='ueditor'">
 <!--                        <input v-model="this.text[item.prop]" value="{{row[item.prop]}}">-->
                         <div v-if="item.formslot" :id="item.prop" >
@@ -65,7 +65,7 @@
                     pageSize: 10
                 },
                 editRow:{},
-                editIndex:{},
+                editIndex:-1,
                 option:{$tableOption}
             }
         },
@@ -83,23 +83,44 @@
                 for (var i=0;i<column.length;i++){
                     if(column[i].type=='ueditor'  && column[i].formslot){
                         this.editor = new E(document.getElementById(column[i].prop));
-                        this.editor.customConfig.uploadImgServer = '/upload_img/';
+                        this.editor.customConfig.uploadImgServer = 'http://www.game.test/index/common/uploadBywang';
                         this.editor.customConfig.showLinkImg = false;
                         this.editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
                         this.editor.customConfig.uploadImgMaxLength = 5;
                         this.editor.customConfig.withCredentials = true;
-                        this.editor.create();
-                        this.editor.txt.html(this.editRow[column[i].prop]);
+                        this.editor.customConfig.uploadFileName = 'file'
                         //console.log('--------------------->',this.editRow[this.option.column[i].prop]);
                         var that = this;
-                        document.getElementById(column[i].prop).addEventListener('click', function () {
-                            console.log(that.editRow[column[i].prop]);
-                            //editIndex
-                            // // 如果未配置 editor.customConfig.onchange，则 editor.change 为 undefined
-                            // editor.change && editor.change()
-                        })
+                        console.log(column[i]);
+                        var index =i;
+                        this.editor.customConfig.onchange = function (html) {
+                            console.log(index);
+                            that.saveEditor(html,index)
+                            // // html 即变化之后的内容
+                            // console.log(column[i]);
+                            // console.log(html)
+                        }
+                        this.editor.create();
+                        this.editor.txt.html(this.obj[column[index].prop]);
+                        // document.getElementById(column[i].prop).addEventListener('click', function () {
+                        //     // console.log(column[i]);
+                        //     // //console.log(that.editRow[column[i].prop]);
+                        //     // //editIndex
+                        //     // // // 如果未配置 editor.customConfig.onchange，则 editor.change 为 undefined
+                        //     that.editor.change && that.editor.change()
+                        // });
+
                     }
                 };
+            },
+            saveEditor(html,i){
+                console.log('----------------------->',this.obj,i,this.option.column)
+                if(i>=0){
+                    console.log(this.option.column[i]);
+                    this.obj[this.option.column[i].prop] = html;
+                    //this.option.column[this.editIndex].val = html;
+                }
+                console.log(html)
             },
             rowEdit(row,index){
                 this.editRow = row;

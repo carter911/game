@@ -530,8 +530,13 @@ class Column
      */
     public function setHtml($html)
     {
-        $this->slot = true;
         $this->html = $html;
+        return $this;
+    }
+
+    public function setFormHtml($formHtml)
+    {
+        $this->formHtml = $formHtml;
         return $this;
     }
 

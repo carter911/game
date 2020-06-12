@@ -37,7 +37,7 @@ class Article extends AdminBase
             $grid->column('content')->setShowColumn(false)
                 ->setLabel('内容')->setOverHidden(true)
                 ->setType(Column::$FORM_UEDITOR)
-                ->setSpan(24)->setFormslot(true)->setHtml('contentForm')
+                ->setSpan(24)->setFormslot(true)->setFormHtml('contentForm')
                 ->setSearch(false);
             $grid->column('create_time')->setLabel('创建时间')->setAddDisplay(false)->setWidth(160)->setSpan(12)->setEditDisabled(true)->setSearch(false);
             $grid->column('update_time')->setLabel('更新时间')->setAddDisplay(false)->setWidth(160)->setSpan(12)->setEditDisabled(true)->setSearch(false);
@@ -57,25 +57,5 @@ class Article extends AdminBase
         return $list;
     }
 
-    public function paramsUpdate($data,$type)
-    {
-        if($type == self::$option_save){
-            $data[0]['password'] = self::makePassword($data[0]['password']);
-            $data[0]['login_time'] = date("Y-m-d H:i:s",time());
-            return $data;
-        }
-        if($type == self::$option_update){
-            if(strlen($data[0]['password']) !=32){
-                $data[0]['password'] = self::makePassword($data[0]['password']);
-            }
-           return $data;
-        }
-        return $data;
-    }
-
-    public static function makePassword($string)
-    {
-        return md5(md5($string).'chenrj123');
-    }
 
 }
