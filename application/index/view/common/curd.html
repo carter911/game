@@ -156,8 +156,9 @@
 
             },
             uploadDel(column){
-                console.log('----------uploadDel----------');
-                console.log(column);
+                this.obj[column['prop']] = "";
+                // console.log('----------uploadDel----------');
+                // console.log(column);
             },
             uploadPreview(file,column){
                 console.log('----------uploadPreview----------');
