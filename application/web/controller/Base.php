@@ -14,7 +14,7 @@ class Base extends Controller
         $banner = Db::name("f_banner")->select();
 
         //分类
-        $category = Db::name("f_category")->select();
+        $category = Db::name("f_category")->order('parent_id asc')->select();
         $menu = [];
         foreach ($category as $key => $val){
             if($val['parent_id'] == 0){

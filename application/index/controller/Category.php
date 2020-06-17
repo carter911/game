@@ -25,20 +25,6 @@ class Category extends AdminBase
     {
         parent::__construct();
         $this->tableName = "f_category";
-//        $this->indexUrl="/index/order/get_list";
-//        $this->updateUrl="/index/order/store";
-//        $this->addUrl="/index/order/save";
-//        $this->delUrl="/index/order/del";
-//        $this->router="/index/order/index";
-
-//        $this->relationTable = [
-//            [
-//                'merchant m',
-//                'm.id = order.merchant_id',
-//                'left',
-//                'm.name'
-//            ]
-//        ];
     }
 
     public function tableConfig()

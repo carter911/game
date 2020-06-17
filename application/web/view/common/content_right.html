@@ -18,25 +18,24 @@
                 <li>
                     <span>Game</span>
                     <select>
-                        <option value="FIFA20">FIFA 20</option>
-                        <option value="FIFA19">FIFA19</option>
-                        <option value="FIFA Mobile">FIFA Mobile</option>
+                        {volist name="menu" id="item"}
+                        <option value="{$item.category_name}">{$item.category_name}</option>
+                        {/volist}
                     </select>
                 </li>
                 <li>
                     <span>Platform</span>
                     <select>
-                        <option value="PC">PC</option>
-                        <option value="PS4">PS4</option>
-                        <option value="Switch">Switch</option>
-                        <option value="Xbox One">Xbox One</option>
+                        {volist name="menu" id="item"}
+                        <option value="{$item.category_name}">{$item.category_name}</option>
+                        {/volist}
                     </select>
                 </li>
                 <li>
                     <span>Delivery</span>
                     <select>
-                        <option value="1">Player Auction</option>
-                        <option value="8">Comfort Trade</option>
+                        <option  value="1">Player Auction</option>
+                        <option selected  value="8">Comfort Trade</option>
                     </select>
                 </li>
                 <li>

@@ -111,7 +111,7 @@ class Product extends AdminBase
 
     public static function getCategory()
     {
-        $list = Db::table('f_category')->field('id as value,category_name as label,parent_id,id')->select();
+        $list = Db::table('f_category')->field('id as value,category_name as label,parent_id,id')->order('parent_id asc')->select();
         //children
         $data = [];
         foreach ($list as $key => $val){

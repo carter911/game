@@ -3,13 +3,13 @@
     <a class="menu-home icon-all" href="/web/index/index">HOME</a>
     <div class="menu-list">
         {volist name="menu" id="item"}
-        <div class="menu-list_item menu-list_item-select">
+        <div class="menu-list_item menu-list_item-select" style="padding: 0 20px;text-align: center">
             <a class="menu-list_item__a" href="javascript:void(0);">{$item.category_name}</a>
             {present name="item.children"}
             <ul class="menu-list_item-select_ul">
                 {volist name="item.children" id="c_item"}
                 <li>
-                    <a href="/web/index/detail/">{$c_item.category_name}</a>
+                    <a href="/web/index/product/category/{$c_item.category_name}">{$c_item.category_name}</a>
                 </li>
                 {/volist}
             </ul>

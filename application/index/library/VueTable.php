@@ -101,6 +101,7 @@ trait VueTable
     public function store()
     {
         list($data,$where) = $this->buildParams(self::$option_update);
+
         //防止条件为空批量更新造成异常
         if(empty($where)){
             retData([],500,'系统在开小差 请稍后重试');
@@ -140,7 +141,7 @@ trait VueTable
             retData([],403,'系统在开小差 请稍后重试');
         }
         $result = Db::name($this->tableName)->where($where)->delete();
-        if($result){
+        if(empty($result)){
             retData([],500,'系统在开小差 请稍后重试');
         }
         $this->optionExt($where,self::$option_delete);
