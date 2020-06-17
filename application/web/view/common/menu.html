@@ -1,11 +1,11 @@
 <!-- 导航菜单 -->
 <div class="menu">
-    <a class="menu-home icon-all" href="/web/index/index">HOME</a>
+    <a class="menu-home icon-all" href="/web">HOME</a>
     <div class="menu-list">
         {volist name="menu" id="item"}
         <div class="menu-list_item menu-list_item-select" style="padding: 0 20px;text-align: center">
+        {present name="item.children"}
             <a class="menu-list_item__a" href="javascript:void(0);">{$item.category_name}</a>
-            {present name="item.children"}
             <ul class="menu-list_item-select_ul">
                 {volist name="item.children" id="c_item"}
                 <li>
@@ -13,8 +13,12 @@
                 </li>
                 {/volist}
             </ul>
-            {/present}
         </div>
+        {else /}
+        <div class="menu-list_item">
+            <a class="menu-list_item__a" href="/web/index/detail/{$item.id}">FIFA MOBILE COINS</a>
+        </div>
+        {/present}
         {/volist}
     </div>
 </div>
