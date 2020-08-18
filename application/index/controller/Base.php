@@ -27,6 +27,9 @@ class Base extends Controller
         $menu = array_values($menu);
         $this->assign('banner',$banner);
         $this->assign('menu',$menu);
+        $this->assign('title','Buy FIFA 20 Coins - Cheap and Safe FUT 20 Coins For Sale - IGVault');
+        $this->assign('keyword','FIFA 20 Coins,FUT 20 Coins,FIFA 20 Ultimate Team Coins');
+        $this->assign('desc','Buy Cheap and Safe FIFA 20 Coins to grow Ultimate Team!IGVault is reliable place to buy FUT 20 Coins with fast,safe payment and 24/7 online support.');
         $this->assign('user_info',session('user_info'));
     }
 }
