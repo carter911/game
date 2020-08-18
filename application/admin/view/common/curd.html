@@ -1,0 +1,255 @@
+{include file="common/header" /}
+{include file="common/nav" /}
+
+<body>
+<div id="app">
+    <nav-list :show="1"></nav-list>
+    <div class="block" v-cloak>
+        <el-card style="height: 100%">
+            <avue-crud :data="data" :option="option" v-model="obj"
+
+                       :before-open="beforeOpen"
+                       @row-save="rowSave"
+                       @cell-click="rowEdit"
+                       @row-update="rowUpdate"
+                       @row-del="rowDel"
+                       :upload-before="uploadBefore"
+                       :upload-after="uploadAfter"
+                       :upload-delete="uploadDel"
+                       :upload-preview="uploadPreview"
+                       :page.sync="page"
+                       @size-change="sizeChange"
+                       @current-change="currentChange"
+                       @search-change="searchChange"
+            >
+                <template slot="expand" slot-scope="{row}">
+                    <pre>{{row}}</pre>
+                </template>
+                <template v-for=" item in option.column" v-if="item.slot" :slot="item.prop" slot-scope="{row}" >
+                    <div v-html="1111222"></div>
+                </template>
+
+                <template v-for=" item in option.column"  :slot="item.formHtml" slot-scope="{row}" >
+                    <template v-show="item.type='ueditor'">
+<!--                        <input v-model="this.text[item.prop]" value="{{row[item.prop]}}">-->
+                        <div v-if="item.formslot" :id="item.prop" >
+                        </div>
+                    </template>
+                </template>
+            </avue-crud>
+        </el-card>
+    </div>
+</div>
+</body>
+
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                text:{},
+                upload: {
+                    //普通图片上传
+                    action: "http://www.game.test/admin/common/upload",
+                    props: {
+                        res: "data",
+                        url: "url"
+                    },
+                },
+                indexUrl:"{$indexUrl}",
+                addUrl:"{$addUrl}",
+                updateUrl:"{$updateUrl}",
+                delUrl:"{$delUrl}",
+                activeIndex:"{$router}",
+                obj:{},
+                data: [],
+                page: {
+                    pageSizes: [10, 20, 30, 40],
+                    currentPage: 1,
+                    total: 100,
+                    pageSize: 10
+                },
+                editRow:{},
+                editIndex:-1,
+                option:{$tableOption}
+            }
+        },
+        created() {
+            this.getList();
+        },
+        mounted() {
+
+        },
+        methods: {
+            init() {
+                const E = window.wangEditor;
+                const column = this.option.column;
+                var that = this;
+                for (var i=0;i<column.length;i++){
+                    if(column[i].type=='ueditor'  && column[i].formslot){
+                        this.editor = new E(document.getElementById(column[i].prop));
+                        this.editor.customConfig.uploadImgServer = 'http://www.game.test/admin/common/uploadBywang';
+                        this.editor.customConfig.showLinkImg = false;
+                        this.editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
+                        this.editor.customConfig.uploadImgMaxLength = 5;
+                        this.editor.customConfig.withCredentials = true;
+                        this.editor.customConfig.uploadFileName = 'file'
+                        //console.log('--------------------->',this.editRow[this.option.column[i].prop]);
+                        var that = this;
+                        console.log(column[i]);
+                        var index =i;
+                        this.editor.customConfig.onchange = function (html) {
+                            console.log(index);
+                            that.saveEditor(html,index)
+                            // // html 即变化之后的内容
+                            // console.log(column[i]);
+                            // console.log(html)
+                        }
+                        this.editor.create();
+                        this.editor.txt.html(this.obj[column[index].prop]);
+                        // document.getElementById(column[i].prop).addEventListener('click', function () {
+                        //     // console.log(column[i]);
+                        //     // //console.log(that.editRow[column[i].prop]);
+                        //     // //editIndex
+                        //     // // // 如果未配置 editor.customConfig.onchange，则 editor.change 为 undefined
+                        //     that.editor.change && that.editor.change()
+                        // });
+
+                    }
+                };
+            },
+            saveEditor(html,i){
+                console.log('----------------------->',this.obj,i,this.option.column)
+                if(i>=0){
+                    console.log(this.option.column[i]);
+                    this.obj[this.option.column[i].prop] = html;
+                    //this.option.column[this.editIndex].val = html;
+                }
+                console.log(html)
+            },
+            rowEdit(row,index){
+                this.editRow = row;
+            },
+            beforeOpen(done,type){
+                setTimeout(()=>{
+                    this.init();
+                },300)
+                done();
+            },
+            handleSelect(){
+
+            },
+            searchChange(params,done) {
+                this.page.currentPage = 1;
+                this.search = params;
+                this.getList();
+                done();
+            },
+            uploadBefore(file,done,loading){
+                console.log('----------upload before----------');
+                console.log(file);
+                console.log(done);
+                console.log(loading);
+                done();
+            },
+            uploadAfter(res,done){
+                console.log('----------uploadAfter----------');
+                console.log(res);
+                console.log(done);
+                done();
+
+            },
+            uploadDel(column){
+                this.obj[column['prop']] = "";
+                // console.log('----------uploadDel----------');
+                // console.log(column);
+            },
+            uploadPreview(file,column){
+                console.log('----------uploadPreview----------');
+                console.log(file);
+                console.log(column);
+            },
+            getList() {
+                var that = this;
+                let params={
+                    search:this.search,
+                    page:this.page,
+                };
+                axios.get(this.indexUrl,{params:params}).then(res=>{
+                    console.log(res.data);
+                    if(res.data.code == 200){
+                        that.page = res.data.data.page;
+                        //that.option = res.data.data.option;
+                        that.data = res.data.data.list;
+                    }
+                }).catch(err=>{
+                    alert('系统加载异常 请稍后重试')
+                    console.log(err);
+                })
+            },
+            rowSave(row,done,loading){
+                var that = this;
+                console.log('--------------------------->add',row)
+                axios.post(this.addUrl,{params:row}).then(res=>{
+                    console.log(res.data);
+                    if(res.data.code == 200){
+                        that.$message.success(res.data.message);
+                        that.getList();
+                    }else{
+                        that.$message.success(res.data.message);
+                    }
+                }).catch(err=>{
+                    alert('系统加载异常 请稍后重试');
+                    console.log(err);
+                })
+                done();
+                console.log(row,done,loading)
+            },
+
+            rowUpdate(row,index,done,loading){
+                var that = this;
+                axios.post(this.updateUrl,{params:row}).then(res=>{
+                    console.log(res.data);
+                    if(res.data.code == 200){
+                        that.getList();
+                    }
+                    done();
+                }).catch(err=>{
+
+                    alert('系统加载异常 请稍后重试');
+                    loading()
+                })
+            },
+
+            rowDel(row,index,done,loading){
+                var that = this;
+                axios.post(this.delUrl,row).then(res=>{
+                    if(res.data.code == 200){
+                        that.$message.success('删除成功');
+                        that.getList();
+                    }else{
+                        that.$message.success(res.data.message);
+                    }
+                    done();
+                }).catch(err=>{
+                    that.$message.success('系统异常');
+                    loading()
+                })
+            },
+            sizeChange(val){
+                this.page.currentPage = 1;
+                this.page.pageSize = val;
+                this.getList()
+            },
+            currentChange(val) {
+                this.page.currentPage = val;
+                this.getList();
+            },
+            formatHtml(html,row){
+                return "我是格式化以后的"+html+row.date;
+            }
+        }
+    })
+</script>
+
+</html>

@@ -1,136 +1,111 @@
 <?php
+
 namespace app\index\controller;
 
-use app\index\library\Column;
-use app\index\library\form\Select;
-use app\index\library\Grid;
-use app\index\library\VueTable;
-use think\Db;
-use think\Request;
+use app\index\model\User as userModel;
 
-class User extends AdminBase
+class User extends Base
 {
-    //引用VueTable 必须要指定对应的表
-    use \app\index\library\VueTable;
-
-
-    public function __construct()
+    public function index()
     {
-        parent::__construct();
-        $this->tableName = "f_user";
+        return "";
     }
 
-    public function tableConfig()
+    public function login()
     {
-        return Grid::make([],function (Grid $grid  ){
-            $grid->column('id')->setAddDisplay(false)->setWidth(100)->setSpan(12)->setEditDisabled(true)->setLabel('ID')->setSearch(false);
-            $grid->column('username')
-                ->setLabel('用户名称')
-                ->setAddDisplay(true)
-                ->setSpan(12)
-                ->setEditDisabled(false)
-                ->setSearch(true);
-            $grid->column('password')
-                ->setLabel('密码')
-                ->setShowColumn(false)
-                ->setAddDisplay(true)
-                ->setWidth(100)
-                ->setType(Column::$FORM_PASSWORD)
-                ->setSpan(12)
-                ->setEditDisabled(false)
-                ->setSearch(false);
-
-            $grid->column('email')
-                ->setLabel('邮箱')
-                ->setShowColumn(true)
-                ->setAddDisplay(true)
-                ->setSpan(12)
-                ->setEditDisabled(false)
-                ->setSearch(true);
-
-            $grid->column('phone')
-                ->setLabel('电话')
-                ->setShowColumn(true)
-                ->setAddDisplay(true)
-                ->setWidth(150)
-                ->setSpan(12)
-                ->setEditDisabled(false)
-                ->setSearch(false);
-            $grid->column('country')
-                ->setLabel('国家')
-                ->setShowColumn(true)
-                ->setAddDisplay(true)
-                ->setWidth(150)
-                ->setSpan(12)
-                ->setEditDisabled(false)
-                ->setSearch(false);
-            $grid->column('login_time')->setLabel('登陆时间')->setAddDisplay(false)->setWidth(160)->setSpan(12)->setEditDisabled(true)->setSearch(false);
-            $grid->column('create_time')->setLabel('创建时间')->setAddDisplay(false)->setWidth(160)->setSpan(12)->setEditDisabled(true)->setSearch(false);
-            $grid->column('update_time')->setLabel('更新时间')->setAddDisplay(false)->setWidth(160)->setSpan(12)->setEditDisabled(true)->setSearch(false);
-        })->setExpand(false)
-            ->setAddBtn(true)
-            ->setExcelBtn(false)
-            ->setSaveBtnTitle('保存数据')
-            ->setPrintBtn(false);
+        return view('login');
     }
 
-    public function formatList($list)
+    public function register()
     {
-//        foreach ($list as $key => $val){
-//            $val['amount_bag'] = "";//json_decode($val['amount_bag'],true);
-//            $list[$key] = $val;
-//        }
-        return $list;
+        return view('register');
     }
 
-    public static function getCurrency()
+    public function forgot_password()
     {
+        return view('forgot_password');
+    }
 
-        $list = [];
-        foreach (self::$currency as $key =>$val){
-            $list[] = Select::make()->setValue($val)->setLabel($val);
+    // 检查登录账户
+    public function login_check()
+    {
+        $params = $this->request->post();
+        // Email格式
+        if (!preg_match("/([\w\-]+\@[\w\-]+\.[\w\-]+)/", $params['email'])) {
+            return json(['code' => '4000', "msg" => "Email格式不正确"]);
         }
-        return $list;
-    }
-
-    public static function getOrderStatus()
-    {
-        $list = [];
-        foreach (self::$order_status as $key =>$val){
-            $list[] = Select::make()->setValue($val)->setLabel($val);
+        // 密码长度
+        if (!preg_match('/^[a-zA-Z\d_]{6,}$/', $params['password'])) {
+            return json(['code' => '4000', "msg" => "密码长度不能少于6个字符或大于16个字符"]);
         }
-        return $list;
-    }
-
-    public static function getCategory()
-    {
-        $list = Db::table('f_category')
-            ->field('id as value,category_name as label,parent_id,id')
-            ->where('parent_id',0)
-            ->select();
-        //children
-        $data = [
-            ['label'=>'无父级','value'=>0]
-        ];
-        foreach ($list as $key => $val){
-            if($val['parent_id'] == 0){
-                $data[$val['id']] = $val;
-            }else{
-                $data[$val['parent_id']][] = $val;
+        $userModel = new userModel;
+        $res = $userModel->where(['email' => $params['email']])->find();
+        if ($res !== null) {
+            $result = $res->toArray();
+            if (md5($params['password']) == $result['password']) {
+                unset($result['password']); // 密码不可以展示
+                $userModel->where(['uid' => $result['uid']])->data(['login_time' => time()])->save();
+                session('user_info', $result);
+                return json(['code' => '0', 'msg' => '恭喜您登陆成功', 'data' => $result]);
+            } else {
+                return json(['code' => '4000', "msg" => "密码有误"]);
             }
+        } else {
+            return json(['code' => '4000', "msg" => "该账户不存在"]);
         }
-
-        $data = array_values($data);
-        return $data;
     }
 
-    public function paramsUpdate($data,$type)
+    // 保存数据
+    public function store()
     {
-        if($type == self::$option_save || $type == self::$option_update){
-            dump($data);
+        $params = $this->request->post();
+        // 检测用户提交的数据格式是否正确
+        // 用户名称长度
+        if (!preg_match('/^[A-Za-z0-9_\x{4e00}-\x{9fa5}]+$/u', $params['username'])) {
+            return json(['code' => '4000', "msg" => "用户名由2-16位数字或字母、汉字、下划线组成"]);
         }
-        //dump($data);die;
-        return $data;
+        // Email格式
+        if (!preg_match("/([\w\-]+\@[\w\-]+\.[\w\-]+)/", $params['email'])) {
+            return json(['code' => '4000', "msg" => "Email格式不正确"]);
+        }
+        // 密码长度
+        if (!preg_match('/^[a-zA-Z\d_]{6,}$/', $params['password'])) {
+            return json(['code' => '4000', "msg" => "密码长度不能少于6个字符或大于16个字符"]);
+        }
+        // 电话长度
+        if (strlen($params['phone']) < 11 && !preg_match('/^(((d{3}))|(d{3}-))?13d{9}$/', $params['phone'])) {
+            return json(['code' => '4000', "msg" => "电话长度不能少于11个字符"]);
+        }
+        $userModel = new userModel;
+        // 查询用户是否存在
+        $res = $userModel->field('email')->where(['email' => $params['email']])->find();
+        // 如果该用户信息为空
+        if ($res === null) {
+            // 如果该用户不存在,则进行保存操作
+            $res = $userModel->save($params);
+            if ($res) {
+                // 保存成功
+                return json(['code' => '0', "msg" => "恭喜您注册成功了"]);
+            } else {
+                // 保存失败
+                return json(['code' => '4000', "msg" => "网络错误!!"]);
+            }
+        } else {
+            // 如果该用户存在
+            return json(['code' => '4000', "msg" => "该账户已存在"]);
+        }
     }
 
+    // 忘记密码接受
+    public function forgot_pwd()
+    {
+        $params = $this->request->post();
+        return json(['code' => '4000', "msg" => "输入有误,或该账户不存在!"]);
+    }
+
+    public function logout()
+    {
+        session("user_info", null);
+        return redirect('/');
+    }
 }

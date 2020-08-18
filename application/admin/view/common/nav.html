@@ -1,0 +1,52 @@
+<template id="nav-list">
+    <el-row :gutter="0" v-show="this.show">
+        <el-col :span="14" :offset="2">
+            <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+                <el-menu-item  index="/admin/dashboard/index"><a href="/admin/dashboard/index">Dashboard</a></el-menu-item>
+                <el-submenu index="/admin/banner/index">
+                    <template slot="title">系统管理</template>
+                    <el-menu-item index="/admin/banner/index" ><a href="/admin/banner/index">轮播图管理</a></el-menu-item>
+                    <el-menu-item index="/admin/admin/index"><a href="/admin/admin/index">管理员列表</a></el-menu-item>
+                    <el-menu-item index="/admin/adminrole/index"><a href="/admin/adminrole/index">权限组列表</a></el-menu-item>
+                    <el-menu-item index="/admin/adminnode/index"><a href="/admin/adminnode/index">节点列表</a></el-menu-item>
+                    <el-menu-item index="/admin/adminlog/index"><a href="/admin/adminlog/index">管理员日志</a></el-menu-item>
+                </el-submenu>
+
+                <el-submenu index="/admin/product/index">
+                    <template slot="title">产品管理</template>
+                    <el-menu-item index="/admin/category/index" ><a href="/admin/category/index">产品分类</a></el-menu-item>
+                    <el-menu-item index="/admin/product/index"><a href="/admin/product/index">产品列表</a></el-menu-item>
+                </el-submenu>
+
+                <el-menu-item index="/admin/order/index"><a href="/admin/order/index">订单列表</a></el-menu-item>
+                <el-menu-item index="/admin/user/index"><a href="/admin/user/index">用户列表</a></el-menu-item>
+                <el-menu-item index="/admin/article/index"><a href="/admin/article/index">文章列表</a></el-menu-item>
+            </el-menu>
+        </el-col>
+        <el-col :span="4" >
+            <el-menu  class="el-menu-demo" mode="horizontal" @select="handleSelect">
+                <el-submenu index="/admin/admin/index">
+                    <template slot="title"><i class="el-icon-user-solid"></i>{$admin_user.user_name}</template>
+                    <el-menu-item index="/admin/admin/index"><a href="/admin/admin/index">修改密码</a></el-menu-item>
+                    <el-menu-item index="/admin/admin/category" ><a href="/admin/login/logout">退出登录</a></el-menu-item>
+                </el-submenu>
+            </el-menu>
+        </el-col>
+    </el-row>
+</template>
+<script>
+    Vue.component('NavList', {
+        template: '#nav-list',
+        props:['show'],
+        data: function () {
+            return {
+                activeIndex:'{$router}'
+            }
+        },
+        methods: {
+            handleSelect(key, keyPath) {
+                console.log(key, keyPath);
+            },
+        }
+    })
+</script>
