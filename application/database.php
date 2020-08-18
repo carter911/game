@@ -15,11 +15,11 @@ return [
     // 服务器地址
     'hostname'        => '127.0.0.1',
     // 数据库名
-    'database'        => 'game',
+    'database'        => 'football',
     // 用户名
-    'username'        => 'game',
+    'username'        => 'football',
     // 密码
-    'password'        => 'HH7wbAed5fCx4CNr',
+    'password'        => 'RTb3ZGHhPiMJkk2J',
     // 端口
     'hostport'        => '',
     // 连接dsn
