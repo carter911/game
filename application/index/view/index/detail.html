@@ -1,20 +1,19 @@
 {include file="common:head" /}
 <link rel="stylesheet" href="/static/index/css/detail.css">
-<!-- 中间主体部分 -->
+
 <div class="content">
     <div class="content-box">
         <div class="content-center">
-            <!-- 主体左边-->
             <div class="content-center_left">
                 {include file="common:logo" /}
                 {include file="common:menu" /}
-                <!-- 导航标签 -->
+
                 <div class="nav-target">
                     <span class="nav-target-item">HOME</span>
                     <span class="nav-target-item">fifa 20 Coins</span>
                     <span class="nav-target-item">{$category.category_name} Coins</span>
                 </div>
-                <!-- 导航标签 -->
+
                 <div class="buy-box">
                     <div class="buy-box-name icon-all">
                         <h3> BUY {$category.category_name}</h3>
@@ -60,7 +59,6 @@
                                 <span>&nbsp;</span>
                             </div>
                             {volist name="list" id="item"}
-                            <!-- 单个商品 -->
                             {volist name="item.amount_bag" id="bag"}
                             <div class="list-ul_li">
                                 <div class="list-ul_li__title">
@@ -76,18 +74,15 @@
                                 </div>
                             </div>
                             {/volist}
-                            <!-- 单个商品 -->
                             {/volist}
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- 主体左边-->
             {include file="common:content_right" /}
         </div>
     </div>
 </div>
-<!-- 中间主体部分 -->
 {include file="common:footer" /}
 </body>
 

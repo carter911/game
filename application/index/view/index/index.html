@@ -1,13 +1,11 @@
 {include file="common:head" /}
-<!-- 中间主体部分 -->
+
 <div class="content">
     <div class="content-box">
         <div class="content-center">
-            <!-- 主体左边-->
             <div class="content-center_left">
                 {include file="common:logo" /}
                 {include file="common:menu" /}
-                <!-- 轮播图 -->
                 <div class="banner">
                     <div class="swiper-container">
                         <div class="swiper-wrapper">
@@ -135,10 +133,8 @@
                     </div>
                 </div>
             </div>
-            <!-- 主体左边-->
             {include file="common:content_right" /}
         </div>
-        <!-- 活动 -->
         <div class="activity">
             <div class="activity-header">
                 <div class="activity-header_title icon-all">FIFA 19 Function</div>
@@ -160,8 +156,6 @@
                 </div>
             </div>
         </div>
-        <!-- 活动 -->
-        <!-- 新闻列表 -->
         <div class="news">
             <div class="news-header">
                 <div class="news-header_title icon-all">FUT News</div>
@@ -170,7 +164,6 @@
                 </a>
             </div>
             <div class="news-body">
-                <!-- 列表 -->
                 <div class="news-list-item">
                     <div class="new-list-item_img"></div>
                     <div class="new-list-item_article">
@@ -235,11 +228,9 @@
                         </article>
                     </div>
                 </div>
-                <!-- 列表 -->
+
             </div>
         </div>
-        <!-- 新闻列表 -->
-        <!-- 人物 -->
         <article class="busi-desc" style="height: auto !important;">
             <div class="artdesc-title">Top Worldwide FIFA Coins Store FIFAAH.Com</div>
             <div class="busi-intro" style="height: auto !important;">
@@ -275,8 +266,6 @@
                 <img src="/static/index/images/busi-pri.png" alt="">
             </div>
         </article>
-        <!-- 人物 -->
-        <!-- 关于 -->
         <div class="about">
             <div class="about-list">
                 <div class="about-list_item">
@@ -322,17 +311,13 @@
                 </div>
             </div>
         </div>
-        <!-- 关于 -->
     </div>
 </div>
-<!-- 中间主体部分 -->
-<!-- 当前页面的js文件 -->
 <script src="/static/index/swiper/js/swiper.min.js"></script>
 <script>
     var mySwiper = new Swiper('.swiper-container', {
-        autoplay: true, //可选选项，自动滑动
-        loop: true, // 循环模式选项
-        // 如果需要前进后退按钮
+        autoplay: true,
+        loop: true,
         navigation: {
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
